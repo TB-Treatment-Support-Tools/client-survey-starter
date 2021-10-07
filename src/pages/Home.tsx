@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import LoginPage from './Login';
+import Fhir from '../api'
 
 
 export default function Home() {
     const { keycloak } = useKeycloak()
+    const [patient,setPatient] = useState({});
 
 
     const logout = useCallback(() => {
@@ -13,13 +15,10 @@ export default function Home() {
 
 
     const fetchData = () => {
-        if (keycloak) {
-            const requestHeaders: HeadersInit = new Headers();
-            requestHeaders.set('Authorization', `Bearer ${keycloak.token}`)
-            fetch('http://localhost:8100/fhir/Patient?_format=json', { headers: requestHeaders }).then(res => { return res.json }).then(json => {
-                console.log(json)
-            })
-        }
+        const api = new Fhir();
+        api.fetchPatients().then( json => {
+            console.log(json);
+        })
     }
 
     const fetchSurveys = () => {
@@ -47,7 +46,6 @@ export default function Home() {
                 {keycloak?.authenticated && <h1>You are logged in as: {getUsername()} </h1>}
                 <button onClick={fetchData}>Fetch Data</button>
                 <button onClick={fetchSurveys}>Fetch Surveys</button>
-                <p>Home</p>
             </div>
         </>)
 }
