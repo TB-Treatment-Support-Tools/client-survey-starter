@@ -9,20 +9,27 @@ import Survey from '../pages/Survey'
 
 import { PrivateRoute } from './utils'
 import BottomNavigation from '../components/BottomNavigation/'
+import styles from './main-content.module.scss'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak()
 
-  if (!initialized) {
-    return <div>Loading...</div>
-  }
+  // if (!initialized) {
+  //   return <div>Loading...</div>
+  // }
 
   return (
     <Router>
-      <Redirect from="/" to="/home" />
-      <Route path="/home" component={HomePage} />
-      <PrivateRoute path="/survey" component={Survey} />
-      <BottomNavigation />
+      <div className={styles.container}>
+        <div className={styles.main}>
+          {!initialized ? <p>Keycloak loading</p> : <>
+            <Redirect from="/" to="/home" />
+            <Route path="/home" component={HomePage} />
+            <PrivateRoute path="/survey" component={Survey} />
+          </>}
+        </div>
+        <BottomNavigation />
+      </div>
     </Router>
   )
 }

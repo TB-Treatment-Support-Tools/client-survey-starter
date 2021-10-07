@@ -5,23 +5,26 @@ import AppRouter from './routes/';
 import reportWebVitals from './reportWebVitals';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
+import { StyledEngineProvider } from '@mui/material/styles';
 
-const eventLogger = (event: unknown, error: unknown) => {
-  console.log('onKeycloakEvent', event, error)
-}
+// const eventLogger = (event: unknown, error: unknown) => {
+//   console.log('onKeycloakEvent', event, error)
+// }
 
-const tokenLogger = (tokens: unknown) => {
-  console.log('onKeycloakTokens', tokens)
-}
+// const tokenLogger = (tokens: unknown) => {
+//   console.log('onKeycloakTokens', tokens)
+// }
 
 ReactDOM.render(
   <React.StrictMode>
     <ReactKeycloakProvider
       authClient={keycloak}
-      onEvent={eventLogger}
-      onTokens={tokenLogger}
-    > 
-      <AppRouter />
+    // onEvent={eventLogger}
+    // onTokens={tokenLogger}
+    >
+      <StyledEngineProvider injectFirst>
+        <AppRouter />
+      </StyledEngineProvider>
     </ReactKeycloakProvider>
   </React.StrictMode>,
   document.getElementById('root')
