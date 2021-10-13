@@ -10,6 +10,7 @@ import Survey from '../pages/Survey'
 import { PrivateRoute } from './utils'
 import BottomNavigation from '../components/BottomNavigation/'
 import styles from './main-content.module.scss'
+import Chat from '../pages/Chat'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak()
@@ -25,6 +26,7 @@ const AppRouter = () => {
           {!initialized ? <p>Keycloak loading</p> : <>
             <Redirect from="/" to="/home" />
             <Route path="/home" component={HomePage} />
+            <Route path="/chat" component={Chat} />
             <PrivateRoute path="/survey" component={Survey} />
           </>}
         </div>

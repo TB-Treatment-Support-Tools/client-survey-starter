@@ -3,7 +3,7 @@ import keycloak from "./keycloak";
 export default class Fhir{
 
     requestHeaders : HeadersInit
-    baseURL = "http://localhost:8100/fhir/"
+    baseURL = "http://localhost:8100/fhir"
 
     constructor() {
         this.requestHeaders = new Headers();

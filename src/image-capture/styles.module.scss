@@ -1,0 +1,77 @@
+.exitButtons {
+    position: fixed;
+    top: 0px;
+    left: 10px;
+    color: white;
+    z-index: 12;
+}
+
+.cameraButton {
+    height: 40px;
+    width: 40px;
+    border: solid 2px white;
+    border-radius: 40px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.container {
+    .hidden {
+        visibility: hidden;
+        display: none;
+        height: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .imageCanvas {
+        position: fixed;
+        top: 0;
+        z-index: 11;
+        background-color: black;
+        text-align: center;
+    }
+
+    img {
+        position: fixed;
+        top: 0;
+        z-index: 11;
+        background-color: black;
+        height: 100vh;
+        width: 100%;
+        object-fit: cover;
+        display: block;
+        margin: auto;
+    }
+}
+
+.webcamContainer {
+    position: fixed;
+    top: 0;
+    z-index: 11;
+}
+
+.video {
+    padding: 0;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.cameraButtons {
+    position: fixed;
+    bottom: 60px;
+    z-index: 12;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    button:first-of-type {
+        margin-right: 1em;
+    }
+}

@@ -25,7 +25,16 @@ export default function Home() {
 
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Authorization', `Bearer ${keycloak.token}`)
-        fetch('http://localhost:8100/fhir/Questionnaire?_format=json', { headers: requestHeaders }).then(res => { return res.json }).then(json => {
+        fetch('http://localhost:8100/fhir/Questionnaire', { headers: requestHeaders }).then(res => { return res.json }).then(json => {
+             console.log(json)
+        })
+    }
+
+    const test = () => {
+        console.log(keycloak?.token)
+        const requestHeaders: HeadersInit = new Headers();
+        requestHeaders.set('Authorization', `Bearer ${keycloak.token}`)
+        fetch('http://localhost:8100/test', { headers: requestHeaders }).then(res => { return res.json }).then(json => {
              console.log(json)
         })
     }
@@ -46,6 +55,7 @@ export default function Home() {
                 {keycloak?.authenticated && <h1>You are logged in as: {getUsername()} </h1>}
                 <button onClick={fetchData}>Fetch Data</button>
                 <button onClick={fetchSurveys}>Fetch Surveys</button>
+                <button onClick={test}>Test</button>
             </div>
         </>)
 }
