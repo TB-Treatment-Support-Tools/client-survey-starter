@@ -14,7 +14,8 @@ export default class Camera extends Component {
             capturedImage: null,
             captured: false,
             uploading: false,
-            capturing: false
+            capturing: false,
+            blob: null
 
         }
     }
@@ -42,21 +43,22 @@ export default class Camera extends Component {
             }
             image.takePhoto({ imageHeight: captureHeight }).then(blob => {
 
-                this.myRotationFunction([blob]).then(test => {
+
                     let reader = new FileReader();
-                    reader.readAsDataURL(test[0]); // converts the blob to base64 and calls onload
+                    reader.readAsDataURL([blob][0]); // converts the blob to base64 and calls onload
                     reader.onload = () => {
 
                         this.setState({
                             captured: true,
                             capturedImage: reader.result,
+                            blob: blob,
                             capturing: false
                         })
 
                         this.handleUsePhoto()
                     };
 
-                });
+               
             })
                 .catch(error => console.error('takePhoto() error:', error));
         });
@@ -90,7 +92,7 @@ export default class Camera extends Component {
     }
 
     handleUsePhoto = () => {
-        this.props.returnPhoto(this.state.capturedImage);
+        this.props.returnPhoto(this.state.capturedImage,this.state.blob);
         this.props.handleExit();
     }
 

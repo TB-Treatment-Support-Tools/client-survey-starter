@@ -15,8 +15,8 @@ export default function Home() {
 
 
     const fetchData = () => {
-        const api = new Fhir();
-        api.fetchPatients().then( json => {
+
+        Fhir.fetchPatients().then( json => {
             console.log(json);
         })
     }

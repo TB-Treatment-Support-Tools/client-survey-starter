@@ -24,10 +24,10 @@ const AppRouter = () => {
       <div className={styles.container}>
         <div className={styles.main}>
           {!initialized ? <p>Keycloak loading</p> : <>
-            <Redirect from="/" to="/home" />
+            {/* <Redirect from="/" to="/home" /> */}
             <Route path="/home" component={HomePage} />
             <Route path="/chat" component={Chat} />
-            <PrivateRoute path="/survey" component={Survey} />
+            <Route path="/survey" component={Survey} />
           </>}
         </div>
         <BottomNavigation />
