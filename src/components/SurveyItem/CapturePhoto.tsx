@@ -33,6 +33,7 @@ export default function CapturePhoto() {
                 {open && <Camera handleExit={toggle} returnPhoto={handlePhoto} />}
                 {photo && <img style={{ width: "90%", margin: "auto", display: "block" }} src={photo} />}
                 {photo && <button onClick={handleUpload}>Test Upload Capability</button>}
+                From Server:
                 {success && <AuthImage path={success} />}
             </div>
         </div>

@@ -13,7 +13,7 @@ export default function AuthImage({ path }: Props) {
         })
     }, [path])
     return (<>
-        {photo ? <img src={photo} /> : <p>Loading photo. path: {path} </p>}
+        {photo ? <img style={{width: "90%"}} src={photo} /> : <p>Loading photo. path: {path} </p>}
     </>)
     
 
