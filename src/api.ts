@@ -39,5 +39,11 @@ export default class Fhir {
         return fetch(`${this.baseURL}/${resource}`, { headers: {'Authorization': `Bearer ${keycloak.token}`}, ...options }).then(res => { return res.json() })
     }
 
+    static testCreatePatient() : void {
+        fetch(`${this.baseURL}/create-patient`, { method: "POST", headers: {'Authorization': `Bearer ${keycloak.token}`}})
+        .then(res => { return res.json() })
+        .then(res => {console.log(res)})
+    }
+
 
 }

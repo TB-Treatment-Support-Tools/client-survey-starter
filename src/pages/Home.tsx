@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import LoginPage from './Login';
 import Fhir from '../api'
+import { Link } from 'react-router-dom';
 
 
 export default function Home() {
@@ -44,6 +45,8 @@ export default function Home() {
         return token.preferred_username || "Unset"
     }
 
+    const isProvider = keycloak?.hasRealmRole('provider')
+
 
     return (
         <>
@@ -56,6 +59,8 @@ export default function Home() {
                 <button onClick={fetchData}>Fetch Data</button>
                 <button onClick={fetchSurveys}>Fetch Surveys</button>
                 <button onClick={test}>Test</button>
+                {isProvider && <button onClick={()=>{Fhir.testCreatePatient()}}>Create Patient</button>}
+                {isProvider && <Link to="/add-patient">Add Patient Page</Link>}
             </div>
         </>)
 }
