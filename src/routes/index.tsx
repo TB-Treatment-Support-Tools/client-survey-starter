@@ -37,7 +37,7 @@ const AppRouter = () => {
             <Link to="/patients">Patients</Link>
           </div>}
           {!initialized ? <p>Keycloak loading</p> : <>
-            <Route path="/home" component={HomePage} />
+            <Route path="/home" component={Survey} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={Survey} />
             <ProviderRoute path="/add-patient" component={AddPatient} />

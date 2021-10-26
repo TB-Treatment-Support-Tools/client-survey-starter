@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react'
-import CapturePhoto from '../components/SurveyItem/CapturePhoto';
 import Fhir from '../api'
 import { CircularProgress } from '@mui/material';
-import SurveyItem from '../types/survey-item';
 import Item from '../components/SurveyItem'
-import { Bundle, Questionnaire, QuestionnaireItem } from 'fhir/r4';
+import {Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'fhir/r4';
 
 export default function Survey() {
     const [survey, setSurvey] = useState<Questionnaire | false>(false);
-    const [userInput,setUserInput] = useState<any>({});
+    const [response,setResponse] = useState<QuestionnaireResponse>({ resourceType: "QuestionnaireResponse", status: 'in-progress'})
 
     const getSurvey = async () => {
         let surveyJSON = await Fhir.getSimpleSurvey('52');
-        console.log(surveyJSON)
         setSurvey(surveyJSON);
-        console.log("Survey Set")
     }
 
     useEffect(() => {
@@ -22,8 +18,8 @@ export default function Survey() {
     }, [])
 
     const handleSurveyResponse = (value : any, code : string) => {
-        let existingValue = userInput;
-        existingValue[`${code}`] = value;
+        console.log("Handle Response Called")
+        console.log(`Value: ${value} code: ${code}`)
     }
 
     return (<div>

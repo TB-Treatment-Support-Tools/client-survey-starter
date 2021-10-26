@@ -3,7 +3,12 @@ import Fhir from '../../api';
 import Camera from '../../image-capture/Camera'
 import AuthImage from '../AuthImage';
 
-export default function CapturePhoto() {
+interface Props{
+    code : string,
+    handleResponse(value: any, code: string): void
+}
+
+export default function CapturePhoto({code,handleResponse} : Props) {
     const [open, setOpen] = useState<boolean>(false);
     const [blob, setBlob] = useState<Blob | null>(null);
     const [photo, setPhoto] = useState<string>('');
@@ -19,11 +24,10 @@ export default function CapturePhoto() {
     const handleUpload = () => {
         if (blob) {
             Fhir.uploadPhoto(blob).then( res => {
-               setSuccess(res.path);
-
+                setSuccess(res.path);
+                handleResponse(res.path, code);
             })
         }
-
     }
 
     return (
