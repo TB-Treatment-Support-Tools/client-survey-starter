@@ -1,25 +1,43 @@
+import { Coding, QuestionnaireItem } from "fhir/r4";
 import { ReactElement } from "react";
 import SurveyItem from "../../types/survey-item";
 import CapturePhoto from "./CapturePhoto";
 
 interface Props {
-    surveyItem: SurveyItem
-    handleResponse(value: any, code: string) : void
-  }
+    surveyItem: QuestionnaireItem
+    handleResponse(value: any, code: string): void
+}
 
-function Item({ surveyItem, handleResponse } : Props) : ReactElement {
+interface DisplayComponentProps {
+    item: QuestionnaireItem
+}
+function InputComponent({ item }: DisplayComponentProps): ReactElement {
+    if (item.code && item.code[0] && item.code[0].code) {
+        const code = item.code[0].code;
+        const type = item.type
+
+        if (code === "photo" && type === "url") return <CapturePhoto />
+        if (type === "boolean") return <div>
+            <p><input type="radio" value="yes"/> Yes</p>
+            <p><input type="radio" value="no" />No</p>
+        </div>
+        return <p>Unsupported code: {code}</p>
+    }
+
+    return <p>Survey item did not have system code</p>
+}
+
+function Item({ surveyItem, handleResponse }: Props): ReactElement {
     let children;
 
-    const isPhoto = surveyItem.code && surveyItem.code[0].code === "72170-4"
+    const isGroup = surveyItem.type === "group";
 
-
-    if (surveyItem.type === "group" && surveyItem.item) {
-        children = <div style={{marginLeft: "1em"}}>{surveyItem.item.map(each => <Item handleResponse={handleResponse} surveyItem={each} />)}</div>
+    if (isGroup && surveyItem.item) {
+        children = <div style={{ marginLeft: "1em" }}>{surveyItem.item.map(each => <Item handleResponse={handleResponse} surveyItem={each} />)}</div>
     }
     return (<div>
-        <p>Title: {surveyItem.text}</p>
-        <p>Link: {surveyItem.linkId} </p>
-        {isPhoto && <CapturePhoto />}
+        <p>{surveyItem.text}</p>
+        {!isGroup && <InputComponent item={surveyItem} />}
         {children}
     </div>)
 }
