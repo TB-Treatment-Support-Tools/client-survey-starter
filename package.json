@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/fhir": "^0.0.34",
     "babel-plugin-direct-import": "^0.9.2",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8"

@@ -40,7 +40,8 @@ export function ProviderRoute({
   ...rest
 }: PrivateRouteParams) {
   const { keycloak } = useKeycloak()
-  const authorized = keycloak?.authenticated && keycloak.hasRealmRole('practitioner')
+  const authorized = keycloak?.authenticated && keycloak?.hasRealmRole('provider')
+
 
   return (
     <Route
@@ -51,7 +52,7 @@ export function ProviderRoute({
         ) : (
           <Redirect
             to={{
-              pathname: '/home',
+              pathname: '/login',
               state: { from: props.location },
             }}
           />

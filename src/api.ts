@@ -1,4 +1,6 @@
 import keycloak from "./keycloak";
+import CreatePatientInputs from "./types/create-patient";
+import {HumanName, Patient} from "fhir/r4";
 
 
 // function initHeaders(): HeadersInit {
@@ -12,6 +14,14 @@ export default class Fhir {
 
     // static requestHeaders: HeadersInit = initHeaders()
     static baseURL = "http://localhost:8100"
+
+    static getProviderProfile(){
+        return this.fhirFetch(`PractitionerRole?_identifier=keycloak/${keycloak?.tokenParsed?.sub}`)
+    }
+
+    static getPatients(organizationId : number){
+        return this.fhirFetch(`Patient?organization=${organizationId.toString()}`)
+    }
 
     static getSimpleSurvey(id : string) {
         return this.fhirFetch(`Questionnaire/${id}`)
@@ -39,10 +49,22 @@ export default class Fhir {
         return fetch(`${this.baseURL}/${resource}`, { headers: {'Authorization': `Bearer ${keycloak.token}`}, ...options }).then(res => { return res.json() })
     }
 
-    static testCreatePatient() : void {
-        fetch(`${this.baseURL}/create-patient`, { method: "POST", headers: {'Authorization': `Bearer ${keycloak.token}`}})
+    static testCreatePatient(inputs : CreatePatientInputs) : void {
+
+        // const patientName : HumanName = {given: [inputs.givenName], family: inputs.familyName}
+
+        // let patient = { 
+        //     givenName: inputs.givenName
+        //     familyName: inputs.familyName
+        //     active: true,
+        //     identifier: [{system: "https://localhost:3000", value: inputs.username}]
+        // }
+
+        fetch(`${this.baseURL}/create-patient`, { body: JSON.stringify(inputs), method: "POST", 
+        headers: {'Authorization': `Bearer ${keycloak.token}`, 'Content-Type': "application/json"}})
         .then(res => { return res.json() })
         .then(res => {console.log(res)})
+        .catch(err => {console.log(err)})
     }
 
 

@@ -13,6 +13,7 @@ import styles from './main-content.module.scss'
 import Chat from '../pages/Chat'
 import keycloak from '../keycloak'
 import AddPatient from '../pages/AddPatient'
+import ViewPatients from '../pages/ViewPatients'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak()
@@ -28,6 +29,11 @@ const AppRouter = () => {
     <Router>
       <div className={styles.container}>
         <div className={styles.main}>
+          {isProvider && <div className={styles.providerNav}><p>Provider Links</p>
+            <Link to="/home">Home</Link>
+            <Link to="/add-patient">Add Patient</Link>
+            <Link to="/patients">Patients</Link>
+          </div>}
           {isProvider && <p>Provider</p>}
           {isPatient && <p>Patient</p>}
           {!initialized ? <p>Keycloak loading</p> : <>
@@ -35,10 +41,11 @@ const AppRouter = () => {
             <Route path="/home" component={HomePage} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={Survey} />
-            <Route path="/add-patient" component={AddPatient} />
+            <ProviderRoute path="/add-patient" component={AddPatient} />
+            <ProviderRoute path="/patients" component={ViewPatients} />
           </>}
         </div>
-        {isPatient &&<BottomNavigation /> }
+        {isPatient && <BottomNavigation />}
       </div>
     </Router>
   )

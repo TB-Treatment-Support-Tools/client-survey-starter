@@ -1,3 +1,5 @@
+import React from "react";
+
 export enum FormElementTypes {
     String,
     Number,
@@ -7,6 +9,8 @@ export enum FormElementTypes {
 export interface FormElement {
     id: string,
     display: string,
-    type: FormElementTypes
-    required?: boolean
+    type: FormElementTypes,
+    required?: boolean,
+    onChange?: React.ChangeEventHandler,
+    value? : any
 }
