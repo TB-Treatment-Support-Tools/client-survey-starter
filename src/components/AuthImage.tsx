@@ -6,6 +6,7 @@ interface Props {
 }
 export default function AuthImage({ path }: Props) {
     const [photo, setPhoto] = useState<any>(null);
+
     useEffect(() => {
         Fhir.getPhoto(path).then(res => {
              setPhoto(window.URL.createObjectURL(res));
@@ -13,7 +14,7 @@ export default function AuthImage({ path }: Props) {
         })
     }, [path])
     return (<>
-        {photo ? <img style={{width: "90%"}} src={photo} /> : <p>Loading photo. path: {path} </p>}
+        {photo ? <img src={photo} /> : <p>Loading photo. path: {path} </p>}
     </>)
     
 

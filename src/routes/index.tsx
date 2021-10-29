@@ -6,6 +6,8 @@ import { useKeycloak } from '@react-keycloak/web'
 import HomePage from '../pages/Home'
 import Survey from '../pages/Survey'
 
+import Login from '../pages/Login'
+
 import { PrivateRoute, ProviderRoute } from './utils'
 import BottomNavigation from '../components/BottomNavigation/'
 import styles from './main-content.module.scss'
@@ -37,11 +39,15 @@ const AppRouter = () => {
             <Link to="/patients">Patients</Link>
           </div>}
           {!initialized ? <p>Keycloak loading</p> : <>
-            <Route path="/home" component={Survey} />
+            {/* {!keycloak?.authenticated && <div>
+              <p>Login</p>
+            </div>} */}
+            <PrivateRoute path="/home" component={Survey} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={Survey} />
             <ProviderRoute path="/add-patient" component={AddPatient} />
             <ProviderRoute path="/patients" component={ViewPatients} />
+            <Route path="/login" component={Login} />
           </>}
         </div>
         {isPatient && <BottomNavigation />}

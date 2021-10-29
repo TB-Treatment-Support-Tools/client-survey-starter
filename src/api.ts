@@ -1,8 +1,6 @@
 import keycloak from "./keycloak";
 import CreatePatientInputs from "./types/create-patient";
-import {HumanName, Patient} from "fhir/r4";
-
-
+import {HumanName, Patient, QuestionnaireResponse} from "fhir/r4";
 // function initHeaders(): HeadersInit {
 //     let headers = new Headers();
 //     console.log(keycloak.token)
@@ -37,11 +35,16 @@ export default class Fhir {
         return this.fileFetch('files',{method: "POST",body: formData})
     }
 
+    static uploadQuestionnaireResponse(questionnaireResponse : QuestionnaireResponse){
+        return this.fhirFetch(`QuestionnaireResponse`,{method: "POST", body: JSON.stringify(questionnaireResponse)})
+    }
+
     static getPhoto(url: string){
-        return fetch(`${this.baseURL}/${url}`, { headers: {'Authorization': `Bearer ${keycloak.token}`} }).then(res => { return res.blob() })
+        return fetch(url, { headers: {'Authorization': `Bearer ${keycloak.token}`} }).then(res => { return res.blob() })
     }
 
     static fhirFetch(resource: string, options? : RequestInit ): Promise<any> {
+        // return fetch(`${this.baseURL}/fhir/${resource}`, { headers: {'Content-Type': "application/json"}, ...options }).then(res => { return res.json() })
         return fetch(`${this.baseURL}/fhir/${resource}`, { headers: {'Content-Type': "application/fhir+json"}, ...options }).then(res => { return res.json() })
     }
 

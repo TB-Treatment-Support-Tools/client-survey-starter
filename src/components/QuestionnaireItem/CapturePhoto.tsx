@@ -1,14 +1,15 @@
+import { QuestionnaireItem } from 'fhir/r4';
 import { useEffect, useState } from 'react'
 import Fhir from '../../api';
 import Camera from '../../image-capture/Camera'
 import AuthImage from '../AuthImage';
 
 interface Props{
-    code : string,
+    questionnaireItem: QuestionnaireItem
     handleResponse(value: any, code: string): void
 }
 
-export default function CapturePhoto({code,handleResponse} : Props) {
+export default function CapturePhoto({questionnaireItem,handleResponse} : Props) {
     const [open, setOpen] = useState<boolean>(false);
     const [blob, setBlob] = useState<Blob | null>(null);
     const [photo, setPhoto] = useState<string>('');
@@ -25,7 +26,7 @@ export default function CapturePhoto({code,handleResponse} : Props) {
         if (blob) {
             Fhir.uploadPhoto(blob).then( res => {
                 setSuccess(res.path);
-                handleResponse(res.path, code);
+                handleResponse(res.path, questionnaireItem.linkId);
             })
         }
     }
@@ -38,7 +39,8 @@ export default function CapturePhoto({code,handleResponse} : Props) {
                 {photo && <img style={{ width: "90%", margin: "auto", display: "block" }} src={photo} />}
                 {photo && <button onClick={handleUpload}>Test Upload Capability</button>}
                 From Server:
-                {success && <AuthImage path={success} />}
+                {/* {success && <AuthImage path={success} />} */}
+                {success && <p>Successfully Uploaded</p>}
             </div>
         </div>
     )
