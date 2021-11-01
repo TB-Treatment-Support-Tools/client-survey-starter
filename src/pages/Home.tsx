@@ -24,8 +24,5 @@ export default function Home() {
     return (
         <>
             <LoginPage />
-            <div>
-                {isProvider && <Link to="/add-patient">Add Patient Page</Link>}
-            </div>
         </>)
 }

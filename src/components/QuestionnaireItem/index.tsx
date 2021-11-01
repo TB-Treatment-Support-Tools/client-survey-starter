@@ -37,7 +37,7 @@ function Item({ questionnaireItem, handleResponse }: Props): ReactElement {
         children = <div style={{ marginLeft: "1em" }}>{questionnaireItem.item.map(each => <Item handleResponse={handleResponse} questionnaireItem={each} />)}</div>
     }
     return (<div>
-        <p>{questionnaireItem.text}</p>
+        {/* <p>{questionnaireItem.text}</p> */}
         {!isGroup && <InputComponent handleResponse={handleResponse} questionnaireItem={questionnaireItem} />}
         {children}
     </div>)

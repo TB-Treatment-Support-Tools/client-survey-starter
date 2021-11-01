@@ -3,10 +3,10 @@ import Fhir from '../api'
 import { CircularProgress } from '@mui/material';
 import Item from '../components/QuestionnaireItem/'
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
+import UserGreeting from '../components/UserGreeting';
 
 export default function Survey() {
-    const [survey, setSurvey] = useState<Questionnaire | false>(false);
-    const [response, setResponse] = useState<QuestionnaireResponse>({ resourceType: "QuestionnaireResponse", status: 'in-progress' })
+    const [survey, setSurvey] = useState<Questionnaire | null>(null);
     const [answers, setAnswers] = useState<QuestionnaireResponseItem[]>([]);
 
     const getSurvey = async () => {
@@ -18,9 +18,9 @@ export default function Survey() {
         getSurvey();
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log("Answers effect")
-    },[answers.length])
+    }, [answers.length])
 
     const handleSurveyResponse = (answer: QuestionnaireResponseItemAnswer, code: string) => {
         const index = answers.findIndex(value => { return value.linkId === code })
@@ -43,6 +43,7 @@ export default function Survey() {
             resourceType: "QuestionnaireResponse",
             status: 'completed',
             authored: new Date().toISOString(),
+            questionnaire: `${survey?.id}`,
             author: {
                 reference: "Patient/1",
                 type: "Patient"
@@ -53,12 +54,16 @@ export default function Survey() {
         Fhir.uploadQuestionnaireResponse(questionnaireResponse)
     }
 
-    return (<div>
-        {survey ? <div style={{ padding: "1em" }}>
-            {survey && survey.item?.map((item: QuestionnaireItem) => <Item handleResponse={handleSurveyResponse} questionnaireItem={item} />)}
-            {console.log(answers)}
-            {answers.length === 2 && <button onClick={submitSurvey}>Submit Survey</button>}
-        </div> : <CircularProgress variant="indeterminate" />}
+    return (
+        <div>
+            <UserGreeting />
+            <div>
+                {survey ? <div style={{ padding: "1em" }}>
+                    {survey && survey.item?.map((item: QuestionnaireItem) => <Item handleResponse={handleSurveyResponse} questionnaireItem={item} />)}
+                    {answers.length === 2 && <button onClick={submitSurvey}>Submit Survey</button>}
+                </div> : <CircularProgress variant="indeterminate" />}
 
-    </div>)
+            </div>
+        </div>
+    )
 }

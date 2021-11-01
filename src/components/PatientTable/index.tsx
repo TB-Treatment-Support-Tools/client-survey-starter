@@ -1,17 +1,10 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Patient } from 'fhir/r4'
+import { Link } from "react-router-dom";
+import { getFhirFullname } from "../../utility/fhir-utilities";
 
 interface Props {
     patients: Patient[]
-}
-
-const getName = (patient: any): string => {
-    console.log(patient)
-    if (patient.name) {
-        return (`${patient.name[0].given[0]} ${patient.name[0].family}`)
-    }
-    return "Unknown"
-
 }
 
 export default function PatientTable({ patients }: Props) {
@@ -22,7 +15,7 @@ export default function PatientTable({ patients }: Props) {
             </TableRow>
         </TableHead>
         <TableBody>
-            {patients.map(patient => <TableRow><TableCell>{getName(patient)}</TableCell></TableRow>)}
+            {patients.map(patient => <TableRow><TableCell><Link to={`/patient/${patient.id}`}>{getFhirFullname(patient.name)}</Link></TableCell></TableRow>)}
         </TableBody>
     </Table>
 }

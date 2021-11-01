@@ -5,10 +5,13 @@ import useToggle from '../../hooks/useToggle'
 import { Drawer } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function TopBar() {
     const { keycloak } = useKeycloak()
     const [menuVisible, toggleMenuVisible] = useToggle(false);
+
+    const isProvider = keycloak?.hasRealmRole('provider')
 
     const logout = useCallback(() => {
         keycloak?.logout()
@@ -22,12 +25,17 @@ export default function TopBar() {
     return (<>
         <div className={classes.topBar}>
             <span>Treatment Tracker</span>
+            {isProvider && <div className={classes.providerNav}>
+                <Link to="/home">Home</Link>
+                <Link to="/add-patient">Add Patient</Link>
+                <Link to="/patients">Patients</Link>
+            </div>}
             <IconButton className={classes.account} aria-label="account" onClick={() => { toggleMenuVisible() }}>
                 <AccountCircleIcon />
             </IconButton>
         </div>
         <Drawer
-            classes={{paper: classes.width}}
+            classes={{ paper: classes.width }}
             anchor={'right'}
             open={menuVisible}
             onClose={toggleMenuVisible}

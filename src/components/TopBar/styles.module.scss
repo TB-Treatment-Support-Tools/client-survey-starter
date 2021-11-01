@@ -16,3 +16,11 @@
 .width{
     width: 80vw;
 }
+
+.providerNav{
+    display: flex;
+    align-items: center;
+    * {
+        padding: 1em;
+    }
+}

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useCallback } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 

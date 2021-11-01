@@ -1,6 +1,6 @@
 import keycloak from "./keycloak";
 import CreatePatientInputs from "./types/create-patient";
-import {HumanName, Patient, QuestionnaireResponse} from "fhir/r4";
+import {HumanName, Patient, Practitioner, QuestionnaireResponse} from "fhir/r4";
 // function initHeaders(): HeadersInit {
 //     let headers = new Headers();
 //     console.log(keycloak.token)
@@ -12,6 +12,24 @@ export default class Fhir {
 
     // static requestHeaders: HeadersInit = initHeaders()
     static baseURL = "http://localhost:8100"
+
+    static async getUserInformation(){
+        const isProvider = keycloak?.hasRealmRole('provider')
+        const isPatient = keycloak?.hasRealmRole('patient')
+        const keycloakID = keycloak?.tokenParsed?.sub;
+
+        if(isProvider){
+            return await this.fhirFetch(`Practitioner?identifier=keycloak|${keycloakID}`).then(json => {return json.entry[0].resource as Practitioner})
+        }
+
+        if(isPatient){
+            return await this.fhirFetch(`Patient?identifier=keycloak|${keycloakID}`)
+            .then(json => {return json.entry[0].resource as Patient})
+        }
+
+        return null
+
+    }
 
     static getProviderProfile(){
         return this.fhirFetch(`PractitionerRole?_identifier=keycloak/${keycloak?.tokenParsed?.sub}`)

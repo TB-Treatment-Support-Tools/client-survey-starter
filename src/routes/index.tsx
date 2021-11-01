@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState} from 'react'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
@@ -17,41 +17,46 @@ import AddPatient from '../pages/AddPatient'
 import ViewPatients from '../pages/ViewPatients'
 
 import TopBar from '../components/TopBar'
+import Fhir from '../api'
+import { Patient, Practitioner } from 'fhir/r4'
+
+import UserContext from '../context/user-context'
+import PatientProfile from '../pages/PatientProfile'
 
 const AppRouter = () => {
-  const { initialized } = useKeycloak()
+  const { initialized } = useKeycloak();
+  const [userResource, setUserResource] = useState<Patient | Practitioner | null>(null);
 
-  // if (!initialized) {
-  //   return <div>Loading...</div>
-  // }
-
-  const isProvider = keycloak?.hasRealmRole('provider')
   const isPatient = keycloak?.hasRealmRole('patient')
+
+  const getCurrentUser = async () => {
+    const user = await Fhir.getUserInformation();
+    setUserResource(user);
+  }
+
+  useEffect(() => {
+    getCurrentUser();
+  }, [initialized])
 
   return (
     <Router>
+      <UserContext.Provider value={{user: userResource}}>
       <div className={styles.container}>
         <TopBar />
         <div className={styles.main}>
-          {isProvider && <div className={styles.providerNav}><p>Provider Links</p>
-            <Link to="/home">Home</Link>
-            <Link to="/add-patient">Add Patient</Link>
-            <Link to="/patients">Patients</Link>
-          </div>}
           {!initialized ? <p>Keycloak loading</p> : <>
-            {/* {!keycloak?.authenticated && <div>
-              <p>Login</p>
-            </div>} */}
             <PrivateRoute path="/home" component={Survey} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={Survey} />
             <ProviderRoute path="/add-patient" component={AddPatient} />
             <ProviderRoute path="/patients" component={ViewPatients} />
+            <ProviderRoute path="/patient/*" component={PatientProfile} />
             <Route path="/login" component={Login} />
           </>}
         </div>
         {isPatient && <BottomNavigation />}
       </div>
+     </UserContext.Provider>
     </Router>
   )
 }
