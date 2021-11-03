@@ -52,6 +52,7 @@ const AppRouter = () => {
             <ProviderRoute path="/patients" component={ViewPatients} />
             <ProviderRoute path="/patient/*" component={PatientProfile} />
             <Route path="/login" component={Login} />
+            <Route path="/" component={Login} />
           </>}
         </div>
         {isPatient && <BottomNavigation />}

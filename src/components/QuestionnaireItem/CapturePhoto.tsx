@@ -1,4 +1,4 @@
-import { QuestionnaireItem } from 'fhir/r4';
+import { QuestionnaireItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import { useEffect, useState } from 'react'
 import Fhir from '../../api';
 import Camera from '../../image-capture/Camera'
@@ -6,7 +6,7 @@ import AuthImage from '../AuthImage';
 
 interface Props{
     questionnaireItem: QuestionnaireItem
-    handleResponse(value: any, code: string): void
+    handleResponse(value: QuestionnaireResponseItemAnswer, code: string): void
 }
 
 export default function CapturePhoto({questionnaireItem,handleResponse} : Props) {
@@ -26,7 +26,7 @@ export default function CapturePhoto({questionnaireItem,handleResponse} : Props)
         if (blob) {
             Fhir.uploadPhoto(blob).then( res => {
                 setSuccess(res.path);
-                handleResponse(res.path, questionnaireItem.linkId);
+                handleResponse({valueUri: res.path}, questionnaireItem.linkId);
             })
         }
     }

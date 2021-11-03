@@ -2,9 +2,10 @@ import { useEffect, useState } from "react"
 import Fhir from "../api"
 
 interface Props {
-    path: string
+    path: string,
+    className?: string | undefined
 }
-export default function AuthImage({ path }: Props) {
+export default function AuthImage({ path, className }: Props) {
     const [photo, setPhoto] = useState<any>(null);
 
     useEffect(() => {
@@ -14,7 +15,7 @@ export default function AuthImage({ path }: Props) {
         })
     }, [path])
     return (<>
-        {photo ? <img src={photo} /> : <p>Loading photo. path: {path} </p>}
+        {photo ? <img className={className} src={photo} /> : <p>Loading photo. path: {path} </p>}
     </>)
     
 

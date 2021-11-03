@@ -29,6 +29,7 @@ export default function TopBar() {
                 <Link to="/home">Home</Link>
                 <Link to="/add-patient">Add Patient</Link>
                 <Link to="/patients">Patients</Link>
+                <Link to="/chat">Chat</Link>
             </div>}
             <IconButton className={classes.account} aria-label="account" onClick={() => { toggleMenuVisible() }}>
                 <AccountCircleIcon />

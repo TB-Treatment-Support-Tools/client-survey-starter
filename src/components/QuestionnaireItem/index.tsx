@@ -1,4 +1,4 @@
-import { Coding, QuestionnaireItem } from "fhir/r4";
+import { Coding, QuestionnaireItem, QuestionnaireResponseItemAnswer } from "fhir/r4";
 import { ReactElement, useState } from "react";
 import questionnaireItem from "../../types/survey-item";
 import CapturePhoto from "./CapturePhoto";
@@ -10,7 +10,7 @@ import FormLabel from '@mui/material/FormLabel';
 
 interface Props {
     questionnaireItem: QuestionnaireItem
-    handleResponse(value: any, code: string): void
+    handleResponse(value: QuestionnaireResponseItemAnswer, code: string): void
 }
 
 function InputComponent(props: Props): ReactElement {
@@ -50,7 +50,7 @@ function BooleanButtons(props: Props) {
 
     const handleChange = (event : React.ChangeEvent<HTMLInputElement> ) => {
         setSelection(event.target.value);
-        handleResponse(event.target.value, questionnaireItem.linkId)
+        handleResponse({valueBoolean:  event.target.value === "true"}, questionnaireItem.linkId)
     }
 
     return (

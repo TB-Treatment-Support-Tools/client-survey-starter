@@ -24,14 +24,12 @@ export default function Survey() {
 
     const handleSurveyResponse = (answer: QuestionnaireResponseItemAnswer, code: string) => {
         const index = answers.findIndex(value => { return value.linkId === code })
-        let answersCopy = [...answers]; //Just c
+        let answersCopy = [...answers];
         const newValue = { linkId: code, answer: [answer] };
 
         if (index < 0) {
-            console.log("push")
             answersCopy.push(newValue)
         } else {
-            console.log("index")
             answersCopy[index] = newValue
         }
         console.log(`handle response: ${answer} Value: ${code}`)

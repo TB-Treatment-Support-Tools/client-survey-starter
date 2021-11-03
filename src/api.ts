@@ -1,17 +1,14 @@
 import keycloak from "./keycloak";
 import CreatePatientInputs from "./types/create-patient";
 import {HumanName, Patient, Practitioner, QuestionnaireResponse} from "fhir/r4";
-// function initHeaders(): HeadersInit {
-//     let headers = new Headers();
-//     console.log(keycloak.token)
-//     headers.set('Authorization', `Bearer ${keycloak.token}`);
-//     return headers
-// }
 
 export default class Fhir {
 
-    // static requestHeaders: HeadersInit = initHeaders()
     static baseURL = "http://localhost:8100"
+
+    static async getChatToken(){
+        return await fetch(`http://localhost:8100/chat-token`, { headers: {'Authorization': `Bearer ${keycloak.token}`} }).then(res => { return res.json() })
+    }
 
     static async getUserInformation(){
         const isProvider = keycloak?.hasRealmRole('provider')
@@ -31,8 +28,17 @@ export default class Fhir {
 
     }
 
-    static getProviderProfile(){
-        return this.fhirFetch(`PractitionerRole?_identifier=keycloak/${keycloak?.tokenParsed?.sub}`)
+    static async deleteQuestionnaireResponse(responseId : string){
+        await this.fhirFetch(`QuestionnaireResponse/${responseId}`,{method: "DELETE"})
+    }
+
+    static async getPatient(patientId: string){
+        return await this.fhirFetch(`Patient/${patientId}`).then(json => {return json as Patient})
+    }
+
+    static async getPatientQuestionnaireResponses(patientId: string){
+        return await this.fhirFetch(`QuestionnaireResponse?author=Patient/${patientId}`)
+        .then(res => {return res.entry as QuestionnaireResponse[]})
     }
 
     static getPatients(organizationId : number){
@@ -63,7 +69,7 @@ export default class Fhir {
 
     static fhirFetch(resource: string, options? : RequestInit ): Promise<any> {
         // return fetch(`${this.baseURL}/fhir/${resource}`, { headers: {'Content-Type': "application/json"}, ...options }).then(res => { return res.json() })
-        return fetch(`${this.baseURL}/fhir/${resource}`, { headers: {'Content-Type': "application/fhir+json"}, ...options }).then(res => { return res.json() })
+        return fetch(`${this.baseURL}/fhir/${resource}`, { headers: {'Content-Type': "application/fhir+json",'Authorization': `Bearer ${keycloak.token}`}, ...options }).then(res => { return res.json() })
     }
 
     static fileFetch(resource: string, options? : RequestInit ): Promise<any> {
