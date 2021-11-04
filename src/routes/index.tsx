@@ -22,6 +22,7 @@ import { Patient, Practitioner } from 'fhir/r4'
 
 import UserContext from '../context/user-context'
 import PatientProfile from '../pages/PatientProfile'
+import PhotoTest from '../components/PhotoTest'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -44,6 +45,7 @@ const AppRouter = () => {
       <div className={styles.container}>
         <TopBar />
         <div className={styles.main}>
+          <Route path="/camera-test" component={PhotoTest} />
           {!initialized ? <p>Keycloak loading</p> : <>
             <PrivateRoute path="/home" component={Survey} />
             <Route path="/chat" component={Chat} />
