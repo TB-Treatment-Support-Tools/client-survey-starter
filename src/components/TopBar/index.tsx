@@ -25,8 +25,8 @@ export default function TopBar() {
     return (<>
         <div className={classes.topBar}>
             <span>Treatment Tracker</span>
+            <Link to="/home">Home</Link>
             {isProvider && <div className={classes.providerNav}>
-                <Link to="/home">Home</Link>
                 <Link to="/add-patient">Add Patient</Link>
                 <Link to="/patients">Patients</Link>
                 <Link to="/chat">Chat</Link>

@@ -47,8 +47,13 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
   }
 
   function drawImge(){
+
+    //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+    //https://stackoverflow.com/questions/31778559/how-do-i-proportionally-resize-a-video-in-canvas/31778788
+    
     var video = videoRef
     var canvas = canvasRef
+    if(canvas.current){
     var ctx = canvas.current.getContext('2d');
 
     canvas.current.width = video.current.videoWidth;
@@ -57,17 +62,18 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
     const boxWidth = video.current.videoWidth / 5;
     const boxHeight = boxWidth * 2;
 
-
-    ctx.drawImage(video.current, 0, 0, canvas.current.width, canvas.current.height);
+    ctx.drawImage(video.current,0,0);
     var pX = canvas.current.width / 2 - boxWidth / 2;
-    var pY = canvas.current.height / 2 - boxHeight /2;
-    // ctx.rect(pX, pY, boxWidth, boxWidth * 3);
-    // ctx.lineWidth = "6";
-    // ctx.strokeStyle = "red";
-    // ctx.stroke();
+    var pY = canvas.current.height/ 10
+
+    ctx.rect(pX,pY,boxWidth,(canvas.current.height -  (pY * 2)));
+    ctx.lineWidth = "6";
+    ctx.strokeStyle = "white";
+    ctx.stroke();
     
-    ctx.drawImage(base_image, 0, 0, base_image.width, base_image.height, 0, 0, canvas.current.width, canvas.current.height);
+    // ctx.drawImage(base_image, 0, 0, base_image.width, base_image.height, 0, 0, canvas.current.width, canvas.current.height);
     setTimeout(drawImge,100)
+    }
   }
 
   function hOnPlay(){
@@ -78,15 +84,18 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
   const handleCapture = () => {
 
     const boxWidth = videoRef.current.videoWidth / 5;
-    const boxHeight = boxWidth * 2;
 
-    var pX = canvasRef.current.width / 2 - boxWidth /2;
-    var pY = canvasRef.current.height / 2 - boxHeight/2;
+    var pX = canvasRef.current.width / 2 - boxWidth / 2;
+    var pY = (canvasRef.current.height/ 10)   
+    
+    const boxHeight = (canvasRef.current.height -  ((canvasRef.current.height/ 10)    * 2))
+
+
 
     const context = displayCanvasRef.current.getContext("2d");
 
     context.drawImage(
-      canvasRef.current, pX, pY, boxWidth, boxHeight, 0, 0, boxWidth, boxHeight
+      canvasRef.current, pX,pY,boxWidth,boxHeight,0,0,boxWidth,boxHeight
     );
 
     displayCanvasRef.current.toBlob((blob: any) => setBlob(blob), "image/jpeg", 1);
@@ -103,10 +112,10 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
       <canvas
         hidden
         ref={displayCanvasRef}
-        width={boxWidth}
-        height={boxWidth * 2}
+        width={videoRef.current ? videoRef.current.videoWidth / 5 : 0}
+        height={canvasRef.current ? (canvasRef.current.height -  ((canvasRef.current.height/ 10)    * 2)) : 0}
       />
-      {blob && <img src={window.URL.createObjectURL(blob)} />}
+      {blob && <img style={{height:"100px"}} src={window.URL.createObjectURL(blob)} />}
     </>
   );
 }

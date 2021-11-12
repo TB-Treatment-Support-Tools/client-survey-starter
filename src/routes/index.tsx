@@ -44,8 +44,9 @@ const AppRouter = () => {
       <UserContext.Provider value={{user: userResource}}>
       <div className={styles.container}>
         <TopBar />
+        <Link to={"/photo-test"}>Photo Test</Link>
         <div className={styles.main}>
-          <Route path="/camera-test" component={PhotoTest} />
+          <Route path="/photo-test" component={PhotoTest} />
           {!initialized ? <p>Keycloak loading</p> : <>
             <PrivateRoute path="/home" component={Survey} />
             <Route path="/chat" component={Chat} />
@@ -54,7 +55,6 @@ const AppRouter = () => {
             <ProviderRoute path="/patients" component={ViewPatients} />
             <ProviderRoute path="/patient/*" component={PatientProfile} />
             <Route path="/login" component={Login} />
-            <Route path="/" component={Login} />
           </>}
         </div>
         {isPatient && <BottomNavigation />}

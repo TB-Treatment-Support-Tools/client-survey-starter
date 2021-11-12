@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Redirect, useLocation } from 'react-router-dom'
+import { Link, Redirect, useLocation,  } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
@@ -20,9 +20,8 @@ const LoginPage = () => {
 
   return (
     <div>
-      <button type="button" onClick={login}>
-        Login
-      </button>
+      <button type="button" onClick={login}>Login</button>
+      <br />
     </div>
   )
 }
