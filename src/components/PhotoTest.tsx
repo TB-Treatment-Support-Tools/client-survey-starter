@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
-const faceArea = 300;
-
+import { useUserMedia } from "../hooks/useUserMedia";
 
 const CAPTURE_OPTIONS = {
   audio: false,
@@ -14,27 +12,48 @@ const CAPTURE_OPTIONS = {
 
 
 export default function PhotoTest() {
+
+  const [full,setFull] = useState("");
+  const [cropped,setCropped] = useState("");
+
+  const handleOutput = (full : string, cropped : string) => {
+    setFull(full);
+    setCropped(cropped);
+  }
+
+  const clearState = () => {
+    setFull("");
+    setCropped("");
+  }
+
   return (<div>
-    <Camera />
+    {!full && <Camera handleOutput={handleOutput} />}
+    {full && <img style={{ height: "100px" }} src={full} />}
+    {cropped && <img style={{ height: "100px" }} src={cropped} />}
+    <button onClick={clearState}>Reset</button>
   </div>)
 }
 
-function Camera() { //From https://blog.logrocket.com/responsive-camera-component-react-hooks/
+interface CameraProps {
+  handleOutput : (full : string, cropped : string) => void
+}
+
+function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.com/responsive-camera-component-react-hooks/
+
+  const videoOpen = useState(false);
+
+  // const [blob, setBlob] = useState<any>(null);
+  // const [fullBlob, setFullBlob] = useState<any>(null);
+
   const videoRef = useRef<any>();
   const canvasRef = useRef<any>();
   const displayCanvasRef = useRef<any>();
-
-  const [blob, setBlob] = useState<any>(null);
-  const [fullBlob, setFullBlob] = useState<any>(null);
-
 
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const [playing, setPlaying] = useState(false);
 
   const [ciWidth, setCiWidth] = useState(0);
   const [ciHeight, setCiHeight] = useState(0);
-
-
 
   const [boxWidth, setBoxWidth] = useState(0);
 
@@ -65,7 +84,6 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
   function drawImge(skipBox = false) {
 
     //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
-    //https://stackoverflow.com/questions/31778559/how-do-i-proportionally-resize-a-video-in-canvas/31778788
 
 
     var video = videoRef
@@ -114,26 +132,39 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
 
     const boxHeight = (canvasRef.current.height - ((canvasRef.current.height / 10) * 2))
 
-
-
     const context = displayCanvasRef.current.getContext("2d");
 
     context.drawImage(
       canvasRef.current, pX, pY, boxWidth, boxHeight, 0, 0, boxWidth, boxHeight
     );
     
+    let croppedBlob : Blob | null = null;
+    let fullBlob : Blob | null = null;
 
-    displayCanvasRef.current.toBlob((blob: any) => setBlob(blob), "image/jpeg", 1);
-    canvasRef.current.toBlob((blob: any) => setFullBlob(blob), "image/jpeg", 1);
+    displayCanvasRef.current.toBlob((blob: any) => {
+      croppedBlob = blob
+      canvasRef.current.toBlob((blobTwo: any) => {
+        fullBlob = blobTwo
+        handleOutput(window.URL.createObjectURL(fullBlob),window.URL.createObjectURL(croppedBlob))
+      }, "image/jpeg", 1);
+    }, "image/jpeg", 1);
+    
+
+    // console.log("out")
+    // if(croppedBlob && fullBlob){
+    //   console.log("in")
+    //   handleOutput(window.URL.createObjectURL(fullBlob),window.URL.createObjectURL(croppedBlob))
+    // }
   }
 
   return (
     <>
       <video style={{ visibility: "hidden", width: "100%", height: "1px" }} ref={videoRef} onPlay={hOnPlay} onCanPlay={handleCanPlay} autoPlay playsInline muted />
       <button onClick={handleCapture}>Handle capture</button>
-      <canvas
+    <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "500px" }}
+        style={{ height: "100vh", position: "fixed", top: 0,left: "50%",
+        transform: "translate(-50%, 0)"}}
       />
       <canvas
         hidden
@@ -141,35 +172,8 @@ function Camera() { //From https://blog.logrocket.com/responsive-camera-componen
         width={ciWidth}
         height={ciHeight}
       />
-      {fullBlob && <img style={{ height: "100px" }} src={window.URL.createObjectURL(fullBlob)} />}
-      {blob && <img style={{ height: "100px" }} src={window.URL.createObjectURL(blob)} />}
+      <button onClick={handleCapture} style={{position: "fixed",zIndex: 1, bottom: "1em", left: "50%"}}>Click</button>
+      {/* {blob && <button onClick={clearImage}>Redo</button>} */}
     </>
   );
-}
-
-export function useUserMedia(requestedMedia: any) {
-  const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-
-  useEffect(() => {
-    async function enableStream() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(requestedMedia);
-        setMediaStream(stream);
-      } catch (err) {
-        // Removed for brevity
-      }
-    }
-
-    if (!mediaStream) {
-      enableStream();
-    } else {
-      return function cleanup() {
-        mediaStream.getTracks().forEach(track => {
-          track.stop();
-        });
-      }
-    }
-  }, [mediaStream, requestedMedia]);
-
-  return mediaStream;
 }
