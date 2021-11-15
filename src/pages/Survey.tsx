@@ -18,10 +18,6 @@ export default function Survey() {
         getSurvey();
     }, [])
 
-    useEffect(() => {
-        console.log("Answers effect")
-    }, [answers.length])
-
     const handleSurveyResponse = (answer: QuestionnaireResponseItemAnswer, code: string) => {
         const index = answers.findIndex(value => { return value.linkId === code })
         let answersCopy = [...answers];

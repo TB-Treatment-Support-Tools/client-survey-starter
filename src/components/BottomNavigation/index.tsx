@@ -8,10 +8,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 type Tab = {
     route: string;
-    icon: React.ReactElement
+    icon: React.ReactElement,
+    text: string
 
 }
-const tabs: Tab[] = [{ route: "/home", icon: <Home /> }, { route: "/survey", icon: <CalendarToday /> }, { route: "/information", icon: <Info /> }, { route: "/chat", icon: <Chat /> }]
+const tabs: Tab[] = [{ route: "/home", icon: <Home />, text: "Home" }, { route: "/survey", icon: <CalendarToday />, text: "progress"  }, { route: "/chat", icon: <Chat />,text: "Support"  }]
 
 export default function SimpleBottomNavigation() {
     
@@ -40,7 +41,7 @@ export default function SimpleBottomNavigation() {
                 onChange={(event, newValue) => {
                     setValue(newValue);
                 }}>
-                {tabs.map((tab, index) => <BottomNavigationAction className={styles.tab} key={`tab-${index}`} onClick={() => { handleClick(tab, index) }} icon={tab.icon} />)}
+                {tabs.map((tab, index) => <BottomNavigationAction classes={{selected: styles.selected}} label={tab.text} className={styles.tab} key={`tab-${index}`} onClick={() => { handleClick(tab, index) }} icon={tab.icon} />)}
             </BottomNavigation>
         </Box>
     );

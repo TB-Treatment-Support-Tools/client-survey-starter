@@ -29,6 +29,7 @@ const AppRouter = () => {
   const [userResource, setUserResource] = useState<Patient | Practitioner | null>(null);
 
   const isPatient = keycloak?.hasRealmRole('patient')
+  const isProvider = keycloak?.hasRealmRole('provider')
 
   const getCurrentUser = async () => {
     const user = await Fhir.getUserInformation();
@@ -43,8 +44,7 @@ const AppRouter = () => {
     <Router>
       <UserContext.Provider value={{user: userResource}}>
       <div className={styles.container}>
-        <TopBar />
-        <Link to={"/photo-test"}>Photo Test</Link>
+        {isProvider && <TopBar />}
         <div className={styles.main}>
           <Route path="/photo-test" component={PhotoTest} />
           {!initialized ? <p>Keycloak loading</p> : <>

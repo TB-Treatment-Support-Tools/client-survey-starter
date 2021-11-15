@@ -1,8 +1,20 @@
+@import 'lib/style';
+
 .container{
     width: 100%;
-    background-color: lightgray;
+    box-sizing: border-box;
+    background-color: $blackColor;
+}
+
+.selected{
+    color: $blueColor;
 }
 
 .tab{
-    background-color: lightgray;
+    color: $whiteColor;
+    background-color: $blackColor;
+    span{
+        margin-top: 5px;
+    }
+    text-transform: lowercase;
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import AppRouter from './routes/';
 import reportWebVitals from './reportWebVitals';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
 import { StyledEngineProvider } from '@mui/material/styles';
+import './app.css'
 
 ReactDOM.render(
   <React.StrictMode>
