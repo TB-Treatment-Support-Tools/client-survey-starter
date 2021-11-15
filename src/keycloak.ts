@@ -5,7 +5,7 @@ import Keycloak from 'keycloak-js';
 const keycloak = Keycloak({
   url: 'https://keycloak.local.app:4400/auth',
   realm: 'survey-app',
-  clientId: 'react-ts-app'
+  clientId: 'tls-client'
 });
 
 export default keycloak;

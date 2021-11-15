@@ -13,10 +13,10 @@ const CAPTURE_OPTIONS = {
 
 export default function PhotoTest() {
 
-  const [full,setFull] = useState("");
-  const [cropped,setCropped] = useState("");
+  const [full, setFull] = useState("");
+  const [cropped, setCropped] = useState("");
 
-  const handleOutput = (full : string, cropped : string) => {
+  const handleOutput = (full: string, cropped: string) => {
     setFull(full);
     setCropped(cropped);
   }
@@ -35,19 +35,20 @@ export default function PhotoTest() {
 }
 
 interface CameraProps {
-  handleOutput : (full : string, cropped : string) => void
+  handleOutput: (full: string, cropped: string) => void
 }
 
-function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.com/responsive-camera-component-react-hooks/
+function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.com/responsive-camera-component-react-hooks/
 
   const videoOpen = useState(false);
 
   // const [blob, setBlob] = useState<any>(null);
   // const [fullBlob, setFullBlob] = useState<any>(null);
 
-  const videoRef = useRef<any>();
-  const canvasRef = useRef<any>();
-  const displayCanvasRef = useRef<any>();
+  const videoRef = useRef<any>(null);
+  const canvasRef = useRef<any>(null);
+  const displayCanvasRef = useRef<HTMLCanvasElement>(null)
+  const rotatedCanvasRef = useRef<HTMLCanvasElement>(null)
 
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const [playing, setPlaying] = useState(false);
@@ -55,16 +56,14 @@ function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.co
   const [ciWidth, setCiWidth] = useState(0);
   const [ciHeight, setCiHeight] = useState(0);
 
-  const [boxWidth, setBoxWidth] = useState(0);
-
   const base_image = new Image();
   base_image.src = 'img/overlay.png';
 
-  useEffect(() => {
-    if (playing) {
-      setBoxWidth(videoRef.current.videoWidth / 5)
-    }
-  }, [playing])
+  // useEffect(() => {
+  //   if (playing) {
+  //     setBoxWidth(videoRef.current.videoWidth / 5)
+  //   }
+  // }, [playing])
 
   if (mediaStream && videoRef.current && !videoRef.current.srcObject) {
     videoRef.current.srcObject = mediaStream;
@@ -121,9 +120,7 @@ function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.co
     setPlaying(true);
   }
 
-  const handleCapture = () => {
-    
-    // drawImge(true);
+  const handleCapture = async () => {
 
     const boxWidth = videoRef.current.videoWidth / 5;
 
@@ -132,39 +129,36 @@ function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.co
 
     const boxHeight = (canvasRef.current.height - ((canvasRef.current.height / 10) * 2))
 
-    const context = displayCanvasRef.current.getContext("2d");
+    if (displayCanvasRef.current) {
 
-    context.drawImage(
-      canvasRef.current, pX, pY, boxWidth, boxHeight, 0, 0, boxWidth, boxHeight
-    );
-    
-    let croppedBlob : Blob | null = null;
-    let fullBlob : Blob | null = null;
+      //Draw cropped image to hidden canvas
+      const context = displayCanvasRef.current.getContext("2d");
 
-    displayCanvasRef.current.toBlob((blob: any) => {
-      croppedBlob = blob
-      canvasRef.current.toBlob((blobTwo: any) => {
-        fullBlob = blobTwo
-        handleOutput(window.URL.createObjectURL(fullBlob),window.URL.createObjectURL(croppedBlob))
-      }, "image/jpeg", 1);
-    }, "image/jpeg", 1);
-    
+      context?.drawImage(canvasRef.current, pX, pY, boxWidth, boxHeight, 0, 0, boxWidth, boxHeight);
 
-    // console.log("out")
-    // if(croppedBlob && fullBlob){
-    //   console.log("in")
-    //   handleOutput(window.URL.createObjectURL(fullBlob),window.URL.createObjectURL(croppedBlob))
-    // }
+      const newContext = rotatedCanvasRef.current?.getContext("2d");
+      newContext?.drawImage(displayCanvasRef.current, boxWidth, boxHeight);
+      newContext?.rotate(Math.PI / 2);
+
+      let croppedBlob: Blob | null = await new Promise(resolve => displayCanvasRef.current?.toBlob((blob: any) => { resolve(blob) }, "image/jpeg"))
+      let fullBlob: Blob | null = await new Promise(resolve => canvasRef.current?.toBlob((blob: any) => { resolve(blob) }, "image/jpeg"))
+
+      handleOutput(window.URL.createObjectURL(fullBlob), window.URL.createObjectURL(croppedBlob))
+
+    }
+
   }
 
   return (
     <>
       <video style={{ visibility: "hidden", width: "100%", height: "1px" }} ref={videoRef} onPlay={hOnPlay} onCanPlay={handleCanPlay} autoPlay playsInline muted />
       <button onClick={handleCapture}>Handle capture</button>
-    <canvas
+      <canvas
         ref={canvasRef}
-        style={{ height: "100vh", position: "fixed", top: 0,left: "50%",
-        transform: "translate(-50%, 0)"}}
+        style={{
+          height: "100vh", position: "fixed", top: 0, left: "50%",
+          transform: "translate(-50%, 0)"
+        }}
       />
       <canvas
         hidden
@@ -172,7 +166,14 @@ function Camera({handleOutput} : CameraProps) { //From https://blog.logrocket.co
         width={ciWidth}
         height={ciHeight}
       />
-      <button onClick={handleCapture} style={{position: "fixed",zIndex: 1, bottom: "1em", left: "50%"}}>Click</button>
+      <canvas
+        //Rotated
+        hidden
+        ref={rotatedCanvasRef}
+        width={ciHeight}
+        height={ciWidth}
+      />
+      <button onClick={handleCapture} style={{ position: "fixed", zIndex: 1, bottom: "1em", left: "50%" }}>Click</button>
       {/* {blob && <button onClick={clearImage}>Redo</button>} */}
     </>
   );
