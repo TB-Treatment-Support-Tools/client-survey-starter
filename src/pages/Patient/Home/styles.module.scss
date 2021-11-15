@@ -1,0 +1,20 @@
+@import 'lib/style';
+
+.lastReport{
+    @include base-text;
+}
+
+.lastCheckIn{
+    padding-right: 2em;
+    padding: .5em 0;
+}
+
+.reportNow{
+    span{
+        @include base-text;  
+    }
+    background-color: #3A606E;
+    color: $whiteColor;
+    padding: 1em;
+    border-radius: 6px;
+}

@@ -1,9 +1,8 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
-import HomePage from '../pages/Home'
 import Survey from '../pages/Survey'
 
 import Login from '../pages/Login'
@@ -13,16 +12,15 @@ import BottomNavigation from '../components/BottomNavigation/'
 import styles from './main-content.module.scss'
 import Chat from '../pages/Chat'
 import keycloak from '../keycloak'
-import AddPatient from '../pages/AddPatient'
-import ViewPatients from '../pages/ViewPatients'
 
 import TopBar from '../components/TopBar'
 import Fhir from '../api'
 import { Patient, Practitioner } from 'fhir/r4'
 
 import UserContext from '../context/user-context'
-import PatientProfile from '../pages/PatientProfile'
 import PhotoTest from '../components/PhotoTest'
+import ProviderRoutes from './ProviderRoutes'
+import PatientHome from '../pages/Patient/Home'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -42,24 +40,20 @@ const AppRouter = () => {
 
   return (
     <Router>
-      <UserContext.Provider value={{user: userResource}}>
-      <div className={styles.container}>
-        {isProvider && <TopBar />}
-        <div className={styles.main}>
-          <Route path="/photo-test" component={PhotoTest} />
-          {!initialized ? <p>Keycloak loading</p> : <>
-            <PrivateRoute path="/home" component={Survey} />
+      <UserContext.Provider value={{ user: userResource }}>
+        <div className={styles.container}>
+          {isProvider && <TopBar />}
+          <div className={styles.main}>
+            <Route path="/photo-test" component={PhotoTest} />
+            <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={Survey} />
-            <ProviderRoute path="/add-patient" component={AddPatient} />
-            <ProviderRoute path="/patients" component={ViewPatients} />
-            <ProviderRoute path="/patient/*" component={PatientProfile} />
             <Route path="/login" component={Login} />
-          </>}
+            {isProvider && <ProviderRoutes />}
+          </div>
+          {isPatient && <BottomNavigation />}
         </div>
-        {isPatient && <BottomNavigation />}
-      </div>
-     </UserContext.Provider>
+      </UserContext.Provider>
     </Router>
   )
 }

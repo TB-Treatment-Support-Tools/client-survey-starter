@@ -20,7 +20,7 @@ export function PrivateRoute({
     <Route
       {...rest}
       render={(props) =>
-        keycloak?.authenticated ? (
+       !keycloak || keycloak?.authenticated ? (
           <Component {...props} />
         ) : (
           <Redirect

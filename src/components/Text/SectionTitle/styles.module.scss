@@ -1,0 +1,6 @@
+@import "lib/style";
+
+.sectionTitle {
+    @include base-title;
+    margin: 0;
+}
