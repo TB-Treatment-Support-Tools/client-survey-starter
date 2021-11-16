@@ -2,11 +2,21 @@
 
 .greeting{
     @include base-title;
+    background-color: #6B8F71;
+    padding: 1em;
+    color: white;
 }
 
 .accountButton{
+    width: fit-content;
     margin-left: auto;
     svg{
         font-size: 2em;
+        color: white;
     }
+}
+
+.accountLabel{
+    @include base-text;
+    font-size: .5em;
 }

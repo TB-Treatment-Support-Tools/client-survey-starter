@@ -2,8 +2,9 @@ import { useKeycloak } from '@react-keycloak/web';
 import UserGreeting from '../../../components/UserGreeting';
 import classes from './styles.module.scss'
 import Grid from '@mui/material/Grid'
-import { KeyboardArrowRightOutlined } from '@mui/icons-material';
+import { Add, AddCircle, AddOutlined, KeyboardArrowRightOutlined, TrendingUp } from '@mui/icons-material';
 import SectionTitle from '../../../components/Text/SectionTitle';
+import { Box } from '@mui/system';
 
 
 export default function Home() {
@@ -14,17 +15,25 @@ export default function Home() {
     return (
         <section>
             <UserGreeting />
-            <SectionTitle>Check-In</SectionTitle>
-            <div className={classes.lastCheckIn}>
-                <span className={classes.lastReport}>You last reported 6 days ago. How have you been since then?</span>
-            </div>
-            <div className={classes.reportNow}>
+            <div className={classes.item}>
+                <SectionTitle>
+                    <AddCircle />
+                    <span>Check-In</span>
+                </SectionTitle>
+                <div className={classes.lastCheckIn}>
+                    <span className={classes.lastReport}>You last reported 6 days ago. How have you been since then?</span>
+                </div>
+                <div className={classes.reportNow}>
 
-                <Grid alignItems="center" justifyContent="space-between" container>
-                    <span>Report Now</span>
-                    <KeyboardArrowRightOutlined />
-                </Grid>
+                    <Grid alignItems="center" justifyContent="space-between" container>
+                        <span>Report Now</span>
+                        <KeyboardArrowRightOutlined />
+                    </Grid>
 
+                </div>
             </div>
+            <Box padding="1em">
+                <SectionTitle>Learn More</SectionTitle>
+            </Box>
         </section>)
 }

@@ -17,13 +17,16 @@ export default function UserGreeting() {
 
     return (
         <>
-        <Grid className={classes.greeting} container>
+        <Grid alignItems="center" wrap="nowrap" className={classes.greeting} container>
             <div>
-                <p>Good Afternoon, <br /> {firstName}</p>
+                <span>Good Afternoon, <br /> {firstName}</span>
             </div>
-            <IconButton className={classes.accountButton} aria-label="profile" onClick={openDrawer}>
+            <Grid alignItems="center" className={classes.accountButton} direction="column" container>
+            <IconButton aria-label="profile" onClick={openDrawer}>
                 <AccountCircle />
             </IconButton>
+            <span className={classes.accountLabel}>Account</span>
+            </Grid>
         </Grid>
         <SideDrawer drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
         </>
