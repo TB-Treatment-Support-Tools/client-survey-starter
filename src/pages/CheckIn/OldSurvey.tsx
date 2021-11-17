@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
-import Fhir from '../api'
-import { CircularProgress } from '@mui/material';
-import Item from '../components/QuestionnaireItem/'
+import Fhir from '../../api'
+import { CircularProgress, IconButton } from '@mui/material';
+import Item from '../../components/QuestionnaireItem'
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
-import UserGreeting from '../components/UserGreeting';
+import UserGreeting from '../../components/UserGreeting';
+import classes from './styles.module.scss'
+import Grid from '@mui/material/Grid'
+import { Cancel } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import Fade from '@mui/material/Fade';
 
 export default function Survey() {
     const [survey, setSurvey] = useState<Questionnaire | null>(null);
@@ -49,15 +54,15 @@ export default function Survey() {
     }
 
     return (
-        <div>
-            <UserGreeting />
-            <div>
-                {survey ? <div style={{ padding: "1em" }}>
-                    {survey && survey.item?.map((item: QuestionnaireItem) => <Item handleResponse={handleSurveyResponse} questionnaireItem={item} />)}
-                    {answers.length === 2 && <button onClick={submitSurvey}>Submit Survey</button>}
-                </div> : <CircularProgress variant="indeterminate" />}
-
+        <Fade appear in timeout={1500} >
+            <div className={classes.container}>
+                <div>
+                    {survey ? <div style={{ padding: "1em" }}>
+                        {survey && survey.item?.map((item: QuestionnaireItem) => <Item handleResponse={handleSurveyResponse} questionnaireItem={item} />)}
+                        {answers.length === 2 && <button onClick={submitSurvey}>Submit Survey</button>}
+                    </div> : <CircularProgress variant="indeterminate" />}
+                </div>
             </div>
-        </div>
+        </Fade>
     )
 }

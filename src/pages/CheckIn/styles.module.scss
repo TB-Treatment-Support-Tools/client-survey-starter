@@ -1,0 +1,18 @@
+@import 'lib/style';
+
+.container{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    z-index: 1;
+}
+
+.exit{
+    padding: 1em;
+    color: $grayTextColor;
+    svg{
+        font-size: 2em;
+    }
+}

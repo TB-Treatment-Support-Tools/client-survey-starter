@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
-import Survey from '../pages/Survey'
+import  CheckIn from '../pages/CheckIn/'
 
 import Login from '../pages/Login'
 
@@ -47,7 +47,7 @@ const AppRouter = () => {
             <Route path="/photo-test" component={PhotoTest} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
-            <Route path="/survey" component={Survey} />
+            <Route path="/survey" component={CheckIn} />
             <Route path="/login" component={Login} />
             {isProvider && <ProviderRoutes />}
           </div>
