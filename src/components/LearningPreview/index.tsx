@@ -2,7 +2,7 @@ import { Avatar, Grid } from '@mui/material'
 import classes from './styles.module.scss'
 
 export default function LearningPreview() {
-    return <Grid style={{overflowX: "scroll"}} wrap="nowrap" container>
+    return <Grid className={classes.container} wrap="nowrap" container>
        <LearningItem src={"/img/pills.png"} text="Medication" />
        <LearningItem src={"/img/symptoms.png"} text="Symptoms" />
        <LearningItem src={"/img/cost.png"} text="Paying for Treatment" />

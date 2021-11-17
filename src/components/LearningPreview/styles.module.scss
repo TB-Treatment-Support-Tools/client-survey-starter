@@ -14,6 +14,14 @@ $storySize: 56px;
     border: solid 2px $blueColor;
 }
 
+.container{
+    overflow-x: scroll;
+}
+
+.container::-webkit-scrollbar {
+    display: none;
+  }
+
 .text{
     padding-top: .5em;
     display: block;
