@@ -1,6 +1,6 @@
-@import 'lib/style';
+@import "lib/style";
 
-.container{
+.container {
     position: fixed;
     top: 0;
     width: 100%;
@@ -9,19 +9,19 @@
     z-index: 1;
 }
 
-.exit{
+.exit {
     padding: 1em;
     color: $grayTextColor;
-    svg{
+    svg {
         font-size: 2em;
     }
 }
 
-.nextButton{
+.nextButton {
     position: fixed;
     bottom: 2em;
     right: 1em;
-    svg{
+    svg {
         font-size: 1.5em;
     }
     color: white;
@@ -29,9 +29,16 @@
     background-color: $altBlueColor;
 }
 
-.nextButtonDisabled{
+.nextButtonDisabled {
     pointer-events: none;
-    button{
+    button {
         background-color: lightgray;
     }
+}
+
+.ratingItem {
+    svg{
+        font-size: 2.5em;
+    }
+
 }
