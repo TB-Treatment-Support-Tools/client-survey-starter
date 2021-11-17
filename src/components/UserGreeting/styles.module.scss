@@ -2,7 +2,7 @@
 
 .greeting{
     @include base-title;
-    background-color: #6B8F71;
+    background-color: $greenColor;
     padding: 1em;
     color: white;
 }
