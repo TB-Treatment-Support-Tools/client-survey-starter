@@ -21,6 +21,7 @@ import UserContext from '../context/user-context'
 import PhotoTest from '../components/PhotoTest'
 import ProviderRoutes from './ProviderRoutes'
 import PatientHome from '../pages/Patient/Home'
+import Progress from '../pages/Progress'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -45,6 +46,7 @@ const AppRouter = () => {
           {isProvider && <TopBar />}
           <div className={styles.main}>
             <Route path="/photo-test" component={PhotoTest} />
+            <Route path="/progress" component={Progress} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={CheckIn} />

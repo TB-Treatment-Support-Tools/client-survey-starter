@@ -12,7 +12,7 @@ type Tab = {
     text: string
 
 }
-const tabs: Tab[] = [{ route: "/home", icon: <Home />, text: "Home" }, { route: "/survey", icon: <CalendarToday />, text: "progress"  }, { route: "/chat", icon: <Chat />,text: "Support"  }]
+const tabs: Tab[] = [{ route: "/home", icon: <Home />, text: "Home" }, { route: "/progress", icon: <CalendarToday />, text: "progress"  }, { route: "/chat", icon: <Chat />,text: "Support"  }]
 
 export default function SimpleBottomNavigation() {
     

@@ -9,7 +9,7 @@ export default function CheckIn() {
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
 
-    return (<div>
+    return (<div className={classes.container}>
         <TopText />
         {QuestionList[questionNumber - 1]}
     </div>)
