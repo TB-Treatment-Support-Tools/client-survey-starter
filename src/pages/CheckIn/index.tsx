@@ -10,7 +10,7 @@ export default function CheckIn() {
     const questionNumber = parseInt(split[split.length - 1]);
 
     return (
-        <Fade in appear timeout={2000}>
+        <Fade in appear timeout={1000}>
             <div className={classes.container}>
                 <TopText />
                 {QuestionList[questionNumber - 1]}

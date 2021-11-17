@@ -1,21 +1,22 @@
-import { useKeycloak } from '@react-keycloak/web';
 import UserGreeting from '../../../components/UserGreeting';
 import classes from './styles.module.scss'
 import Grid from '@mui/material/Grid'
-import { Add, AddCircle, AddOutlined, KeyboardArrowRightOutlined, Lightbulb, TrendingUp } from '@mui/icons-material';
+import { AddCircle, KeyboardArrowRightOutlined, Lightbulb } from '@mui/icons-material';
 import SectionTitle from '../../../components/Text/SectionTitle';
 import { Box } from '@mui/system';
-import { ButtonBase } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LearningPreview from '../../../components/LearningPreview';
+import CheckIn from '../../CheckIn';
 
 
-export default function Home() {
-    const { keycloak } = useKeycloak()
+export default function PatientHome() {
 
-    const isProvider = keycloak?.hasRealmRole('provider')
+    const location = useLocation();
+    const isSurvey = location.pathname.split("/")[1] === "survey"
 
     return (
+        <>
+        {isSurvey && <CheckIn />}
         <section>
             <UserGreeting />
             <div className={classes.item}>
@@ -42,5 +43,6 @@ export default function Home() {
                 </SectionTitle>
                 <LearningPreview />
             </Box>
-        </section>)
+        </section>
+        </>)
 }

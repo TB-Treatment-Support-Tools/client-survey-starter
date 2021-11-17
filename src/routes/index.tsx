@@ -49,7 +49,7 @@ const AppRouter = () => {
             <Route path="/progress" component={Progress} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
-            <Route path="/survey" component={CheckIn} />
+            <Route path="/survey" component={PatientHome} />
             <Route path="/login" component={Login} />
             {isProvider && <ProviderRoutes />}
           </div>
