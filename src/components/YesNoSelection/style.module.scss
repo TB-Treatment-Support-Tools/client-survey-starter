@@ -1,11 +1,22 @@
-.container{
+@import 'lib/style';
+
+.container {
     width: 100%;
-    button{
+    button {
         font-size: 1.25em;
         padding: 1em;
         border-radius: 5px;
         border: 1px solid gray;
         flex: 1 1 0;
-        
     }
+}
+
+.selectedYes {
+    background-color: $yesColor;
+    color: white;
+}
+
+.selectedNo {
+    background-color: $noColor;
+    color: white;
 }

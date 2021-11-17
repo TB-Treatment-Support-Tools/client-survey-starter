@@ -28,3 +28,10 @@
     border-radius: 50%;
     background-color: $altBlueColor;
 }
+
+.nextButtonDisabled{
+    pointer-events: none;
+    button{
+        background-color: lightgray;
+    }
+}
