@@ -1,0 +1,6 @@
+@import 'lib/style';
+
+.questionText{
+    @include base-text;
+    font-size: 1.5em;
+}
