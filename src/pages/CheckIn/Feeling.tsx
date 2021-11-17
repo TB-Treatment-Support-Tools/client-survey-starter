@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { Link } from 'react-router-dom';
 import QuestionText from '../../components/Text/QuestionText';
+import NextButton from './NextButton';
 
 export default function Feeling() {
     return (<div style={{padding: "2em"}}>
         <QuestionText>How are you feeling today?</QuestionText>
         <DiscreteSliderMarks />
-        <Link to="survey/3">Next</Link>
+        <NextButton />
     </div>)
 }
 

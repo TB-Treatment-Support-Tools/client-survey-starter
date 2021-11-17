@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
-import  CheckIn from '../pages/CheckIn/'
-
 import Login from '../pages/Login'
 
-import { PrivateRoute, ProviderRoute } from './utils'
+import { PrivateRoute } from './utils'
 import BottomNavigation from '../components/BottomNavigation/'
 import styles from './main-content.module.scss'
 import Chat from '../pages/Chat'
