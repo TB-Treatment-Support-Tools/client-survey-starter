@@ -1,4 +1,4 @@
-import { Bundle, Patient, BundleEntry, Condition } from "fhir/r4"
+import { Bundle, Patient, Condition } from "fhir/r4"
 import { useContext, useEffect, useState } from "react"
 import Fhir from "../../api"
 import PatientTable from "../../components/PatientTable";
@@ -39,10 +39,10 @@ export default function ViewPatients() {
         loadConditions();
     }, [])
 
-    return <div>
+    return (<div>
         <p>Site Information</p>
         <p>Name: </p>
         <p>Id: {userContext.organizationID}</p>
         {patients.length > 0 && <PatientTable conditions={conditions} patients={patients} />}
-    </div>
+    </div>)
 }

@@ -20,6 +20,7 @@ export default function TopBar() {
                 <Link to="/add-patient">Add Patient</Link>
                 <Link to="/patients">Patients</Link>
                 <Link to="/chat">Chat</Link>
+                <p>Hello</p>
             </div>
         </div>
     </>
