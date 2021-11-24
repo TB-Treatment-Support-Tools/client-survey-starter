@@ -8,15 +8,15 @@ import { useState } from 'react';
 
 //@TODO - make this conditional based on the answer to the previous question
 //@TODO - dont hardcode these here, move to FHIR Survey definition on HAPI Server 
-const reasons = ["I forgot to take it","I ran out of medication","My medication is lost or stolen","I didn’t have time to take it","I didn’t have it with me today","I didn’t have privacy to take it","I wasn’t feeling well","Other"]
+const reasons = ["Nausea", "Vomiting", "Upset Stomach", "Vision Loss", "Other"]
 const initalValues = reasons.map( each => {return false});
 
-export default function AdherenceFactors() {
+export default function SideEffects() {
 
     const [response,setResponse] = useState<boolean[]>(initalValues)
 
     return (<Box padding="1em">
-        <QuestionText>What has been causing you to miss doses of your medication?</QuestionText>
+        <QuestionText>What side effects have you experienced?</QuestionText>
         <Box height="1em" />
         <FormGroup>
             {reasons.map( (each,index) => {

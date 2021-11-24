@@ -8,10 +8,6 @@ export default function TopBar() {
 
     const isProvider = keycloak?.hasRealmRole('provider')
 
-    const logout = useCallback(() => {
-        keycloak?.logout()
-    }, [keycloak])
-
     return (<>
         <div className={classes.topBar}>
             <span>Treatment Tracker</span>
