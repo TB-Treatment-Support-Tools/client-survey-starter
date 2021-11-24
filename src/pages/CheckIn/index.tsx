@@ -34,7 +34,7 @@ const TopText = ({ progress }: TopTextProps) => {
         <div>
             <Grid justifyContent="space-between" alignItems="center" container >
 
-                <IconButton className={classes.exit} onClick={history.goBack}>
+                <IconButton className={classes.backButton} onClick={history.goBack}>
                     <Left />
                 </IconButton>
                 <Link className={classes.exit} to="/home">

@@ -1,5 +1,11 @@
 @import "lib/style";
 
+.backButton {
+    svg {
+        font-size: 1.5em;
+    }
+}
+
 .container {
     position: fixed;
     top: 0;
@@ -10,7 +16,7 @@
 }
 
 .exit {
-    padding: 1em;
+    padding: 0 1em;
     color: $grayTextColor;
     svg {
         font-size: 2em;
@@ -37,8 +43,7 @@
 }
 
 .ratingItem {
-    svg{
+    svg {
         font-size: 2.5em;
     }
-
 }
