@@ -22,3 +22,9 @@ export function getIdFromReference(reference: string | undefined) {
     }
     return reference.split("/")[1] || null;
 }
+
+export function extractTreatmentTypeFromSnomedCode(code : string | undefined){
+    if(code === "266974005") return "ART"
+    if(code === "86406008") return "PrEP"
+    return "Unsupported Diagnosis"
+}

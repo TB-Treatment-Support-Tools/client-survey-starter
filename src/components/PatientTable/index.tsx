@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { Condition, Patient } from 'fhir/r4'
 import { Link } from "react-router-dom";
 import { addCondition } from "../../api/patient";
-import { getFhirFullname } from "../../utility/fhir-utilities";
+import { extractTreatmentTypeFromSnomedCode, getFhirFullname } from "../../utility/fhir-utilities";
 
 interface Props {
     patients: Patient[]
@@ -21,7 +21,7 @@ export default function PatientTable({ patients, conditions }: Props) {
         if (c.subject.reference && c.code && c.code.coding) {
             const newPatientId = c.subject.reference.split("/")[1]
             if (newPatientId) {
-                conditionsMap[`${newPatientId}`] = c.code.coding[0].display
+                conditionsMap[`${newPatientId}`] = extractTreatmentTypeFromSnomedCode(c.code.coding[0].code)
             }
         }
     })
@@ -31,20 +31,24 @@ export default function PatientTable({ patients, conditions }: Props) {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Condition</TableCell>
+                <TableCell>Treatment Type</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
-            {patients.map(patient => <TableRow>
+            {patients.map(patient => {
+            const condition = conditionsMap[`${patient.id}`];
+            return(<TableRow>
                 <TableCell>{patient.id}</TableCell>
                 <TableCell><Link to={`/patient/${patient.id}`}>{getFhirFullname(patient.name)}</Link></TableCell>
-                <TableCell>{conditionsMap[`${patient.id}`]}</TableCell>
+                <TableCell>{condition}</TableCell>
                 <TableCell>
-                    <button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP</button>
-                    <br />
-                    <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
+                    {!condition && <>
+                        <button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP</button>
+                        <br />
+                        <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
+                    </>}
                 </TableCell>
-            </TableRow>)}
+            </TableRow>)})}
         </TableBody>
     </Table>
 }
