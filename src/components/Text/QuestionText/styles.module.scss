@@ -3,4 +3,6 @@
 .questionText{
     @include base-text;
     font-size: 1.5em;
+    padding: 0;
+    margin: 0;
 }

@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import { Link, Redirect, useLocation,  } from 'react-router-dom'
-
 import { useKeycloak } from '@react-keycloak/web'
 
 const LoginPage = () => {
@@ -20,10 +19,11 @@ const LoginPage = () => {
 
   return (
     <div>
+      <h1>Welcome to treatment tracker please login</h1>
       <button type="button" onClick={login}>Login</button>
       <br />
     </div>
   )
 }
 
-export default LoginPage
+export default LoginPage;

@@ -24,9 +24,6 @@ export default function ViewPatients() {
     }, [])
 
     return <div>
-        <p>Patient 1</p>
-        <button onClick={getPatients}>Get Patients Again</button>
-        <p>Table</p>
         {patients.length > 0 && <PatientTable patients={patients} />}
     </div>
 }
