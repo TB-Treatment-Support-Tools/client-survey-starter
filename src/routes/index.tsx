@@ -20,10 +20,15 @@ import PhotoTest from '../components/PhotoTest'
 import ProviderRoutes from './ProviderRoutes'
 import PatientHome from '../pages/Patient/Home'
 import Progress from '../pages/Progress'
+import { getPractitionerRoles } from '../api/practitioner'
+import { UserInformation } from '../types/user-information'
+import { getIdFromReference } from '../utility/fhir-utilities'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
+
   const [userResource, setUserResource] = useState<Patient | Practitioner | null>(null);
+  const [orgID, setOrgId] = useState<string | null>(null);
 
   const isPatient = keycloak?.hasRealmRole('patient')
   const isProvider = keycloak?.hasRealmRole('provider')
@@ -31,6 +36,15 @@ const AppRouter = () => {
   const getCurrentUser = async () => {
     const user = await Fhir.getUserInformation();
     setUserResource(user);
+
+    if (user?.resourceType === "Patient" && user.managingOrganization && user.managingOrganization.id) {
+      setOrgId(user.managingOrganization.id)
+    } else if (user?.resourceType === "Practitioner" && user.id) {
+      const roles = await getPractitionerRoles(user.id);
+      if (roles && roles.length > 0 && roles[0].organization?.reference) {
+        setOrgId(getIdFromReference(roles[0].organization?.reference));
+      }
+    }
   }
 
   useEffect(() => {
@@ -39,7 +53,7 @@ const AppRouter = () => {
 
   return (
     <Router>
-      <UserContext.Provider value={{ user: userResource }}>
+      <UserContext.Provider value={{ user: userResource, organizationID: orgID }}>
         <div className={styles.container}>
           {isProvider && <TopBar />}
           <div className={styles.main}>

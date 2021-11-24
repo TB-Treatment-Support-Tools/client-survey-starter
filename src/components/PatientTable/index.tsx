@@ -29,16 +29,21 @@ export default function PatientTable({ patients, conditions }: Props) {
     return <Table>
         <TableHead>
             <TableRow>
+                <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Condition</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
             {patients.map(patient => <TableRow>
+                <TableCell>{patient.id}</TableCell>
                 <TableCell><Link to={`/patient/${patient.id}`}>{getFhirFullname(patient.name)}</Link></TableCell>
                 <TableCell>{conditionsMap[`${patient.id}`]}</TableCell>
-                <TableCell><button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP Condition</button></TableCell>
-                <TableCell><button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV Diagnosis</button></TableCell>
+                <TableCell>
+                    <button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP</button>
+                    <br />
+                    <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
+                </TableCell>
             </TableRow>)}
         </TableBody>
     </Table>
