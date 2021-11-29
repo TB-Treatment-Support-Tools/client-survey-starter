@@ -5,8 +5,13 @@ import classes from './styles.module.scss';
 import QuestionList from "./QuestionList";
 import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
+import { Questionnaire } from 'fhir/r4';
 
-export default function CheckIn() {
+interface Props{
+    questionnaire : Questionnaire
+}
+
+export default function WeeklyQuestionnaire() {
     const location = useLocation();
 
     const split = location.pathname.split("/");

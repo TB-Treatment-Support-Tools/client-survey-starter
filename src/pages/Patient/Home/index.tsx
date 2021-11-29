@@ -6,7 +6,7 @@ import SectionTitle from '../../../components/Text/SectionTitle';
 import { Box } from '@mui/system';
 import { Link, useLocation } from 'react-router-dom';
 import LearningPreview from '../../../components/LearningPreview';
-import CheckIn from '../../CheckIn';
+import WeeklyQuestionnaire from '../../WeeklyQuestionnaire';
 import { useEffect, useState } from 'react';
 import { getQuestionnaire } from '../../../api/patient';
 import { Questionnaire } from 'fhir/r4';
@@ -32,7 +32,7 @@ export default function PatientHome() {
 
     return (
         <>
-        {isSurvey && <CheckIn />}
+        {isSurvey && <WeeklyQuestionnaire />}
         <section>
             <UserGreeting />
             <div className={classes.item}>
