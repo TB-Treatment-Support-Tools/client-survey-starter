@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import QuestionText from "../../components/Text/QuestionText";
 import YesNoSelection from "../../components/YesNoSelection";
+import NextButton from "../../pages/WeeklyQuestionnaire/NextButton";
 import QuestionnaireElementProps from "../../types/questionnaire-element";
 
  const Binary = ({ item, handleResponse }: QuestionnaireElementProps) => {
@@ -16,7 +17,7 @@ import QuestionnaireElementProps from "../../types/questionnaire-element";
 
     const handleChange = (value: boolean) => {
         setTaken(value)
-        handleResponse(item.linkId,value)
+        handleResponse([{valueBoolean: value}],item.linkId)
     }
 
     return (

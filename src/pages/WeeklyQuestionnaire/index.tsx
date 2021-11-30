@@ -4,9 +4,10 @@ import { Link, useLocation, useHistory } from "react-router-dom";
 import classes from './styles.module.scss';
 import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
-import { Questionnaire, QuestionnaireItem } from 'fhir/r4';
+import { Questionnaire, QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
 import NextButton from "./NextButton";
+import { useState } from "react";
 
 interface Props {
     questionnaire: Questionnaire
@@ -14,25 +15,41 @@ interface Props {
 
 export default function WeeklyQuestionnaire({ questionnaire }: Props) {
 
+    const [responses,setResponses] = useState<QuestionnaireResponseItem[]>([]);
+
+
     let questions: QuestionnaireItem[] = [];
     if (questionnaire.item && questionnaire.item.length > 0) {
         questions = questionnaire.item
     }
 
-
     const location = useLocation();
-
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
 
     const progress = (questionNumber / questions.length) * 100;
 
+    const handleResponse = (answers: QuestionnaireResponseItemAnswer[], code: string) => {
+        const index = responses.findIndex(value => { return value.linkId === code })
+        let answersCopy = [...responses];
+        const newValue = { linkId: code, answer: answers };
+
+        if (index < 0) {
+            answersCopy.push(newValue)
+        } else {
+            answersCopy[index] = newValue
+        }
+        console.log(`handle response for ${code}`)
+        console.log(answers)
+        setResponses(answersCopy)
+    }
+
     return (
         <Fade in appear timeout={1000}>
             <div className={classes.container}>
                 <TopText progress={progress} />
-                <QuestionnaireItemRouter item={questions[questionNumber - 1]} />
-                <NextButton />
+                <QuestionnaireItemRouter responses={responses} handleResponse={handleResponse} item={questions[questionNumber - 1]} />
+                <NextButton  />
             </div>
         </Fade>
     )

@@ -1,20 +1,17 @@
-import { QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from "fhir/r4";
 import Binary from '../../components/QuestionnaireItem/Binary'
 import Choice from "../../components/QuestionnaireItem/Choice";
 import QuestionnaireElementProps from "../../types/questionnaire-element";
 
 interface RouterProps {
-    item: QuestionnaireItem
+    item: QuestionnaireItem,
+    handleResponse: (answers : QuestionnaireResponseItemAnswer[], linkId : string) => void,
+    responses: QuestionnaireResponseItem[]
 }
 
-function responseHandler(linkId : string, value : any) : void {
-    console.log("TODO: Handle Questionnaire Response change")
-    console.log(linkId)
-}
+const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProps) => {
 
-const QuestionnaireItemRouter = ({ item }: RouterProps) => {
-
-    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: responseHandler }
+    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse }
 
     if(item.type === "boolean"){
         return <Binary {...passedProps} />

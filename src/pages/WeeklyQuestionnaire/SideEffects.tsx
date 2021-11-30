@@ -26,7 +26,6 @@ export default function SideEffects() {
                         setResponse(temp)
                     }
                 return (<FormControlLabel checked={response[index]} onChange={handleCheck} control={<Checkbox />} label={each} value={index} key={`adherence-reason-${index}`} />)})}
-            <NextButton />
         </FormGroup>
     </Box>)
 }

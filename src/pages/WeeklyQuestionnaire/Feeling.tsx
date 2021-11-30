@@ -18,7 +18,6 @@ export default function Feeling() {
         <Box padding="2em 0">
             <RadioGroupRating />
         </Box>
-        <NextButton />
     </div>)
 }
 

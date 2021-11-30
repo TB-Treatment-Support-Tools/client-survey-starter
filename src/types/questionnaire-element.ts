@@ -1,11 +1,10 @@
-import { QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponseItemAnswer } from "fhir/r4";
 
 let john: QuestionnaireItem;
 
-
 interface QuestionnaireElementProps {
     item: QuestionnaireItem,
-    handleResponse: (linkId: string, value: any) => void
+    handleResponse: (answers : QuestionnaireResponseItemAnswer[], linkId : string ) => void
 }
 
 export default QuestionnaireElementProps;

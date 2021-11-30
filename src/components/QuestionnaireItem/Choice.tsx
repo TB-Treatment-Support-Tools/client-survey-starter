@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 import QuestionText from '../Text/QuestionText';
 import { useEffect, useState } from 'react';
 import QuestionnaireElementProps from '../../types/questionnaire-element';
+import { QuestionnaireResponseItemAnswer } from 'fhir/r4';
 
 export default function Choice({ item, handleResponse }: QuestionnaireElementProps) {
 
@@ -17,8 +18,20 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
     const initalValues = reasons.map(each => { return false });
     const [response, setResponse] = useState<boolean[]>(initalValues)
 
+    function extractValues(){
+
+    }
+
     useEffect(()=>{
-        handleResponse(item.linkId,response)
+        let answers : QuestionnaireResponseItemAnswer[] = [];
+        response.forEach( (each,index) => {
+            if(each && item.answerOption && item.answerOption[index]){
+                let newAnswer : QuestionnaireResponseItemAnswer = {}
+                newAnswer.valueCoding = item.answerOption[index].valueCoding
+                answers.push(newAnswer)
+            }
+        })
+        handleResponse(answers,item.linkId)
     },[response])
 
     return (<Box padding="1em">
