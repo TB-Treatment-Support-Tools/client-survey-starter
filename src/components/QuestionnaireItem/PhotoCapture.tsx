@@ -13,11 +13,11 @@ export default function PhotoCapture({ item, handleResponse }: QuestionnaireElem
     return (<Box padding="1em">
         <QuestionText>{item.text || "Question Text Missing"}</QuestionText>
         <Box height="1em" />
-        <ButtonBase onClick={toggleCameraOpen} className={classes.launchCamera}>
+        {!cameraOpen && <ButtonBase onClick={toggleCameraOpen} className={classes.launchCamera}>
             <CameraAlt />
             <Box width="1em" />
             Launch Camera
-        </ButtonBase>
+        </ButtonBase>}
         {cameraOpen && <CroppableCamera />}
     </Box>)
 }

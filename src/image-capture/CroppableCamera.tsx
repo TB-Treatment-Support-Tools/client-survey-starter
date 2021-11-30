@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useUserMedia } from "../hooks/useUserMedia";
-import rgbToHsv from "../utility/rgb-to-hsv";
+import rgbToHsl from "../utility/rgb-to-hsl";
 import OptionButton from "../components/Buttons/OptionButton";
 import { Box } from "@mui/system";
 import Grid from '@mui/material/Grid'
@@ -14,7 +14,7 @@ const CAPTURE_OPTIONS = {
   }
 };
 
-export default function CroppableCamera() {
+export default function CroppableCamera({}) {
 
   const [full, setFull] = useState("");
   const [cropped, setCropped] = useState("");
@@ -35,11 +35,11 @@ export default function CroppableCamera() {
             const red = data[i];
             const green = data[i + 1];
             const blue = data[i + 2];
-            const [h, s, v] = rgbToHsv(red, green, blue);
+            const [h, s, l] = rgbToHsl(red, green, blue);
 
             if (i === 1000) {
-              console.log("HSV : ")
-              console.log(h, s, v)
+              console.log("HSL : ")
+              console.log(h, s, l)
             }
           }
         }
@@ -64,17 +64,16 @@ export default function CroppableCamera() {
 
   return (<div>
     {!!!full && <Camera handleOutput={handleOutput} />}
-    {full && <img style={{ height: "100px" }} src={full} />}
-    {cropped && <img ref={imgRef} style={{ height: "100px" }} src={cropped} />}
-    <br />
+    <Box padding="1em 0">
+      {full && <img style={{ height: "100px" }} src={full} />}
+      {cropped && <img ref={imgRef} style={{ height: "100px" }} src={cropped} />}
+    </Box>
     <Grid container>
       <OptionButton onClick={clearState}>Reset</OptionButton>
       <Box width=".5em" />
       <OptionButton onClick={analyzeImage}>Analyze</OptionButton>
     </Grid>
-    <canvas
-      ref={cRef}
-    />
+    <canvas ref={cRef} />
   </div>)
 }
 
@@ -86,30 +85,18 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
 
   const videoOpen = useState(false);
 
-  // const [blob, setBlob] = useState<any>(null);
-  // const [fullBlob, setFullBlob] = useState<any>(null);
-
   const videoRef = useRef<any>(null);
   const canvasRef = useRef<any>(null);
   const displayCanvasRef = useRef<HTMLCanvasElement>(null)
   const rotatedCanvasRef = useRef<HTMLCanvasElement>(null)
 
-  const [n, setN] = useState(0);
-
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
-  const [playing, setPlaying] = useState(false);
 
   const [ciWidth, setCiWidth] = useState(0);
   const [ciHeight, setCiHeight] = useState(0);
 
   const base_image = new Image();
   base_image.src = 'img/overlay.png';
-
-  // useEffect(() => {
-  //   if (playing) {
-  //     setBoxWidth(videoRef.current.videoWidth / 5)
-  //   }
-  // }, [playing])
 
   if (mediaStream && videoRef.current && !videoRef.current.srcObject) {
     videoRef.current.srcObject = mediaStream;
@@ -163,7 +150,6 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
 
   function hOnPlay() {
     setTimeout(drawImge, 300)
-    setPlaying(true);
   }
 
   const handleCapture = async () => {
@@ -195,7 +181,6 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
   return (
     <>
       <video style={{ visibility: "hidden", width: "100%", height: "1px" }} ref={videoRef} onPlay={hOnPlay} onCanPlay={handleCanPlay} autoPlay playsInline muted />
-      <button onClick={handleCapture}>Handle capture</button>
       {<canvas
         ref={canvasRef}
         style={{
@@ -218,31 +203,12 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
         height={ciWidth}
       />
       <button onClick={handleCapture} style={{ position: "fixed", zIndex: 3, bottom: "1em", left: "50%" }}>Click</button>
-      {/* {blob && <button onClick={clearImage}>Redo</button>} */}
 
     </>
   );
 }
 
-
-// const loadImage = () => {
-
-//   if (imgRef.current) {
-//     let ctx = cRef.current?.getContext('2d');
-//     if (cRef.current) {
-//       cRef.current.height = imgRef.current.height;
-//       cRef.current.width = imgRef.current.width;
-//       cRef.current.setAttribute("style", "background-color: red");
-//     }
-//     if (ctx) {
-//       ctx.drawImage(imgRef.current, 0, 0, imgRef.current.width, imgRef.current.height)
-//       // set the composite operation
-//       ctx.globalCompositeOperation = 'saturation';
-//       ctx.fillStyle = "red";
-//       ctx.globalAlpha = .5;  // alpha 0 = no effect 1 = full effect
-//       ctx.fillRect(0, 0, imgRef.current.width,imgRef.current.height);
-//     }
-
-//   }
-
-// }
+// HSL graph might be more apporpriate
+// Possible good hsv filter colors: (hMin = 0 , sMin = 17, vMin = 0), (hMax = 14 , sMax = 255, vMax = 255)
+// SMIN 18 
+// Bump image contrast? https://stackoverflow.com/questions/10521978/html5-canvas-image-contrast
