@@ -5,7 +5,7 @@ import QuestionText from "../../components/Text/QuestionText";
 import YesNoSelection from "../../components/YesNoSelection";
 import QuestionnaireElementProps from "../../types/questionnaire-element";
 
- const Binary = ({ item }: QuestionnaireElementProps) => {
+ const Binary = ({ item, handleResponse }: QuestionnaireElementProps) => {
 
     let bottomText;
     if (item.item && item.item.length > 0) {
@@ -15,7 +15,8 @@ import QuestionnaireElementProps from "../../types/questionnaire-element";
     const [taken, setTaken] = useState<boolean | null>(null);
 
     const handleChange = (value: boolean) => {
-        setTaken(value);
+        setTaken(value)
+        handleResponse(item.linkId,value)
     }
 
     return (

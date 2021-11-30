@@ -2,7 +2,6 @@ import { Cancel } from "@mui/icons-material";
 import { Fade, Grid, IconButton } from '@mui/material'
 import { Link, useLocation, useHistory } from "react-router-dom";
 import classes from './styles.module.scss';
-import QuestionList from "./QuestionList";
 import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
 import { Questionnaire, QuestionnaireItem } from 'fhir/r4';
@@ -26,7 +25,7 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
 
-    const progress = (questionNumber / QuestionList.length) * 100;
+    const progress = (questionNumber / questions.length) * 100;
 
     return (
         <Fade in appear timeout={1000}>
