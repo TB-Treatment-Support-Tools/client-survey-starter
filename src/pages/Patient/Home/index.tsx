@@ -11,15 +11,11 @@ import { useEffect, useState } from 'react';
 import { getQuestionnaire } from '../../../api/patient';
 import { Questionnaire } from 'fhir/r4';
 
-
-
 export default function PatientHome() {
-
 
     const [survey,setSurvey] = useState<Questionnaire | null>(null);
     const location = useLocation();
     const isSurvey = location.pathname.split("/")[1] === "survey"
-
 
     const fetchQ = async () => {
         const questionaire = await getQuestionnaire();
@@ -32,7 +28,7 @@ export default function PatientHome() {
 
     return (
         <>
-        {isSurvey && <WeeklyQuestionnaire />}
+        {(isSurvey && survey) && <WeeklyQuestionnaire questionnaire={survey} />}
         <section>
             <UserGreeting />
             <div className={classes.item}>

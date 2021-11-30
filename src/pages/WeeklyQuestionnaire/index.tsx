@@ -5,13 +5,22 @@ import classes from './styles.module.scss';
 import QuestionList from "./QuestionList";
 import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
-import { Questionnaire } from 'fhir/r4';
+import { Questionnaire, QuestionnaireItem } from 'fhir/r4';
+import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
+import NextButton from "./NextButton";
 
-interface Props{
-    questionnaire : Questionnaire
+interface Props {
+    questionnaire: Questionnaire
 }
 
-export default function WeeklyQuestionnaire() {
+export default function WeeklyQuestionnaire({ questionnaire }: Props) {
+
+    let questions: QuestionnaireItem[] = [];
+    if (questionnaire.item && questionnaire.item.length > 0) {
+        questions = questionnaire.item
+    }
+
+
     const location = useLocation();
 
     const split = location.pathname.split("/");
@@ -23,7 +32,8 @@ export default function WeeklyQuestionnaire() {
         <Fade in appear timeout={1000}>
             <div className={classes.container}>
                 <TopText progress={progress} />
-                {QuestionList[questionNumber - 1]}
+                <QuestionnaireItemRouter item={questions[questionNumber - 1]} />
+                <NextButton />
             </div>
         </Fade>
     )
@@ -38,7 +48,6 @@ const TopText = ({ progress }: TopTextProps) => {
     return (
         <div>
             <Grid justifyContent="space-between" alignItems="center" container >
-
                 <IconButton className={classes.backButton} onClick={history.goBack}>
                     <Left />
                 </IconButton>
