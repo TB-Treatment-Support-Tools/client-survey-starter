@@ -35,7 +35,7 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
     },[response])
 
     return (<Box padding="1em">
-        <QuestionText>What has been causing you to miss doses of your medication?</QuestionText>
+        <QuestionText>{item.text || "Question Text Missing" }</QuestionText>
         <Box height="1em" />
         <FormGroup>
             {reasons.map((each, index) => {

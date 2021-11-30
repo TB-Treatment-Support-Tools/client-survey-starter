@@ -1,6 +1,7 @@
 import { QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from "fhir/r4";
 import Binary from '../../components/QuestionnaireItem/Binary'
 import Choice from "../../components/QuestionnaireItem/Choice";
+import FeelingGroup from "../../components/QuestionnaireItem/FeelingGroup";
 import QuestionnaireElementProps from "../../types/questionnaire-element";
 
 interface RouterProps {
@@ -19,6 +20,10 @@ const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProp
 
     if(item.type === "open-choice" || item.type === "choice"){
         return <Choice {...passedProps} />
+    }
+
+    if(item.type === "group" && item.code && item.code[0].code === "feeling"){
+        return <FeelingGroup {...passedProps} />
     }
 
     return <></>
