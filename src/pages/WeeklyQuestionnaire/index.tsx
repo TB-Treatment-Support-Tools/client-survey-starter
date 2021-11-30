@@ -7,7 +7,7 @@ import Left from '@mui/icons-material/KeyboardArrowLeft'
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
 import NextButton from "./NextButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
     questionnaire: Questionnaire
@@ -39,10 +39,12 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
         } else {
             answersCopy[index] = newValue
         }
-        console.log(`handle response for ${code}`)
-        console.log(answers)
         setResponses(answersCopy)
     }
+
+    useEffect(()=>{
+        console.log(responses)
+    },[responses])
 
     return (
         <Fade in appear timeout={1000}>

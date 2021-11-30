@@ -13,7 +13,7 @@ import { Questionnaire } from 'fhir/r4';
 
 export default function PatientHome() {
 
-    const [survey,setSurvey] = useState<Questionnaire | null>(null);
+    const [survey, setSurvey] = useState<Questionnaire | null>(null);
     const location = useLocation();
     const isSurvey = location.pathname.split("/")[1] === "survey"
 
@@ -22,42 +22,39 @@ export default function PatientHome() {
         setSurvey(questionaire);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchQ();
-    },[])
+    }, [])
 
     return (
         <>
-        {(isSurvey && survey) && <WeeklyQuestionnaire questionnaire={survey} />}
-        <section>
-            <UserGreeting />
-            <div className={classes.item}>
-                <SectionTitle>
-                    <AddCircle />
-                    <span>Check-In</span>
-                </SectionTitle>
-                <div>
-                    <p>Questionire: {survey ? "Yes" : "No"}</p>
+            {(isSurvey && survey) && <WeeklyQuestionnaire questionnaire={survey} />}
+            <section>
+                <UserGreeting />
+                <div className={classes.item}>
+                    <SectionTitle>
+                        <AddCircle />
+                        <span>Check-In</span>
+                    </SectionTitle>
+                    <div className={classes.lastCheckIn}>
+                        <span className={classes.lastReport}>You last reported 6 days ago. How have you been since then?</span>
                     </div>
-                <div className={classes.lastCheckIn}>
-                    <span className={classes.lastReport}>You last reported 6 days ago. How have you been since then?</span>
+                    <Link style={{ textDecoration: "none" }} to="/survey/1">
+                        <div className={classes.reportNow}>
+                            <Grid alignItems="center" justifyContent="space-between" container>
+                                <span>Report Now</span>
+                                <KeyboardArrowRightOutlined />
+                            </Grid>
+                        </div>
+                    </Link>
                 </div>
-                <Link style={{ textDecoration: "none" }} to="/survey/1">
-                    <div className={classes.reportNow}>
-                        <Grid alignItems="center" justifyContent="space-between" container>
-                            <span>Report Now</span>
-                            <KeyboardArrowRightOutlined />
-                        </Grid>
-                    </div>
-                </Link>
-            </div>
-            <Box padding="1em">
-                <SectionTitle>
-                    <Lightbulb />
-                    <span>Learn More</span>
-                </SectionTitle>
-                <LearningPreview />
-            </Box>
-        </section>
+                <Box padding="1em">
+                    <SectionTitle>
+                        <Lightbulb />
+                        <span>Learn More</span>
+                    </SectionTitle>
+                    <LearningPreview />
+                </Box>
+            </section>
         </>)
 }

@@ -14,7 +14,8 @@ interface RouterProps {
 //@TODO - Use a switch and clone so you dont have to reapeat ...passedprops for each one
 const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProps) => {
 
-    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse }
+    const responseItem = responses.find( each => {return each.linkId === item.linkId}) || null;
+    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse, responseItem: responseItem }
 
     if(item.type === "boolean"){
         return <Binary {...passedProps} />
