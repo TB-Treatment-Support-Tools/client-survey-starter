@@ -2,6 +2,7 @@ import { QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItem
 import Binary from '../../components/QuestionnaireItem/Binary'
 import Choice from "../../components/QuestionnaireItem/Choice";
 import FeelingGroup from "../../components/QuestionnaireItem/FeelingGroup";
+import PhotoCapture from "../../components/QuestionnaireItem/PhotoCapture";
 import QuestionnaireElementProps from "../../types/questionnaire-element";
 
 interface RouterProps {
@@ -10,6 +11,7 @@ interface RouterProps {
     responses: QuestionnaireResponseItem[]
 }
 
+//@TODO - Use a switch and clone so you dont have to reapeat ...passedprops for each one
 const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProps) => {
 
     const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse }
@@ -22,11 +24,15 @@ const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProp
         return <Choice {...passedProps} />
     }
 
+    if(item.type === "attachment" && item.linkId === "test-photo"){
+        return <PhotoCapture {...passedProps} />
+    }
+
     if(item.type === "group" && item.code && item.code[0].code === "feeling"){
         return <FeelingGroup {...passedProps} />
     }
 
-    return <></>
+    return <p style={{padding: "1em"}}>There was an error displaying this survey question, please contact support. <br /> <br />Question Code: {item.linkId}</p>
 }
 
 export default QuestionnaireItemRouter

@@ -18,10 +18,6 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
     const initalValues = reasons.map(each => { return false });
     const [response, setResponse] = useState<boolean[]>(initalValues)
 
-    function extractValues(){
-
-    }
-
     useEffect(()=>{
         let answers : QuestionnaireResponseItemAnswer[] = [];
         response.forEach( (each,index) => {
