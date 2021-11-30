@@ -4,4 +4,8 @@
     text-transform: none;
     background-color: $grayTextColor;
     color: white;
+
+    &:hover{
+        background-color: $grayTextColor;
+    }
 }

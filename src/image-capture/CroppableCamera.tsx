@@ -4,6 +4,9 @@ import rgbToHsl from "../utility/rgb-to-hsl";
 import OptionButton from "../components/Buttons/OptionButton";
 import { Box } from "@mui/system";
 import Grid from '@mui/material/Grid'
+import { IconButton } from "@mui/material";
+import { CameraAlt, Autorenew, Insights } from "@mui/icons-material";
+import classes from './styles.module.scss';
 
 const CAPTURE_OPTIONS = {
   audio: false,
@@ -14,7 +17,7 @@ const CAPTURE_OPTIONS = {
   }
 };
 
-export default function CroppableCamera({}) {
+export default function CroppableCamera({ }) {
 
   const [full, setFull] = useState("");
   const [cropped, setCropped] = useState("");
@@ -68,10 +71,10 @@ export default function CroppableCamera({}) {
       {full && <img style={{ height: "100px" }} src={full} />}
       {cropped && <img ref={imgRef} style={{ height: "100px" }} src={cropped} />}
     </Box>
-    <Grid container>
-      <OptionButton onClick={clearState}>Reset</OptionButton>
-      <Box width=".5em" />
-      <OptionButton onClick={analyzeImage}>Analyze</OptionButton>
+    <Grid container direction="column" alignItems="flex-start">
+      <OptionButton onClick={clearState}> <Autorenew style={{fontSize: "1.25em", marginRight: ".5em"}} /> Capture Again</OptionButton>
+      <Box height=".5em" />
+      <OptionButton onClick={analyzeImage}> <Insights style={{fontSize: "1.25em", marginRight: ".5em"}} /> Analyze</OptionButton>
     </Grid>
     <canvas ref={cRef} />
   </div>)
@@ -129,7 +132,6 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
       canvas.current.height = video.current.videoHeight;
 
       const boxWidth = video.current.videoWidth / 5;
-      const boxHeight = boxWidth * 2;
 
       ctx.drawImage(video.current, 0, 0);
       var pX = canvas.current.width / 2 - boxWidth / 2;
@@ -202,8 +204,11 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
         width={ciHeight}
         height={ciWidth}
       />
-      <button onClick={handleCapture} style={{ position: "fixed", zIndex: 3, bottom: "1em", left: "50%" }}>Click</button>
-
+      <div className={classes.cameraButtons}>
+        <IconButton onClick={handleCapture} className={classes.cameraButton}>
+          <CameraAlt />
+        </IconButton>
+      </div>
     </>
   );
 }
