@@ -24,7 +24,7 @@ const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProp
         return <Choice {...passedProps} />
     }
 
-    if(item.type === "attachment" && item.linkId === "test-photo"){
+    if(item.type === "url" && item.linkId === "test-photo"){
         return <PhotoCapture {...passedProps} />
     }
 
@@ -32,7 +32,10 @@ const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProp
         return <FeelingGroup {...passedProps} />
     }
 
-    return <p style={{padding: "1em"}}>There was an error displaying this survey question, please contact support. <br /> <br />Question Code: {item.linkId}</p>
+    return <p style={{padding: "1em"}}>There was an error displaying this survey question, please contact support. 
+    <br /> <br />Question Code: {item.linkId}
+    <br /> <br />Question Type: {item.type}
+    </p>
 }
 
 export default QuestionnaireItemRouter
