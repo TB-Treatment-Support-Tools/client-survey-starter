@@ -1,8 +1,11 @@
 import { QuestionnaireItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import { useEffect, useState } from 'react'
 import Fhir from '../../api';
-import Camera from '../../image-capture/Camera'
 import AuthImage from '../AuthImage';
+
+const Camera = () => {
+    return <p>Camera</p>
+}
 
 interface Props{
     questionnaireItem: QuestionnaireItem
@@ -35,7 +38,7 @@ export default function CapturePhoto({questionnaireItem,handleResponse} : Props)
         <div>
             <button onClick={toggle}>Open Camera</button>
             <div style={{ width: "100%" }}>
-                {open && <Camera handleExit={toggle} returnPhoto={handlePhoto} />}
+                {/* {open && <Camera handleExit={toggle} returnPhoto={handlePhoto} />} */}
                 {photo && <img style={{ width: "90%", margin: "auto", display: "block" }} src={photo} />}
                 {photo && <button onClick={handleUpload}>Test Upload Capability</button>}
                 From Server:

@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useUserMedia } from "../hooks/useUserMedia";
 import rgbToHsv from "../utility/rgb-to-hsv";
-// import Caman from 'caman'
+import OptionButton from "../components/Buttons/OptionButton";
+import { Box } from "@mui/system";
+import Grid from '@mui/material/Grid'
 
 const CAPTURE_OPTIONS = {
   audio: false,
@@ -12,7 +14,7 @@ const CAPTURE_OPTIONS = {
   }
 };
 
-export default function PhotoTest() {
+export default function CroppableCamera() {
 
   const [full, setFull] = useState("");
   const [cropped, setCropped] = useState("");
@@ -50,28 +52,6 @@ export default function PhotoTest() {
 
   }
 
-  const loadImage = () => {
-
-    if (imgRef.current) {
-      let ctx = cRef.current?.getContext('2d');
-      if (cRef.current) {
-        cRef.current.height = imgRef.current.height;
-        cRef.current.width = imgRef.current.width;
-        cRef.current.setAttribute("style", "background-color: red");
-      }
-      if (ctx) {
-        ctx.drawImage(imgRef.current, 0, 0, imgRef.current.width, imgRef.current.height)
-        // set the composite operation
-        ctx.globalCompositeOperation = 'saturation';
-        ctx.fillStyle = "red";
-        ctx.globalAlpha = .5;  // alpha 0 = no effect 1 = full effect
-        ctx.fillRect(0, 0, imgRef.current.width,imgRef.current.height);
-      }
-
-    }
-
-  }
-
   const handleOutput = (full: string, cropped: string) => {
     setFull(full);
     setCropped(cropped);
@@ -85,9 +65,13 @@ export default function PhotoTest() {
   return (<div>
     {!!!full && <Camera handleOutput={handleOutput} />}
     {full && <img style={{ height: "100px" }} src={full} />}
-    {cropped && <img ref={imgRef} onLoad={loadImage} style={{ height: "100px" }} src={cropped} />}
-    <button onClick={clearState}>Reset</button>
-    <button onClick={analyzeImage}>Analyze</button>
+    {cropped && <img ref={imgRef} style={{ height: "100px" }} src={cropped} />}
+    <br />
+    <Grid container>
+      <OptionButton onClick={clearState}>Reset</OptionButton>
+      <Box width=".5em" />
+      <OptionButton onClick={analyzeImage}>Analyze</OptionButton>
+    </Grid>
     <canvas
       ref={cRef}
     />
@@ -215,6 +199,7 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
       {<canvas
         ref={canvasRef}
         style={{
+          zIndex: 2,
           height: "100vh", position: "fixed", top: 0, left: "50%",
           transform: "translate(-50%, 0)"
         }}
@@ -232,8 +217,32 @@ function Camera({ handleOutput }: CameraProps) { //From https://blog.logrocket.c
         width={ciHeight}
         height={ciWidth}
       />
-      <button onClick={handleCapture} style={{ position: "fixed", zIndex: 1, bottom: "1em", left: "50%" }}>Click</button>
+      <button onClick={handleCapture} style={{ position: "fixed", zIndex: 3, bottom: "1em", left: "50%" }}>Click</button>
       {/* {blob && <button onClick={clearImage}>Redo</button>} */}
+
     </>
   );
 }
+
+
+// const loadImage = () => {
+
+//   if (imgRef.current) {
+//     let ctx = cRef.current?.getContext('2d');
+//     if (cRef.current) {
+//       cRef.current.height = imgRef.current.height;
+//       cRef.current.width = imgRef.current.width;
+//       cRef.current.setAttribute("style", "background-color: red");
+//     }
+//     if (ctx) {
+//       ctx.drawImage(imgRef.current, 0, 0, imgRef.current.width, imgRef.current.height)
+//       // set the composite operation
+//       ctx.globalCompositeOperation = 'saturation';
+//       ctx.fillStyle = "red";
+//       ctx.globalAlpha = .5;  // alpha 0 = no effect 1 = full effect
+//       ctx.fillRect(0, 0, imgRef.current.width,imgRef.current.height);
+//     }
+
+//   }
+
+// }
