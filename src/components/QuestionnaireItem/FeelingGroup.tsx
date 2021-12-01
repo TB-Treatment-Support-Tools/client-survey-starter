@@ -88,14 +88,25 @@ export default function FeelingGroup({ item, handleResponse, responseItem, allRe
     const handleChange = (value: number | null, linkId: string) => {
         let realValue : number | undefined = value || undefined;
 
-        let topLevel: QuestionnaireResponseItem[] = [{
+        
+        let oldValues: QuestionnaireResponseItem[]  = [];
+
+        if(responseItem?.item){
+           oldValues = [...responseItem?.item]
+
+           const badIndex = oldValues.findIndex( i => i.linkId === linkId )
+
+           if(badIndex >= 0){
+               oldValues.splice(badIndex,1);
+           }
+        }
+        
+        oldValues.push({
                     linkId: linkId,
                     answer: [{valueInteger: realValue}]
-                }]
+                })
 
-        console.log(topLevel)
-
-        handleGroupResponse(topLevel,item.linkId)
+        handleGroupResponse(oldValues,item.linkId)
 
         
 
