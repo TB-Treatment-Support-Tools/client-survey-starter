@@ -6,6 +6,7 @@ import QuestionText from '../Text/QuestionText';
 import { useEffect, useState } from 'react';
 import QuestionnaireElementProps from '../../types/questionnaire-element';
 import { QuestionnaireResponseItemAnswer } from 'fhir/r4';
+import NextButton from '../../pages/WeeklyQuestionnaire/NextButton';
 
 export default function Choice({ item, handleResponse }: QuestionnaireElementProps) {
 
@@ -43,5 +44,6 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
                 return (<FormControlLabel checked={response[index]} onChange={handleCheck} control={<Checkbox />} label={each} value={index} key={`adherence-reason-${index}`} />)
             })}
         </FormGroup>
+        {/* <NextButton /> */}
     </Box>)
 }

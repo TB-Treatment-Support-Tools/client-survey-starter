@@ -6,8 +6,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
+import { useState } from "react";
 import NextButton from "./NextButton";
-import { useEffect, useState } from "react";
 
 interface Props {
     questionnaire: Questionnaire
@@ -17,17 +17,19 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
 
     const [responses,setResponses] = useState<QuestionnaireResponseItem[]>([]);
 
-
     let questions: QuestionnaireItem[] = [];
     if (questionnaire.item && questionnaire.item.length > 0) {
         questions = questionnaire.item
     }
 
     const location = useLocation();
+    const history = useHistory();
+
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
-
     const progress = (questionNumber / questions.length) * 100;
+
+    const currentQuestion = questions[questionNumber - 1];
 
     const handleResponse = (answers: QuestionnaireResponseItemAnswer[], code: string) => {
         const index = responses.findIndex(value => { return value.linkId === code })
@@ -42,16 +44,12 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
         setResponses(answersCopy)
     }
 
-    useEffect(()=>{
-        console.log(responses)
-    },[responses])
-
     return (
         <Fade in appear timeout={1000}>
             <div className={classes.container}>
                 <TopText progress={progress} />
-                <QuestionnaireItemRouter responses={responses} handleResponse={handleResponse} item={questions[questionNumber - 1]} />
-                <NextButton  />
+                <QuestionnaireItemRouter responses={responses} handleResponse={handleResponse} item={currentQuestion} />
+                <NextButton questions={questions} responses={responses} />
             </div>
         </Fade>
     )
