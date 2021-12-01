@@ -34,14 +34,15 @@
     color: white;
     border-radius: 50%;
     background-color: $altBlueColor;
-    &:hover{
+    &:hover {
         background-color: $altBlueColor;
     }
 }
 
 .nextButtonDisabled {
     pointer-events: none;
-    button {
+    background-color: lightgray;
+    &:hover {
         background-color: lightgray;
     }
 }

@@ -19,17 +19,19 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
     const initalValues = reasons.map(each => { return false });
     const [response, setResponse] = useState<boolean[]>(initalValues)
 
-    useEffect(()=>{
-        let answers : QuestionnaireResponseItemAnswer[] = [];
-        response.forEach( (each,index) => {
-            if(each && item.answerOption && item.answerOption[index]){
-                let newAnswer : QuestionnaireResponseItemAnswer = {}
-                newAnswer.valueCoding = item.answerOption[index].valueCoding
-                answers.push(newAnswer)
-            }
-        })
-        handleResponse(answers,item.linkId)
-    },[response])
+    // useEffect(()=>{
+    //     let answers : QuestionnaireResponseItemAnswer[] = [];
+    //     response.forEach( (each,index) => {
+    //         if(each && item.answerOption && item.answerOption[index]){
+    //             let newAnswer : QuestionnaireResponseItemAnswer = {}
+    //             newAnswer.valueCoding = item.answerOption[index].valueCoding
+    //             answers.push(newAnswer)
+    //         }
+    //     })
+    //     if(answers.length > 0){
+    //         handleResponse(answers,item.linkId)
+    //     }
+    // },[response])
 
     return (<Box padding="1em">
         <QuestionText>{item.text || "Question Text Missing" }</QuestionText>
@@ -44,6 +46,5 @@ export default function Choice({ item, handleResponse }: QuestionnaireElementPro
                 return (<FormControlLabel checked={response[index]} onChange={handleCheck} control={<Checkbox />} label={each} value={index} key={`adherence-reason-${index}`} />)
             })}
         </FormGroup>
-        {/* <NextButton /> */}
     </Box>)
 }

@@ -5,17 +5,24 @@ import { Link, useLocation } from "react-router-dom";
 import classes from './styles.module.scss';
 
 interface Props {
-    disabled?: boolean,
-    skipNumber?: number,
     questions: QuestionnaireItem[],
     responses: QuestionnaireResponseItem[]
 }
 
-export default function NextButton({ disabled, skipNumber, questions, responses }: Props) {
+export default function NextButton({ questions, responses }: Props) {
+
+    let disabled = false;
 
     const location = useLocation();
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
+
+    const currentQuestion = questions[questionNumber -1];
+    const currentAnswer = responses.find( each => { return each.linkId === currentQuestion.linkId})
+
+    if(currentQuestion.required && !currentAnswer || !currentAnswer?.answer ){
+        disabled = true;
+    }
 
     let skip = 0;
 
@@ -33,8 +40,8 @@ export default function NextButton({ disabled, skipNumber, questions, responses 
         }
     }
 
-    return (<Link className={`${disabled && classes.nextButtonDisabled}`} to={`/survey/${questionNumber + 1 + skip}`}>
-        <IconButton className={classes.nextButton}>
+    return (<Link to={`/survey/${questionNumber + 1 + skip}`}>
+        <IconButton className={`${classes.nextButton} ${disabled && classes.nextButtonDisabled}`}>
             <KeyboardArrowRightRounded />
         </IconButton>
     </Link>)
