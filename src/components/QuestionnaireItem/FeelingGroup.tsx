@@ -76,92 +76,51 @@ export default function FeelingGroup({ item, handleResponse, responseItem, allRe
 
     */
 
-    useEffect(()=>{
-        console.log("all responses change")
-        console.log(allResponses)
-    },[allResponses])
-
     if (!item.item) {
         return <p>Error: Group question does not have child questions </p>
     }
 
     const handleChange = (value: number | null, linkId: string) => {
-        let realValue : number | undefined = value || undefined;
+        let realValue: number | undefined = value || undefined;
 
-        
-        let oldValues: QuestionnaireResponseItem[]  = [];
 
-        if(responseItem?.item){
-           oldValues = [...responseItem?.item]
+        let oldValues: QuestionnaireResponseItem[] = [];
 
-           const badIndex = oldValues.findIndex( i => i.linkId === linkId )
+        if (responseItem?.item) {
+            oldValues = [...responseItem?.item]
 
-           if(badIndex >= 0){
-               oldValues.splice(badIndex,1);
-           }
+            const badIndex = oldValues.findIndex(i => i.linkId === linkId)
+
+            if (badIndex >= 0) {
+                oldValues.splice(badIndex, 1);
+            }
         }
-        
+
         oldValues.push({
-                    linkId: linkId,
-                    answer: [{valueInteger: realValue}]
-                })
+            linkId: linkId,
+            answer: [{ valueInteger: realValue }]
+        })
 
-        handleGroupResponse(oldValues,item.linkId)
-
-        
-
-        // let existingItem = newItems?.findIndex(i => i.linkId === linkId)
-
-        // if (existingItem >= 0) {
-        //     // newItems.splice(existingItem, 1)
-        // }
-
-        // const newValue = { linkId: linkId, answer: [{ valueInteger: value || undefined }] }
-        // newItems.push(newValue)
-
-
-        // handleResponse(newItems, item.linkId)
-
+        handleGroupResponse(oldValues, item.linkId)
     }
 
-    // Trying to use default values
-    // useEffect(()=>{
-    //     item.item?.forEach(eachItem => {
-    //             let answer = allResponses.find(res => {return res.linkId === eachItem.linkId})
-    //             if(!answer && eachItem.initial && eachItem.initial[0].valueInteger ){
-    //                 handleResponse( [{ value eachItem.initial[0].valueInteger}], eachItem.linkId)
-    //             }
-    //         }
-    //     )
-    // },[])
 
 
     const getValue = (linkId: string) => {
-        console.log("get value")
-        console.log(responseItem)
-        if(responseItem && responseItem.item){
-            let rel = responseItem?.item.find( i => i.linkId === linkId)
-            console.log("Rel")
-            console.log(rel)
-            if(rel && rel.answer && rel.answer[0]){
+        if (responseItem && responseItem.item) {
+            let rel = responseItem?.item.find(i => i.linkId === linkId)
+            if (rel && rel.answer && rel.answer[0]) {
                 return rel.answer[0].valueInteger || null
             }
         }
 
         return null
-        
-        // const answer = allResponses.find(each => each.linkId === linkId)?.answer
 
-        // if (answer && answer[0]) {
-        //     return answer[0].valueInteger || null
-        // }
-
-        // return null;
     }
 
 
     return (<Box padding="1em">
-        { item.item.map(each => <div key={`${each.linkId}`}>
+        {item.item.map(each => <div key={`${each.linkId}`}>
             <QuestionText>{each.text || "No text"}</QuestionText>
             <Box height="1em" />
             <RadioGroupRating handleChange={(event: React.SyntheticEvent<Element, Event>, value: number | null) => { handleChange(value, each.linkId) }} value={getValue(each.linkId)} />

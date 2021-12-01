@@ -21,10 +21,17 @@ export default function NextButton({ questions, responses }: Props) {
     const currentAnswer = responses.find( each => { return each.linkId === currentQuestion.linkId})
 
     if(currentQuestion.required && (!currentAnswer || !currentAnswer?.answer || currentAnswer.answer.length === 0 )){
-        console.log("disabled")
-        console.log(currentQuestion)
-        console.log(currentAnswer)
-        disabled = true;
+
+        //Need to check through recursivley to make this actually work
+        if(currentAnswer?.item){
+            currentAnswer?.item?.forEach(i => {
+                if(!i.answer){
+                    disabled = true;
+                }
+            })
+        }else{
+                 disabled = true;   
+        }
     }
 
     let skip = 0;
