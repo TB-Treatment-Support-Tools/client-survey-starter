@@ -8,14 +8,15 @@ import QuestionnaireElementProps from "../../types/questionnaire-element";
 interface RouterProps {
     item: QuestionnaireItem,
     handleResponse: (answers : QuestionnaireResponseItemAnswer[], linkId : string) => void,
-    responses: QuestionnaireResponseItem[]
+    responses: QuestionnaireResponseItem[],
+    handleGroupResponse: (items : QuestionnaireResponseItem[], linkId : string) => void,
 }
 
 //@TODO - Use a switch and clone so you dont have to reapeat ...passedprops for each one
-const QuestionnaireItemRouter = ({ item, handleResponse, responses }: RouterProps) => {
+const QuestionnaireItemRouter = ({ item, handleResponse, responses, handleGroupResponse }: RouterProps) => {
 
     const responseItem = responses.find( each => {return each.linkId === item.linkId}) || null;
-    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse, responseItem: responseItem }
+    const passedProps : QuestionnaireElementProps = {item: item, handleResponse: handleResponse, responseItem: responseItem, allResponses: responses, handleGroupResponse: handleGroupResponse }
 
     if(item.type === "boolean"){
         return <Binary {...passedProps} />

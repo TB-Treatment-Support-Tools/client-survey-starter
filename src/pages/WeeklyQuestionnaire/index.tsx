@@ -42,6 +42,19 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
 
     const currentQuestion = questions[questionNumber - 1];
 
+    const handleGroupResponse = (items : QuestionnaireResponseItem[], code: string) => {
+        const index = responses.findIndex(value => { return value.linkId === code })
+        let answersCopy = [...responses];
+        const newValue = {linkId: code, item: items };
+
+        if (index < 0) {
+            answersCopy.push(newValue)
+        } else {
+            answersCopy[index] = newValue
+        }
+        setResponses(answersCopy)
+    }
+
     const handleResponse = (answers: QuestionnaireResponseItemAnswer[], code: string) => {
         const index = responses.findIndex(value => { return value.linkId === code })
         let answersCopy = [...responses];
@@ -59,7 +72,7 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
         <Fade in appear timeout={1000}>
             <div className={classes.container}>
                 <TopText progress={progress} />
-                <QuestionnaireItemRouter responses={responses} handleResponse={handleResponse} item={currentQuestion} />
+                <QuestionnaireItemRouter responses={responses} handleGroupResponse={handleGroupResponse} handleResponse={handleResponse} item={currentQuestion} />
                 <NextButton questions={questions} responses={responses} />
             </div>
         </Fade>

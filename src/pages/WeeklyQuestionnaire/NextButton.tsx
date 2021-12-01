@@ -20,7 +20,10 @@ export default function NextButton({ questions, responses }: Props) {
     const currentQuestion = questions[questionNumber -1];
     const currentAnswer = responses.find( each => { return each.linkId === currentQuestion.linkId})
 
-    if(currentQuestion.required && !currentAnswer || !currentAnswer?.answer || currentAnswer.answer.length === 0 ){
+    if(currentQuestion.required && (!currentAnswer || !currentAnswer?.answer || currentAnswer.answer.length === 0 )){
+        console.log("disabled")
+        console.log(currentQuestion)
+        console.log(currentAnswer)
         disabled = true;
     }
 
