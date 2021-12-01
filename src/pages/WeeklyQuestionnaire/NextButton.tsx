@@ -20,7 +20,7 @@ export default function NextButton({ questions, responses }: Props) {
     const currentQuestion = questions[questionNumber -1];
     const currentAnswer = responses.find( each => { return each.linkId === currentQuestion.linkId})
 
-    if(currentQuestion.required && !currentAnswer || !currentAnswer?.answer ){
+    if(currentQuestion.required && !currentAnswer || !currentAnswer?.answer || currentAnswer.answer.length === 0 ){
         disabled = true;
     }
 
@@ -29,7 +29,7 @@ export default function NextButton({ questions, responses }: Props) {
     if (questionNumber < questions.length) {
         const nextQuestion = questions[questionNumber];
 
-        //Todo - make this more broadly applicable to different enabled senarios
+        //@TODO - make this more broadly applicable to different enabled senarios
         if (nextQuestion.enableWhen) {
             nextQuestion.enableWhen.forEach(each => {
                 let disabled = responses.find(res => { return res.linkId === each.question && (res.answer && res.answer[0] && res.answer[0].valueBoolean === false) })
