@@ -8,6 +8,7 @@ import { Questionnaire, QuestionnaireItem, QuestionnaireResponseItem, Questionna
 import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
 import { useState } from "react";
 import NextButton from "./NextButton";
+import OptionButton from "../../components/Buttons/OptionButton";
 
 interface Props {
     questionnaire: Questionnaire
@@ -15,7 +16,7 @@ interface Props {
 
 export default function WeeklyQuestionnaire({ questionnaire }: Props) {
 
-    const [responses,setResponses] = useState<QuestionnaireResponseItem[]>([]);
+    const [responses, setResponses] = useState<QuestionnaireResponseItem[]>([]);
 
     let questions: QuestionnaireItem[] = [];
     if (questionnaire.item && questionnaire.item.length > 0) {
@@ -23,11 +24,21 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
     }
 
     const location = useLocation();
-    const history = useHistory();
 
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
     const progress = (questionNumber / questions.length) * 100;
+
+    //Refactor this to make more sense
+    if (questionNumber > questions.length) {
+        return (<div className={classes.container}>
+            <p>This is the Summary Page</p>
+            <Link to="/home">
+                <OptionButton> Submit and Go Home</OptionButton>
+            </Link>
+        </div>)
+
+    }
 
     const currentQuestion = questions[questionNumber - 1];
 
