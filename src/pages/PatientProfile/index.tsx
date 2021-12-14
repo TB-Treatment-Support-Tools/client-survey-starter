@@ -51,6 +51,7 @@ export default function PatientProfile() {
                 <p>{response.id}</p>
                 <p>Created at: {response.authored} </p>
                 {response.item && <DisplayResponse items={response.item} />}
+                <button onClick={() => response.id && deleteEntry(response.id)} >Delete</button>
             </div>)
         })}
     </div>)

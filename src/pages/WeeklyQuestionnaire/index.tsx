@@ -1,20 +1,24 @@
 import { Cancel } from "@mui/icons-material";
-import { Fade, Grid, IconButton } from '@mui/material'
+import { Fade, Grid, IconButton, Button } from '@mui/material'
 import { Link, useLocation, useHistory } from "react-router-dom";
 import classes from './styles.module.scss';
 import LinearProgress from '@mui/material/LinearProgress';
 import Left from '@mui/icons-material/KeyboardArrowLeft'
-import { Questionnaire, QuestionnaireItem, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
+import { Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import QuestionnaireItemRouter from "./QuestionnaireItemRouter";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import NextButton from "./NextButton";
 import OptionButton from "../../components/Buttons/OptionButton";
+import UserContext from "../../context/user-context";
+import {uploadQuestionnaireResponse} from '../../api/patient';
 
 interface Props {
     questionnaire: Questionnaire
 }
 
 export default function WeeklyQuestionnaire({ questionnaire }: Props) {
+
+    const { user } = useContext(UserContext);
 
     const [responses, setResponses] = useState<QuestionnaireResponseItem[]>([]);
 
@@ -24,17 +28,41 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
     }
 
     const location = useLocation();
+    const history = useHistory();
 
     const split = location.pathname.split("/");
     const questionNumber = parseInt(split[split.length - 1]);
     const progress = (questionNumber / questions.length) * 100;
 
+    const submitResponse = async () => {
+
+        if (user && responses.length > 0) {
+            let body: QuestionnaireResponse = {
+                questionnaire: `Questionnaire/${questionnaire.id}`,
+                resourceType: "QuestionnaireResponse",
+                status: "completed",
+                subject: {
+                    reference: `Patient/${user?.id}`
+                },
+                author: {
+                    reference: `Patient/${user?.id}`
+                },
+                item: responses
+            }
+            let res = await uploadQuestionnaireResponse(body);
+            console.log(res)
+        }
+    }
+
     //Refactor this to make more sense
     if (questionNumber > questions.length) {
         return (<div className={classes.container}>
+            <Button onClick={()=>{history.goBack()}}>Back</Button>
             <p>This is the Summary Page</p>
+            <OptionButton onClick={() => { console.log(responses) }}> Review Responses</OptionButton>
+            <OptionButton onClick={submitResponse}>Upload Responses</OptionButton>
             <Link to="/home">
-                <OptionButton> Submit and Go Home</OptionButton>
+                <OptionButton > Submit and Go Home</OptionButton>
             </Link>
         </div>)
 
@@ -42,10 +70,10 @@ export default function WeeklyQuestionnaire({ questionnaire }: Props) {
 
     const currentQuestion = questions[questionNumber - 1];
 
-    const handleGroupResponse = (items : QuestionnaireResponseItem[], code: string) => {
+    const handleGroupResponse = (items: QuestionnaireResponseItem[], code: string) => {
         const index = responses.findIndex(value => { return value.linkId === code })
         let answersCopy = [...responses];
-        const newValue = {linkId: code, item: items };
+        const newValue = { linkId: code, item: items };
 
         if (index < 0) {
             answersCopy.push(newValue)

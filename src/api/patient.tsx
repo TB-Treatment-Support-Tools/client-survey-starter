@@ -1,6 +1,7 @@
 import { fhirFetch } from "./base";
-import { CarePlan, CodeableConcept, Condition, Questionnaire } from "fhir/r4";
+import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse } from "fhir/r4";
 
+//TODO - Move these to a modeling folder
 const riskForHIVCodeableConcept: CodeableConcept = {
     coding: [{
         system: "http://snomed.info/sct",
@@ -40,4 +41,8 @@ const getQuestionnaire = async () => {
     })
 }
 
-export {addCondition, getQuestionnaire}
+const uploadQuestionnaireResponse = async (questionnaireResponse: QuestionnaireResponse) => {
+    return fhirFetch(`QuestionnaireResponse`, { method: "POST", body: JSON.stringify(questionnaireResponse) })
+}
+
+export {addCondition, getQuestionnaire, uploadQuestionnaireResponse}
