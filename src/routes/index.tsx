@@ -20,8 +20,8 @@ import ProviderRoutes from './ProviderRoutes'
 import PatientHome from '../pages/Patient/Home'
 import Progress from '../pages/Progress'
 import { getPractitionerRoles } from '../api/practitioner'
-import { UserInformation } from '../types/user-information'
 import { getIdFromReference } from '../utility/fhir-utilities'
+import SubmitTest from '../pages/Patient/SubmitTest'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -62,6 +62,7 @@ const AppRouter = () => {
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={PatientHome} />
             <Route path="/login" component={Login} />
+            <Route path="/submit-photo" component={SubmitTest} />
             <Route path="/">
               <DefaultComponent />
             </Route>

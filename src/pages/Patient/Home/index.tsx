@@ -1,7 +1,7 @@
 import UserGreeting from '../../../components/UserGreeting';
 import classes from './styles.module.scss'
 import Grid from '@mui/material/Grid'
-import { AddCircle, KeyboardArrowRightOutlined, Lightbulb } from '@mui/icons-material';
+import { AddCircle, CameraAlt, KeyboardArrowRightOutlined, Lightbulb } from '@mui/icons-material';
 import SectionTitle from '../../../components/Text/SectionTitle';
 import { Box } from '@mui/system';
 import { Link, useLocation } from 'react-router-dom';
@@ -44,6 +44,15 @@ export default function PatientHome() {
                             <Grid alignItems="center" justifyContent="space-between" container>
                                 <span>Report Now</span>
                                 <KeyboardArrowRightOutlined />
+                            </Grid>
+                        </div>
+                    </Link>
+                    <Box height=".5em" />
+                    <Link style={{ textDecoration: "none" }} to="/submit-photo">
+                        <div className={classes.reportNow}>
+                            <Grid alignItems="center" justifyContent="space-between" container>
+                                <span>Submit Photo</span>
+                                <CameraAlt />
                             </Grid>
                         </div>
                     </Link>

@@ -1,7 +1,6 @@
 import { Coding, QuestionnaireItem, QuestionnaireResponseItemAnswer } from "fhir/r4";
 import { ReactElement, useState } from "react";
 import questionnaireItem from "../../types/survey-item";
-import CapturePhoto from "./CapturePhoto";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -20,7 +19,7 @@ function InputComponent(props: Props): ReactElement {
         const code = questionnaireItem.code[0].code;
         const type = questionnaireItem.type
         //TODO - just clone and add handleResponse + code to all elements
-        if (code === "photo" && type === "url") return <CapturePhoto {...props} />
+        // if (code === "photo" && type === "url") return <CapturePhoto {...props} />
         if (type === "boolean") return <BooleanButtons {...props} />
         return <p>Unsupported code: {code}</p>
     }
@@ -51,6 +50,7 @@ function BooleanButtons(props: Props) {
     const handleChange = (event : React.ChangeEvent<HTMLInputElement> ) => {
         setSelection(event.target.value);
         handleResponse({valueBoolean:  event.target.value === "true"}, questionnaireItem.linkId)
+        
     }
 
     return (
