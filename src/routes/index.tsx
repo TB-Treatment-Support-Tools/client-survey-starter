@@ -57,16 +57,16 @@ const AppRouter = () => {
           {isProvider && <TopBar />}
           <div className={styles.main}>
             <Switch>
+            {isProvider && <ProviderRoutes />}
             <PrivateRoute path="/progress" component={Progress} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={PatientHome} />
             <Route path="/login" component={Login} />
-            <Route path="/submit-photo" component={SubmitTest} />
+            <PrivateRoute path="/submit-photo" component={SubmitTest} />
             <Route path="/">
               <DefaultComponent />
             </Route>
-            {isProvider && <ProviderRoutes />}
             </Switch>
           </div>
           {isPatient && <BottomNavigation />}

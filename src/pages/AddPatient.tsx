@@ -70,7 +70,7 @@ export default function AddPatient() {
     const [details,setDetails] = useState<CreatePatientInputs>({ givenName: "",familyName: "", username: "", medication: "truvada", organizationId: 102})
 
     const handleSubmit = (event: React.FormEvent) => {
-        Fhir.testCreatePatient(details);
+        Fhir.createPatient(details);
     }
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement> ) => {

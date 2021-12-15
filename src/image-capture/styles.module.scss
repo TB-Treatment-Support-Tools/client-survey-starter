@@ -76,3 +76,10 @@
         margin-right: 1em;
     }
 }
+
+.exit{
+    position: fixed;
+    top: .5em;
+    left: .5em;
+    z-index: 12;
+}

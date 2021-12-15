@@ -18,6 +18,6 @@ export default function PhotoCapture({ item, handleResponse }: QuestionnaireElem
             <Box width="1em" />
             Launch Camera
         </ButtonBase>}
-        {cameraOpen && <CroppableCamera />}
+        {cameraOpen && <CroppableCamera closeCamera={toggleCameraOpen} setImages={(tests)=>{console.log("TODO")}} />}
     </Box>)
 }
