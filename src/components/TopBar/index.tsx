@@ -8,8 +8,7 @@ export default function TopBar() {
 
     const isProvider = keycloak?.hasRealmRole('provider')
 
-    return (<>
-        <div className={classes.topBar}>
+    return (<div className={classes.topBar}>
             <span>Treatment Tracker</span>
             <div className={classes.providerNav}>
                 <Link to="/home">Home</Link>
@@ -19,6 +18,5 @@ export default function TopBar() {
                 <p>Hello</p>
             </div>
         </div>
-    </>
     )
 }

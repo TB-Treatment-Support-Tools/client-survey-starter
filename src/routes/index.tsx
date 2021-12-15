@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
@@ -16,13 +16,12 @@ import Fhir from '../api'
 import { Patient, Practitioner } from 'fhir/r4'
 
 import UserContext from '../context/user-context'
-import PhotoTest from '../components/PhotoTest'
 import ProviderRoutes from './ProviderRoutes'
 import PatientHome from '../pages/Patient/Home'
 import Progress from '../pages/Progress'
 import { getPractitionerRoles } from '../api/practitioner'
-import { UserInformation } from '../types/user-information'
 import { getIdFromReference } from '../utility/fhir-utilities'
+import SubmitTest from '../pages/Patient/SubmitTest'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -57,13 +56,18 @@ const AppRouter = () => {
         <div className={styles.container}>
           {isProvider && <TopBar />}
           <div className={styles.main}>
-            <Route path="/photo-test" component={PhotoTest} />
-            <Route path="/progress" component={Progress} />
+            <Switch>
+            <PrivateRoute path="/progress" component={Progress} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={PatientHome} />
             <Route path="/login" component={Login} />
+            <Route path="/submit-photo" component={SubmitTest} />
+            <Route path="/">
+              <DefaultComponent />
+            </Route>
             {isProvider && <ProviderRoutes />}
+            </Switch>
           </div>
           {isPatient && <BottomNavigation />}
         </div>
@@ -71,5 +75,7 @@ const AppRouter = () => {
     </Router>
   )
 }
+
+const DefaultComponent = () => <div>Page Not Found <Login /></div>
 
 export default AppRouter;
