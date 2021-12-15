@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import { useKeycloak } from '@react-keycloak/web'
 
@@ -56,12 +56,17 @@ const AppRouter = () => {
         <div className={styles.container}>
           {isProvider && <TopBar />}
           <div className={styles.main}>
-            <Route path="/progress" component={Progress} />
+            <Switch>
+            <PrivateRoute path="/progress" component={Progress} />
             <PrivateRoute path="/home" component={PatientHome} />
             <Route path="/chat" component={Chat} />
             <Route path="/survey" component={PatientHome} />
             <Route path="/login" component={Login} />
+            <Route path="/">
+              <DefaultComponent />
+            </Route>
             {isProvider && <ProviderRoutes />}
+            </Switch>
           </div>
           {isPatient && <BottomNavigation />}
         </div>
@@ -69,5 +74,7 @@ const AppRouter = () => {
     </Router>
   )
 }
+
+const DefaultComponent = () => <div>Page Not Found <Login /></div>
 
 export default AppRouter;
