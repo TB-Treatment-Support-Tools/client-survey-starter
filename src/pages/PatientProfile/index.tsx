@@ -23,7 +23,7 @@ export default function PatientProfile() {
 
     const loadResponses = async () => {
         const res = await Fhir.getPatientQuestionnaireResponses(patientId)
-        setResponses(res.map((each: any) => { return each.resource }));
+        setResponses(res.reverse().map((each: any) => { return each.resource }));
     }
 
     const deleteEntry = async (id: string) => {
@@ -49,6 +49,7 @@ export default function PatientProfile() {
         {showResponses && responses.map((response, index) => {
             return (<div key={`questionnaire-${index}`}>
                 <p>{response.id}</p>
+                <p>Questionnarie ID: {response.questionnaire}</p>
                 <p>Created at: {response.authored} </p>
                 {response.item && <DisplayResponse items={response.item} />}
                 <button onClick={() => response.id && deleteEntry(response.id)} >Delete</button>
