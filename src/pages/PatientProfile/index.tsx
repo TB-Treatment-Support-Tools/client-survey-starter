@@ -2,7 +2,7 @@ import { CarePlan, Patient, QuestionnaireResponse, QuestionnaireResponseItem } f
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Fhir from "../../api";
-import { addCarePlan } from "../../api/practitioner";
+import { addCarePlan, addMedicaiton } from "../../api/practitioner";
 import AuthImage from "../../components/AuthImage";
 import OptionButton from "../../components/Buttons/OptionButton";
 import CarePlanInfo from "../../components/CarePlanInfo";
@@ -56,6 +56,7 @@ export default function PatientProfile() {
             <p>Name: {getFhirFullname(patient.name)} </p>
             <p>Resource ID: {patient.id}</p>
             <OptionButton onClick={handleAddCarePlan}>Add Care Plan</OptionButton>
+            <OptionButton onClick={addMedicaiton}>Add Medication</OptionButton>
         </div>}
 
         {patient && <CarePlanInfo patient={patient} />}

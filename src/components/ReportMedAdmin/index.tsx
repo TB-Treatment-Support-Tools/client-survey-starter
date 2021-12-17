@@ -23,11 +23,11 @@ export default function ReportMedAdmin() {
         <Box padding="1em">
             <SectionTitle>Have you taken your medication today?</SectionTitle>
             <Grid className={classes.container} container>
-                <IconButton className={classes.yes}>
+                <IconButton onClick={handleYes} className={classes.yes}>
                     <Check />
                 </IconButton>
                 <Box width="1em" />
-                <IconButton className={classes.no}>
+                <IconButton onClick={handleNo} className={classes.no}>
                     <Clear />
                 </IconButton>
             </Grid>

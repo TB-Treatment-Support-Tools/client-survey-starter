@@ -4,6 +4,7 @@ import { MedicationStatement, Organization, Patient, Practitioner, PractitionerR
 import Fhir from "../api";
 import { ChangeEvent, useState } from "react";
 import CreatePatientInputs from "../types/create-patient";
+import MedicationList from "../components/MedicationList";
 
 const generatePatient = (): Patient => {
     const patient: Patient = {
@@ -32,14 +33,14 @@ const medStatement: MedicationStatement = {
 
 }
 
-const demoOrganization : Organization = {
+const demoOrganization: Organization = {
     resourceType: "Organization",
     name: "Local Hospital"
 }
 
-const demoPractitioner : Practitioner = {
+const demoPractitioner: Practitioner = {
     resourceType: "Practitioner",
-    identifier: [{system: "keycloak",value: "586bdd60-3ff9-4db8-a675-0a807bb40754"}],
+    identifier: [{ system: "keycloak", value: "586bdd60-3ff9-4db8-a675-0a807bb40754" }],
     active: true,
     name: [{
         use: "official",
@@ -56,7 +57,7 @@ const elements: FormElement[] = [
     { id: "username", display: "Username", type: FormElementTypes.String }
 ]
 
-const demoRole : PractitionerRole = {
+const demoRole: PractitionerRole = {
     resourceType: "PractitionerRole",
     active: true,
     organization: {
@@ -67,26 +68,30 @@ const demoRole : PractitionerRole = {
 
 export default function AddPatient() {
     //TODO: Add dynamic organization ID
-    const [details,setDetails] = useState<CreatePatientInputs>({ givenName: "",familyName: "", username: "", medication: "truvada", organizationId: 102})
+    const [details, setDetails] = useState<CreatePatientInputs>({ givenName: "", familyName: "", username: "", medication: "truvada", organizationId: 102 })
 
     const handleSubmit = (event: React.FormEvent) => {
         Fhir.createPatient(details);
     }
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement> ) => {
-        let newDetails : any = {}
+    const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        let newDetails: any = {}
         newDetails[event.target.id] = event.target.value
-        setDetails({...details,...newDetails});
+        setDetails({ ...details, ...newDetails });
     }
 
     return (<div>
         <h1>Add a patient</h1>
-        <form onSubmit={(e) => {e.preventDefault()}}>
+        <form onSubmit={(e) => { e.preventDefault() }}>
             {elements.map(element => <Element key={element.id} onChange={handleChange} value={details[element.id]} {...element} />)}
-            <select id="medication" onChange={handleChange} value={details.medication}>
+            {/* <select id="medication" onChange={handleChange} value={details.medication}>
                 <option value="truvada" >Truvada</option>
                 <option value="descovy">Descovy</option>
-            </select>
+            </select> */}
+            <div>
+                <p>Possible Medications</p>
+                <MedicationList />
+            </div>
             <br />
             <p>Organization {details.organizationId} </p>
             <button onClick={handleSubmit}>Add Patient</button>
