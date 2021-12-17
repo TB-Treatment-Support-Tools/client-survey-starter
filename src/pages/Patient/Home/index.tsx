@@ -10,6 +10,7 @@ import WeeklyQuestionnaire from '../../WeeklyQuestionnaire';
 import { useEffect, useState } from 'react';
 import { getQuestionnaire } from '../../../api/patient';
 import { Questionnaire } from 'fhir/r4';
+import ReportMedAdmin from '../../../components/ReportMedAdmin';
 
 export default function PatientHome() {
 
@@ -31,6 +32,7 @@ export default function PatientHome() {
             {(isSurvey && survey) && <WeeklyQuestionnaire questionnaire={survey} />}
             <section>
                 <UserGreeting />
+                <ReportMedAdmin />
                 <div className={classes.item}>
                     <SectionTitle>
                         <AddCircle />

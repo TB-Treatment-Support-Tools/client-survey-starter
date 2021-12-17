@@ -1,0 +1,21 @@
+@import "lib/style";
+
+@mixin option {
+    border-radius: 5px;
+    color: white;
+}
+
+
+.container{
+    padding: 1em 0;
+}
+
+.yes{
+    @include option();
+    background-color: $yesColor;
+}
+
+.no{
+    @include option();
+    background-color: $noColor;
+}
