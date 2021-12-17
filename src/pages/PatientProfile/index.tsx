@@ -1,14 +1,18 @@
-import { Patient, QuestionnaireResponse, QuestionnaireResponseItem } from "fhir/r4";
+import { CarePlan, Patient, QuestionnaireResponse, QuestionnaireResponseItem } from "fhir/r4";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Fhir from "../../api";
+import { addCarePlan } from "../../api/practitioner";
 import AuthImage from "../../components/AuthImage";
+import OptionButton from "../../components/Buttons/OptionButton";
+import CarePlanInfo from "../../components/CarePlanInfo";
 import { getFhirFullname } from "../../utility/fhir-utilities";
 import styles from './styles.module.scss'
 
 export default function PatientProfile() {
     const { location } = useHistory();
     const [patient, setPatient] = useState<Patient | null>(null);
+
     const [responses, setResponses] = useState<QuestionnaireResponse[] | null>(null);
 
 
@@ -32,6 +36,14 @@ export default function PatientProfile() {
 
     }
 
+    const handleAddCarePlan = () => {
+        if(patient){
+            addCarePlan(patient).then(res => {
+                console.log(res);
+            })
+        }
+    }
+
     useEffect(() => {
         if (patientId) {
             loadPatient();
@@ -43,7 +55,10 @@ export default function PatientProfile() {
         {patient && <div>
             <p>Name: {getFhirFullname(patient.name)} </p>
             <p>Resource ID: {patient.id}</p>
+            <OptionButton onClick={handleAddCarePlan}>Add Care Plan</OptionButton>
         </div>}
+
+        {patient && <CarePlanInfo patient={patient} />}
 
         <h2>Reponses found: {showResponses && "True"}</h2>
         {showResponses && responses.map((response, index) => {

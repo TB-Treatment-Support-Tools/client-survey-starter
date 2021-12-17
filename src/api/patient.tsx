@@ -1,5 +1,5 @@
 import { fhirFetch } from "./base";
-import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse } from "fhir/r4";
+import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse, BundleEntry } from "fhir/r4";
 
 //TODO - Move these to a modeling folder
 const riskForHIVCodeableConcept: CodeableConcept = {
@@ -41,8 +41,12 @@ const getQuestionnaire = async () => {
     })
 }
 
-const uploadQuestionnaireResponse = async (questionnaireResponse: QuestionnaireResponse) => {
+export const getCarePlans = async (patientID : string) => {
+    return fhirFetch(`CarePlan?subject:Patient=${patientID}`).then( json => { return json.entry.map((each : BundleEntry) => each.resource) as CarePlan[]})
+}
+
+export const uploadQuestionnaireResponse = async (questionnaireResponse: QuestionnaireResponse) => {
     return fhirFetch(`QuestionnaireResponse`, { method: "POST", body: JSON.stringify(questionnaireResponse) })
 }
 
-export {addCondition, getQuestionnaire, uploadQuestionnaireResponse}
+export {addCondition, getQuestionnaire }

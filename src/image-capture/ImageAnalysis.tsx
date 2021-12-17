@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import { useEffect, useRef } from "react"
 import { analyzeImage, contrastImage } from "../utility/analyze-image";
 
@@ -32,6 +31,7 @@ export default function ImageAnalysis({ imageSrc }: Props) {
 
     const handleAnalyze = () => {
         const values = analyzeImage(ref);
+        console.log(values?.length)
         let ctx = graphRef.current?.getContext("2d");
 
         let width = graphRef.current?.width;
@@ -58,7 +58,7 @@ export default function ImageAnalysis({ imageSrc }: Props) {
     }, [])
 
     return (<div>
-        <canvas style={{ width: "150px" }} ref={ref}></canvas>
-        <canvas style={{ width: "150px" }} ref={graphRef}></canvas>
+        <canvas ref={ref}></canvas>
+        <canvas ref={graphRef}></canvas>
     </div>)
 }

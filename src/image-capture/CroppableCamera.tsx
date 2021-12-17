@@ -125,7 +125,7 @@ function Camera({ handleOutput, closeCamera }: CameraProps) { //From https://blo
     }
   }
 
-  function hOnPlay() {
+  function handleOnPlay() {
     setTimeout(drawImge, 300)
   }
 
@@ -136,13 +136,14 @@ function Camera({ handleOutput, closeCamera }: CameraProps) { //From https://blo
     var pX = canvasRef.current.width / 2 - boxWidth / 2;
     var pY = (canvasRef.current.height / 4)
 
-    const boxHeight = (canvasRef.current.height - ((canvasRef.current.height / 10) * 2))
+    const boxHeight = (canvasRef.current.height - (pY * 2))
 
     if (displayCanvasRef.current) {
 
       //Draw cropped image to hidden canvas
       const context = displayCanvasRef.current.getContext("2d");
-
+      displayCanvasRef.current.height = boxHeight;
+      displayCanvasRef.current.width = boxWidth;
       context?.drawImage(canvasRef.current, pX, pY, boxWidth, boxHeight, 0, 0, boxWidth, boxHeight);
 
       const newContext = rotatedCanvasRef.current?.getContext("2d");
@@ -162,7 +163,7 @@ function Camera({ handleOutput, closeCamera }: CameraProps) { //From https://blo
           <Clear />
         </IconButton>
       </div>
-      <video style={{ visibility: "hidden", width: "100%", height: "1px" }} ref={videoRef} onPlay={hOnPlay} onCanPlay={handleCanPlay} autoPlay playsInline muted />
+      <video style={{ visibility: "hidden", width: "100%", height: "1px" }} ref={videoRef} onPlay={handleOnPlay} onCanPlay={handleCanPlay} autoPlay playsInline muted />
       {<canvas
         ref={canvasRef}
         style={{
