@@ -1,0 +1,30 @@
+.calendar{
+    width: 100%;
+    padding: 0 1em;
+    box-sizing: border-box;
+
+    button{
+        background-color: unset;
+        border: none;
+    }
+
+    abbr{
+        visibility: hidden;
+        height: 0px;
+    }
+}
+
+.day{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p{
+        margin: 0;
+        padding: 1em;
+    }
+
+
+    border: solid 1px lightgray;
+}
+

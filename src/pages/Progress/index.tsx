@@ -1,66 +1,32 @@
-import { Button } from "@mui/material";
-import { useEffect, useRef } from "react"
-import { analyzeImage, contrastImage } from "../../utility/analyze-image";
+import { MedicationAdministration } from "fhir/r4";
+import { useEffect, useState } from "react";
+import { getMedcationAdministration } from "../../api/patient";
+import MedAdminCalendar from "../../components/MedAdminCalendar";
+import {DateTime} from 'luxon';
+
+type BoolMap = Map<string,boolean>;
 
 export default function Progress() {
 
-    const ref = useRef<HTMLCanvasElement>(null);
-    const graphRef = useRef<HTMLCanvasElement>(null);
+    const [map,setMap] = useState<BoolMap>(new Map<string,boolean>());
 
-    const handleLoaded = () => {
-        const ctx = ref.current?.getContext("2d");
-        const i = new Image();
-        i.src = "/img/test-input.png"
-        i.onload = function () {
-            if (ref && ref.current && ctx && graphRef && graphRef.current) {
-                ref.current.height = i.height;
-                ref.current.width = i.width;
-                graphRef.current.height = i.height;
-                graphRef.current.width = i.width;
-                ctx.drawImage(i, 0, 0);
-                const oldData = ctx.getImageData(0, 0, ref.current.width, ref.current.height);
-                const newData = contrastImage(oldData,30);
-                ctx.putImageData(newData, 0, 0)
-            }
-        }
+    async function getMedAdmins(){
+       let medAdmins = await getMedcationAdministration("1")
+       let tempMap = new Map<string,boolean>();
+       for(let medAdmin of medAdmins){
+           if(medAdmin.effectiveDateTime){
+            const date = DateTime.fromISO(medAdmin.effectiveDateTime).toISODate();
+            tempMap.set(date, medAdmin.status === "completed");
+           }
+       }
+       setMap(tempMap)
     }
 
-    const handleAnalyze = () => {
-        const values = analyzeImage(ref);
-        let ctx = graphRef.current?.getContext("2d");
-
-        let width = graphRef.current?.width;
-
-        if(values && values.length > 0 && ctx){
-            ctx.beginPath();
-            ctx.moveTo(Math.floor(values[0] * (width || 0)),0);
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = "green";
-            
-            let y = 1;
-            for(let value of values.reverse()){
-                const x = Math.floor(value * (width || 0));
-                ctx.lineTo(x,y);
-                y++;
-            }
-            ctx.stroke();          
-            ctx.closePath();
-
-        }
-    }
-
-    useEffect(() => {
-        handleLoaded();
-    }, [])
+    useEffect(()=>{
+        getMedAdmins();
+    },[])
 
     return (<div>
-
-        {/* <img src="/img/test-input.png" onLoad={handleLoaded} /> */}
-        <canvas ref={ref}></canvas>
-        <canvas ref={graphRef}></canvas>
-        <div style={{width: "100%"}}>
-               <Button onClick={handleAnalyze}>Analyze</Button>
-        </div>
-     
+        <MedAdminCalendar valueMap={map}  />
     </div>)
 }

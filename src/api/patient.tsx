@@ -1,4 +1,4 @@
-import { fhirFetch } from "./base";
+import { fhirFetch, requestFhirBundle } from "./base";
 import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse, BundleEntry, Patient, MedicationAdministration } from "fhir/r4";
 
 //TODO - Move these to a modeling folder
@@ -58,6 +58,11 @@ export const addMedicationAdministration = async (patientID :string , medication
         effectiveDateTime: new Date().toISOString()
     }
     return fhirFetch(`MedicationAdministration`,{method: "POST", body: JSON.stringify(body)})
+}
+
+export async function getMedcationAdministration(patientID : string){
+    const admins = await requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}`);
+    return admins;
 }
 
 export {addCondition, getQuestionnaire }

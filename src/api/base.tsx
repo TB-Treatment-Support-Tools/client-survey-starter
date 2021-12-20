@@ -1,4 +1,5 @@
 import keycloak from "../keycloak";
+import { BundleEntry } from "fhir/r4";
 
 const baseURL = "http://localhost:8100";
 
@@ -12,5 +13,9 @@ const fileFetch = (resource: string, options?: RequestInit): Promise<any> => {
     .then(res => { return res.json() })
 }
 
-export {fhirFetch,fileFetch}
+async function requestFhirBundle<Type>(resource: string, options?: RequestInit) : Promise<Type[]>{
+    return fhirFetch(resource).then( json => { return json.entry.map((each : BundleEntry) => each.resource) as Type[]})
+}
+
+export {fhirFetch,fileFetch,requestFhirBundle}
 
