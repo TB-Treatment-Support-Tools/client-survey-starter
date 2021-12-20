@@ -5,6 +5,7 @@ import Fhir from "../api";
 import { ChangeEvent, useState } from "react";
 import CreatePatientInputs from "../types/create-patient";
 import MedicationList from "../components/MedicationList";
+import { addTLD } from "../api/practitioner";
 
 const generatePatient = (): Patient => {
     const patient: Patient = {
@@ -95,6 +96,7 @@ export default function AddPatient() {
             <br />
             <p>Organization {details.organizationId} </p>
             <button onClick={handleSubmit}>Add Patient</button>
+            <button onClick={addTLD}>Tld</button>
         </form>
     </div>)
 }

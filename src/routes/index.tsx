@@ -13,7 +13,7 @@ import keycloak from '../keycloak'
 
 import TopBar from '../components/TopBar'
 import Fhir from '../api'
-import { Patient, Practitioner } from 'fhir/r4'
+import { CarePlan, Patient, Practitioner } from 'fhir/r4'
 
 import UserContext from '../context/user-context'
 import ProviderRoutes from './ProviderRoutes'
@@ -22,26 +22,37 @@ import Progress from '../pages/Progress'
 import { getPractitionerRoles } from '../api/practitioner'
 import { getIdFromReference } from '../utility/fhir-utilities'
 import SubmitTest from '../pages/Patient/SubmitTest'
+import { getCarePlans } from '../api/patient'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
 
   const [userResource, setUserResource] = useState<Patient | Practitioner | null>(null);
   const [orgID, setOrgId] = useState<string | null>(null);
+  const [carePlan, setCarePlan] = useState<CarePlan | null>(null);
 
   const isPatient = keycloak?.hasRealmRole('patient')
   const isProvider = keycloak?.hasRealmRole('provider')
 
+  const getCarePlanDetails = async (user : Patient) => {
+    if (user.id) {
+      const carePlans = await getCarePlans(user.id);
+      if (carePlans.length > 0) {
+        setCarePlan(carePlans[0])
+      }
+    }
+  }
+
   const getCurrentUser = async () => {
     const user = await Fhir.getUserInformation();
     setUserResource(user);
-
-    if (user?.resourceType === "Patient" && user.managingOrganization && user.managingOrganization.id) {
-      setOrgId(user.managingOrganization.id)
+    if (user?.resourceType === "Patient" && user.managingOrganization) {
+      setOrgId(getIdFromReference(user.managingOrganization))
+      getCarePlanDetails(user);
     } else if (user?.resourceType === "Practitioner" && user.id) {
       const roles = await getPractitionerRoles(user.id);
       if (roles && roles.length > 0 && roles[0].organization?.reference) {
-        setOrgId(getIdFromReference(roles[0].organization?.reference));
+        setOrgId(getIdFromReference(roles[0].organization));
       }
     }
   }
@@ -52,21 +63,21 @@ const AppRouter = () => {
 
   return (
     <Router>
-      <UserContext.Provider value={{ user: userResource, organizationID: orgID }}>
+      <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan }}>
         <div className={styles.container}>
           {isProvider && <TopBar />}
           <div className={styles.main}>
             <Switch>
-            {isProvider && <ProviderRoutes />}
-            <PrivateRoute path="/progress" component={Progress} />
-            <PrivateRoute path="/home" component={PatientHome} />
-            <Route path="/chat" component={Chat} />
-            <Route path="/survey" component={PatientHome} />
-            <Route path="/login" component={Login} />
-            <PrivateRoute path="/submit-photo" component={SubmitTest} />
-            <Route path="/">
-              <DefaultComponent />
-            </Route>
+              {isProvider && <ProviderRoutes />}
+              <PrivateRoute path="/progress" component={Progress} />
+              <PrivateRoute path="/home" component={PatientHome} />
+              <Route path="/chat" component={Chat} />
+              <Route path="/survey" component={PatientHome} />
+              <Route path="/login" component={Login} />
+              <PrivateRoute path="/submit-photo" component={SubmitTest} />
+              <Route path="/">
+                <DefaultComponent />
+              </Route>
             </Switch>
           </div>
           {isPatient && <BottomNavigation />}

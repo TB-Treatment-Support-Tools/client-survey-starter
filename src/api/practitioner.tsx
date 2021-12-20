@@ -1,5 +1,6 @@
 import { fhirFetch } from "./base";
 import { Bundle, CarePlan, Medication, MedicationRequest, Patient, PractitionerRole } from "fhir/r4";
+import { createIngredient } from "../utility/fhir-utilities";
 
 export const getPractitionerRoles = (id: string) => {
     return fhirFetch(`PractitionerRole?practitioner=${id}`).then((json: Bundle) => {
@@ -72,12 +73,28 @@ export const getMedications = () => {
     return fhirFetch(`Medication`).then((json : Bundle) => { return json.entry?.map( each => each.resource) as Medication[]} )
 }
 
+export const addTLD = () => {
+    const medication: Medication = {
+        code: {
+            text: "TDF 300 mg, 3TC 300 mg, and DTG 50 mg",
+        },
+        resourceType: "Medication",
+        ingredient: [
+            createIngredient(30,"422091007","Tenofovir"),
+            createIngredient(30,"386897000"," Lamivudine"),
+            createIngredient(30,"713464000","Dolutegravir")
+        ]
+    }
+    console.log(JSON.stringify(medication))
+}
+
 export const addMedicaiton = () => {
     const medication: Medication = {
         code: {
             coding: [{
                 system: "http://snomed.info/sct",
-                id: "3738612019"
+                id: "3738612019",
+                display: "Bictegravir and emtricitabine and tenofovir only product in oral dose form"
             }],
             text: "Bictegravir and emtricitabine and tenofovir only product in oral dose form",
         },
@@ -135,3 +152,12 @@ export const addMedicaiton = () => {
 
     console.log(JSON.stringify(medication))
 }
+
+// export const addMedicationRequest = (medicationID) => {
+//     const medRequest : MedicationRequest = {
+//         resourceType: "MedicationRequest",
+//         status: "active",
+//         subject: {reference: "Patient/1"},
+//         medicationReference: {reference: `Medication/${medicationID}`}
+//     }
+// }

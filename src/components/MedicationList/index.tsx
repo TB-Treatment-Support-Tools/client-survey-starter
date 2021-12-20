@@ -5,7 +5,7 @@ import MedicationResult from "./MedicationResult";
 
 export default function MedicationList() {
 
-    const [medications,setMedication] = useState<Medication[]>([]);
+    const [medications, setMedication] = useState<Medication[]>([]);
 
     const fetchMeds = async () => {
         let medications = await getMedications();
@@ -13,11 +13,13 @@ export default function MedicationList() {
         setMedication(medications);
     }
 
-    useEffect(()=>{
-       fetchMeds();
-    },[])
+    useEffect(() => {
+        fetchMeds();
+    }, [])
 
     return (<div>
-        {medications.map(each => <MedicationResult medication={each} />)}
+        <select>
+            {medications.map(each => <MedicationResult medication={each} />)}
+        </select>
     </div>)
 }

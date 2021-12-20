@@ -7,8 +7,8 @@ interface Props{
 export default function MedicationResult({medication}: Props){
 
     if(medication.code && medication.code.text){
-        return(<li>{medication.code.text}</li>)
+        return(<option>{medication.code.text}</option>)
     }else{
-        return(<li>No display name</li>)
+        return(<option>No display name</option>)
     }
 }
