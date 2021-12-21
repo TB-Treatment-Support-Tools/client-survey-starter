@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import DateMap from '../types/date-map'
 
 import { useKeycloak } from '@react-keycloak/web'
 
@@ -22,7 +23,8 @@ import Progress from '../pages/Progress'
 import { getPractitionerRoles } from '../api/practitioner'
 import { getIdFromReference } from '../utility/fhir-utilities'
 import SubmitTest from '../pages/Patient/SubmitTest'
-import { getCarePlans } from '../api/patient'
+import { getCarePlans, getMedcationAdministration } from '../api/patient'
+import { DateTime } from 'luxon'
 
 const AppRouter = () => {
   const { initialized } = useKeycloak();
@@ -30,11 +32,12 @@ const AppRouter = () => {
   const [userResource, setUserResource] = useState<Patient | Practitioner | null>(null);
   const [orgID, setOrgId] = useState<string | null>(null);
   const [carePlan, setCarePlan] = useState<CarePlan | null>(null);
+  const [map, setMap] = useState<DateMap>(new Map<string, boolean>());
 
   const isPatient = keycloak?.hasRealmRole('patient')
   const isProvider = keycloak?.hasRealmRole('provider')
 
-  const getCarePlanDetails = async (user : Patient) => {
+  const getCarePlanDetails = async (user: Patient) => {
     if (user.id) {
       const carePlans = await getCarePlans(user.id);
       if (carePlans.length > 0) {
@@ -49,6 +52,7 @@ const AppRouter = () => {
     if (user?.resourceType === "Patient" && user.managingOrganization) {
       setOrgId(getIdFromReference(user.managingOrganization))
       getCarePlanDetails(user);
+      getMedAdmins(user);
     } else if (user?.resourceType === "Practitioner" && user.id) {
       const roles = await getPractitionerRoles(user.id);
       if (roles && roles.length > 0 && roles[0].organization?.reference) {
@@ -57,36 +61,50 @@ const AppRouter = () => {
     }
   }
 
-  useEffect(() => {
-    getCurrentUser();
-  }, [initialized])
+  async function getMedAdmins(patient : Patient) {
+    if (patient && patient.id) {
+      let medAdmins = await getMedcationAdministration(patient.id)
+      let tempMap = new Map<string, boolean>();
+      for (let medAdmin of medAdmins) {
+        if (medAdmin.effectiveDateTime) {
+          const date = DateTime.fromISO(medAdmin.effectiveDateTime).toISODate();
+          tempMap.set(date, medAdmin.status === "completed");
+        }
+      }
+      setMap(tempMap)
+    }
+  }
 
-  return (
-    <Router>
-      <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan }}>
-        <div className={styles.container}>
-          {isProvider && <TopBar />}
-          <div className={styles.main}>
-            <Switch>
-              {isProvider && <ProviderRoutes />}
-              <PrivateRoute path="/progress" component={Progress} />
-              <PrivateRoute path="/home" component={PatientHome} />
-              <Route path="/chat" component={Chat} />
-              <Route path="/survey" component={PatientHome} />
-              <Route path="/login" component={Login} />
-              <PrivateRoute path="/submit-photo" component={SubmitTest} />
-              <Route path="/">
-                <DefaultComponent />
-              </Route>
-            </Switch>
+    useEffect(() => {
+      getCurrentUser();
+    }, [initialized])
+
+    return (
+      <Router>
+        <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan, medicationDates: map }}>
+          <div className={styles.container}>
+            {isProvider && <TopBar />}
+            <div className={styles.main}>
+              <Switch>
+                {isProvider && <ProviderRoutes />}
+                <PrivateRoute path="/progress" component={Progress} />
+                <PrivateRoute path="/home" component={PatientHome} />
+                <Route path="/chat" component={Chat} />
+                <Route path="/survey" component={PatientHome} />
+                <Route path="/login" component={Login} />
+                <PrivateRoute path="/submit-photo" component={SubmitTest} />
+                <Route path="/">
+                  <DefaultComponent />
+                </Route>
+              </Switch>
+            </div>
+            {isPatient && <BottomNavigation />}
           </div>
-          {isPatient && <BottomNavigation />}
-        </div>
-      </UserContext.Provider>
-    </Router>
-  )
-}
+        </UserContext.Provider>
+      </Router>
+    )
+  }
 
-const DefaultComponent = () => <div>Page Not Found <Login /></div>
+  const DefaultComponent = () => <div>Page Not Found <Login /></div>
 
-export default AppRouter;
+  export default AppRouter;

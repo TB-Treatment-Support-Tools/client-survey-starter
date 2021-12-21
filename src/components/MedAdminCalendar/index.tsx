@@ -4,9 +4,10 @@ import Calendar from 'react-calendar';
 import Day from './Day';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import classes from './styles.module.scss';
+import DateMap from '../../types/date-map';
 
 interface CalendarProps{
-    valueMap: Map<string,boolean>
+    valueMap: DateMap
 }
 
 const CustomCalendar = ({valueMap} : CalendarProps) => {
