@@ -1,23 +1,7 @@
 import { fhirFetch, requestFhirBundle } from "./base";
-import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse, BundleEntry, Patient, MedicationAdministration } from "fhir/r4";
+import { CarePlan, Condition, Questionnaire, QuestionnaireResponse, BundleEntry, Patient, MedicationAdministration } from "fhir/r4";
 import { DateTime } from "luxon";
-
-//TODO - Move these to a modeling folder
-const riskForHIVCodeableConcept: CodeableConcept = {
-    coding: [{
-        system: "http://snomed.info/sct",
-        display: "Human immunodeficiency virus risk lifestyle",
-        code: "266974005"
-    }],
-}
-
-const positiveHIVCodeableConcept: CodeableConcept = {
-    coding: [{
-        system: "http://snomed.info/sct",
-        display: "Human immunodeficiency virus infection",
-        code: "86406008"
-    }],
-}
+import { positiveHIVCodeableConcept, riskForHIVCodeableConcept} from "../resources/conditions";
 
 const addCondition = (patientID: string, hivPositive : boolean) => {
     const condition: Condition = {

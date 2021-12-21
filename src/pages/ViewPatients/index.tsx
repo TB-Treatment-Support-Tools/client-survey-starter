@@ -4,6 +4,8 @@ import Fhir from "../../api"
 import PatientTable from "../../components/PatientTable";
 import { getConditions } from "../../api/practitioner";
 import UserContext from "../../context/user-context";
+import AddPatient from "../../components/AddPatient";
+import { Box } from "@mui/system";
 
 export default function ViewPatients() {
 
@@ -39,10 +41,10 @@ export default function ViewPatients() {
         loadConditions();
     }, [])
 
-    return (<div>
-        <p>Site Information</p>
-        <p>Name: </p>
-        <p>Id: {userContext.organizationID}</p>
+    return (<Box padding="1em">
+        <p>Patients at Site {userContext.organizationID}</p>
         {patients.length > 0 && <PatientTable conditions={conditions} patients={patients} />}
-    </div>)
+        <Box height="1em" />
+        <AddPatient />
+    </Box>)
 }

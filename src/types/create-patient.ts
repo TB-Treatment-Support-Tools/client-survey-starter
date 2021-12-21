@@ -3,8 +3,7 @@ type CreatePatientInputs = {
     givenName: string,
     familyName: string,
     username: string,
-    medication: string,
-    organizationId: number
+    organizationId: string
 }
 
 export default CreatePatientInputs;
