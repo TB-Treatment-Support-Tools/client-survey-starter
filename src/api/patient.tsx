@@ -1,5 +1,6 @@
 import { fhirFetch, requestFhirBundle } from "./base";
 import { CarePlan, CodeableConcept, Condition, Questionnaire, QuestionnaireResponse, BundleEntry, Patient, MedicationAdministration } from "fhir/r4";
+import { DateTime } from "luxon";
 
 //TODO - Move these to a modeling folder
 const riskForHIVCodeableConcept: CodeableConcept = {
@@ -49,13 +50,13 @@ export const uploadQuestionnaireResponse = async (questionnaireResponse: Questio
     return fhirFetch(`QuestionnaireResponse`, { method: "POST", body: JSON.stringify(questionnaireResponse) })
 }
 
-export const addMedicationAdministration = async (patientID :string , medicationID : string) => {
+export const addMedicationAdministration = async (patientID :string , medicationID : string, datetime : string = DateTime.local().toISO() ) => {
     const body : MedicationAdministration = {
         resourceType: "MedicationAdministration",
         medicationReference: {reference: `Medication/${medicationID}`},
         subject: {reference: `Patient/${patientID}`},
         status: "completed",
-        effectiveDateTime: new Date().toISOString()
+        effectiveDateTime: datetime
     }
     return fhirFetch(`MedicationAdministration`,{method: "POST", body: JSON.stringify(body)})
 }
@@ -63,6 +64,15 @@ export const addMedicationAdministration = async (patientID :string , medication
 export async function getMedcationAdministration(patientID : string){
     const admins = await requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}`);
     return admins;
+}
+
+export async function seedPatientData(patientID : string, medicationID : string){
+    let dt = DateTime.local()
+
+    for(let i=15; i>0; i--){
+        dt = dt.minus({days: 1});
+        await addMedicationAdministration(patientID,medicationID,dt.toISO());
+    }
 }
 
 export {addCondition, getQuestionnaire }

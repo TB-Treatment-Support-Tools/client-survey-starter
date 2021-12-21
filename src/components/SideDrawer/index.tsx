@@ -1,6 +1,7 @@
 import { Drawer } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback } from 'react';
+import { seedPatientData } from '../../api/patient';
 import classes from './styles.module.scss'
 
 interface Props {
@@ -11,8 +12,6 @@ interface Props {
 export default function SideDrawer({ drawerOpen, setDrawerOpen }: Props) {
 
     const { keycloak } = useKeycloak()
-
-    const isProvider = keycloak?.hasRealmRole('provider')
 
     const logout = useCallback(() => {
         keycloak?.logout()
@@ -36,6 +35,7 @@ export default function SideDrawer({ drawerOpen, setDrawerOpen }: Props) {
                 {keycloak?.authenticated && <button onClick={logout}>Logout</button>}
                 {keycloak?.authenticated && <h1>You are logged in as: {getUsername()} </h1>}
                 <button onClick={closeDrawer}>Close This {">"}</button>
+                <button onClick={()=>{seedPatientData("1","311")}}>Seed Patient MedAdmin Data</button>
             </div>
         </Drawer>
     )

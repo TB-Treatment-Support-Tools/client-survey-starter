@@ -14,7 +14,13 @@ const fileFetch = (resource: string, options?: RequestInit): Promise<any> => {
 }
 
 async function requestFhirBundle<Type>(resource: string, options?: RequestInit) : Promise<Type[]>{
-    return fhirFetch(resource).then( json => { return json.entry.map((each : BundleEntry) => each.resource) as Type[]})
+    return fhirFetch(resource).then( json => { 
+        if(json.entry){
+             return json.entry.map((each : BundleEntry) => each.resource) as Type[]
+        }
+        return []
+       
+    })
 }
 
 export {fhirFetch,fileFetch,requestFhirBundle}
