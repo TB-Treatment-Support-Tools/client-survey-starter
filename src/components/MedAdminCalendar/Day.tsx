@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import React from 'react'
 import classes from './styles.module.scss'
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 export default function Day({ date, medicationWasTaken }: Props) {
 
     return (
-        <div className={classes.day} style={{backgroundColor: medicationWasTaken ? "green" : "unset"}}>
+        <div className={classes.day} style={{backgroundColor: medicationWasTaken ? "rgba(68, 175, 105,.5)" : "unset"}}>
             <p>
                 {date.day}
             </p>
