@@ -1,15 +1,14 @@
 import { MedicationStatement, Organization, Patient, Practitioner, PractitionerRole, PractitionerRoleNotAvailable } from "fhir/r4";
 import { cloneElement, useState } from "react";
 import OptionButton from "../Buttons/OptionButton";
-import { Button, Dialog, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Dialog, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import BaseDetails from "./BaseDetails";
 import { Box } from "@mui/system";
 import classes from './styles.module.scss'
 import Grid from '@mui/material/Grid'
 import Conditions from "./Conditions";
-import { AddOutlined } from "@mui/icons-material";
-
-
+import { AddOutlined, ChevronLeft } from "@mui/icons-material";
+import AddPatient from "../../types/add-patient";
 
 const generatePatient = (): Patient => {
     const patient: Patient = {
@@ -30,52 +29,25 @@ const generatePatient = (): Patient => {
     return patient;
 }
 
-const medStatement: MedicationStatement = {
-    resourceType: "MedicationStatement",
-    status: "active",
-    subject: { type: "Patient", reference: "Patient/1" },
-    medicationCodeableConcept: {}
-
-}
-
-const demoOrganization: Organization = {
-    resourceType: "Organization",
-    name: "Local Hospital"
-}
-
-const demoPractitioner: Practitioner = {
-    resourceType: "Practitioner",
-    identifier: [{ system: "keycloak", value: "586bdd60-3ff9-4db8-a675-0a807bb40754" }],
-    active: true,
-    name: [{
-        use: "official",
-        given: ["Testy"],
-        family: "Testson",
-
-    }],
-    telecom: [{ system: "email", value: "test@gmail.com" }]
-}
-
-const demoRole: PractitionerRole = {
-    resourceType: "PractitionerRole",
-    active: true,
-    organization: {
-        reference: "Organization/102"
-    }
-
-}
-
 const steps = ["Details", "Condition", "CarePlan", "Confirmation"];
 const stepContent = [<BaseDetails />, <Conditions />]
 
-export default function AddPatient() {
-    //TODO: Add dynamic organization ID
+export default function AddPatientFlow() {
 
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
+    const [information, setInformation] = useState<AddPatient>({})
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
+    }
+
+    const handleBack = () => {
+        if (activeStep > 0) {
+            setActiveStep(activeStep - 1)
+        } else {
+            setOpen(false);
+        }
     }
 
     const handleClose = () => {
@@ -95,13 +67,16 @@ export default function AddPatient() {
         <Dialog onClose={handleClose} open={open} >
             <Box className={classes.dialog} padding="2em">
                 <Stepper activeStep={activeStep}>
+                    <IconButton onClick={handleBack}>
+                        <ChevronLeft />
+                    </IconButton>
                     {steps.map((step, index) => {
                         return (<Step key={step}>
                             <StepLabel>{step}</StepLabel>
                         </Step>)
                     })}
                 </Stepper>
-                {cloneElement(stepContent[activeStep], { goToNext: handleNext })}
+                {cloneElement(stepContent[activeStep], { goToNext: handleNext, information: information, setInformation: setInformation })}
             </Box>
         </Dialog>
     </div>)

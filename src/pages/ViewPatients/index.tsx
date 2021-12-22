@@ -1,11 +1,11 @@
 import { Bundle, Patient, Condition } from "fhir/r4"
 import { useContext, useEffect, useState } from "react"
-import Fhir from "../../api"
 import PatientTable from "../../components/PatientTable";
 import { getConditions } from "../../api/practitioner";
 import UserContext from "../../context/user-context";
 import AddPatient from "../../components/AddPatient";
 import { Box } from "@mui/system";
+import Fhir from "../../api"
 
 export default function ViewPatients() {
 
