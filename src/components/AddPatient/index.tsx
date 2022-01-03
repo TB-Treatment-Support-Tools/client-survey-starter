@@ -1,4 +1,4 @@
-import { Patient} from "fhir/r4";
+import { Patient } from "fhir/r4";
 import { cloneElement, useState } from "react";
 import OptionButton from "../Buttons/OptionButton";
 import { Dialog, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
@@ -57,30 +57,26 @@ export default function AddPatientFlow() {
 
     }
 
-    return (<div>
-        <Grid alignItems="center" container>
+    return (<>
             <OptionButton onClick={() => { setOpen(true) }}>
                 <AddOutlined />
                 <Box width="1em" />
                 <Typography variant="body1">Add new patient</Typography>
             </OptionButton>
-        </Grid>
-        <Dialog onClose={handleClose} open={open} >
-            <Box className={classes.dialog} padding="2em">
-                <Stepper activeStep={activeStep}>
-                    {/* <IconButton onClick={handleBack}>
-                        <ChevronLeft />
-                    </IconButton> */}
-                    {steps.map((step, index) => {
-                        return (<Step  key={`stepper-${index}`}>
-                            <StepLabel icon={`${index + 1}`}>{step}</StepLabel>
-                        </Step>)
-                    })}
-                </Stepper>
-                <Box padding="1em 0" minHeight="300px">
-                {cloneElement(stepContent[activeStep], { goToNext: handleNext, information: information, setInformation: setInformation })}
+            <Dialog onClose={handleClose} open={open} >
+                <Box className={classes.dialog} padding="2em">
+                    <Stepper activeStep={activeStep}>
+                        {steps.map((step, index) => {
+                            return (<Step key={`stepper-${index}`}>
+                                <StepLabel icon={`${index + 1}`}>{step}</StepLabel>
+                            </Step>)
+                        })}
+                    </Stepper>
+                    <Box padding="1em 0" minHeight="300px">
+                        {cloneElement(stepContent[activeStep], { goToNext: handleNext, information: information, setInformation: setInformation })}
+                    </Box>
                 </Box>
-            </Box>
-        </Dialog>
-    </div>)
+            </Dialog>
+            </>
+            )
 }

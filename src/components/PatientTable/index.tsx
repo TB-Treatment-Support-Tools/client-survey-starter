@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { addCondition } from "../../api/patient";
 import { deletePatient } from "../../api/practitioner";
 import { extractTreatmentTypeFromSnomedCode, getFhirFullname } from "../../utility/fhir-utilities";
+import Grid from '@mui/material/Grid'
 
 interface Props {
     patients: Patient[]
@@ -20,7 +21,7 @@ export default function PatientTable({ patients, conditions, refresh }: Props) {
 
     let conditionsMap: ConditionMap = {}
 
-    const handleDelete = (id : string) => {
+    const handleDelete = (id: string) => {
         deletePatient(id)
         refresh()
     }
@@ -39,30 +40,32 @@ export default function PatientTable({ patients, conditions, refresh }: Props) {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Treatment Type</TableCell>
+                <TableCell>Condition</TableCell>
                 <TableCell>Options</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
             {patients.map(patient => {
-            const condition = conditionsMap[`${patient.id}`];
-            return(<TableRow>
-                <TableCell>{patient.id}</TableCell>
-                <TableCell><Link to={`/patient/${patient.id}`}>{getFhirFullname(patient.name)}</Link></TableCell>
-                <TableCell>{condition}</TableCell>
-                <TableCell>
-                    {!condition && <>
-                        <button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP</button>
-                        <br />
-                        <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
-                    </>}
-                </TableCell>
-                <TableCell>
-                    <IconButton onClick={()=>{patient.id && handleDelete(patient.id)}}>
-                        <DeleteForever />
-                    </IconButton>
-                </TableCell>
-            </TableRow>)})}
+                const condition = conditionsMap[`${patient.id}`];
+                return (<TableRow>
+                    <TableCell>{patient.id}</TableCell>
+                    <TableCell><Link to={`/patient/${patient.id}`}>{getFhirFullname(patient.name)}</Link></TableCell>
+                    <TableCell>{condition}</TableCell>
+                    <TableCell>
+                    <Grid wrap="nowrap" container>
+                        <IconButton onClick={() => { patient.id && handleDelete(patient.id) }}>
+                            <DeleteForever />
+                        </IconButton>
+                        {!condition &&
+                            <div>
+                                <button onClick={() => { patient.id && addCondition(patient.id, false) }}>Add PrEP</button>
+                                <br />
+                                <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
+                            </div>}
+                            </Grid>
+                    </TableCell>
+                </TableRow>)
+            })}
         </TableBody>
     </Table>
 }
