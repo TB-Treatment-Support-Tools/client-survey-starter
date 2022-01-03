@@ -1,4 +1,5 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { DeleteForever } from "@mui/icons-material";
+import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { Condition, Patient } from 'fhir/r4'
 import { Link } from "react-router-dom";
 import { addCondition } from "../../api/patient";
@@ -21,7 +22,7 @@ export default function PatientTable({ patients, conditions, refresh }: Props) {
 
     const handleDelete = (id : string) => {
         deletePatient(id)
-        refresh();
+        refresh()
     }
 
     conditions.forEach(c => {
@@ -39,6 +40,7 @@ export default function PatientTable({ patients, conditions, refresh }: Props) {
                 <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Treatment Type</TableCell>
+                <TableCell>Options</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
@@ -56,7 +58,9 @@ export default function PatientTable({ patients, conditions, refresh }: Props) {
                     </>}
                 </TableCell>
                 <TableCell>
-                    <button onClick={()=>{patient.id && handleDelete(patient.id)}}>Delete</button>
+                    <IconButton onClick={()=>{patient.id && handleDelete(patient.id)}}>
+                        <DeleteForever />
+                    </IconButton>
                 </TableCell>
             </TableRow>)})}
         </TableBody>

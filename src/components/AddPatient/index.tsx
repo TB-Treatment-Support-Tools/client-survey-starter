@@ -68,16 +68,18 @@ export default function AddPatientFlow() {
         <Dialog onClose={handleClose} open={open} >
             <Box className={classes.dialog} padding="2em">
                 <Stepper activeStep={activeStep}>
-                    <IconButton onClick={handleBack}>
+                    {/* <IconButton onClick={handleBack}>
                         <ChevronLeft />
-                    </IconButton>
+                    </IconButton> */}
                     {steps.map((step, index) => {
                         return (<Step  key={`stepper-${index}`}>
                             <StepLabel icon={`${index + 1}`}>{step}</StepLabel>
                         </Step>)
                     })}
                 </Stepper>
+                <Box padding="1em 0" minHeight="300px">
                 {cloneElement(stepContent[activeStep], { goToNext: handleNext, information: information, setInformation: setInformation })}
+                </Box>
             </Box>
         </Dialog>
     </div>)

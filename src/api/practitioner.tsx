@@ -1,5 +1,5 @@
-import { fhirFetch } from "./base";
-import { Bundle, CarePlan, Medication, MedicationRequest, Patient, PractitionerRole } from "fhir/r4";
+import { fhirFetch, fetchFhirResource } from "./base";
+import { Bundle, CarePlan, Condition, Medication, MedicationRequest, Patient, PractitionerRole } from "fhir/r4";
 import { createIngredient } from "../utility/fhir-utilities";
 
 export const getPractitionerRoles = (id: string) => {
@@ -13,15 +13,6 @@ export const getConditions = (): Promise<any> => {
 }
 
 export const addCarePlan = (patient: Patient) => {
-
-    // const medicationRequest: MedicationRequest = {
-    //     resourceType: "MedicationRequest",
-    //     intent: "plan",
-    //     subject: { reference: `Patient/${patient.id}` },
-    //     medicationReference: "Medication/"
-
-
-    // }
 
     const carePlan: CarePlan = {
         intent: "plan",
@@ -154,7 +145,11 @@ export const addMedicaiton = () => {
 }
 
 export function addPatient(details : Patient){
-    return fhirFetch('/Patient',{method:"POST",body: JSON.stringify(details)})
+    return fetchFhirResource<Patient>('/Patient',{method:"POST",body: JSON.stringify(details)})
+}
+
+export function addCondition(condition: Condition){
+    return fetchFhirResource('/Condition',{method: "POST",body: JSON.stringify(condition)})
 }
 
 export function deletePatient(id: string){

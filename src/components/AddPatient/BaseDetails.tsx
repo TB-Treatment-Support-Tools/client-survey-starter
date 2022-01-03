@@ -10,7 +10,8 @@ import NextButton from "./NextButton"
 import { Patient } from "fhir/r4"
 import { createFhirName } from "../../utility/fhir-utilities"
 import { addPatient } from "../../api/practitioner"
-import { CircularProgress, Grid } from "@mui/material"
+import Loading from '../Loading'
+import AddPatientFlowProps from "./AddPatientFlowProps"
 
 type InputTypes = {
     [key: string]: string | number,
@@ -20,17 +21,10 @@ type InputTypes = {
 
 const elements: FormElement[] = [
     { id: "givenName", display: "First Name", type: FormElementTypes.String },
-    { id: "familyName", display: "Last Name", type: FormElementTypes.String },
-    { id: "username", display: "Username", type: FormElementTypes.String }
+    { id: "familyName", display: "Last Name", type: FormElementTypes.String }
 ]
 
-console.log('default patient')
-
-interface Props {
-    goToNext?: () => void
-}
-
-export default function BaseDetails({ goToNext }: Props) {
+export default function BaseDetails({ goToNext, setInformation }: AddPatientFlowProps) {
 
     const { organizationID } = useContext(UserContext)
     const [loading, setLoading] = useState<boolean>(false);
@@ -46,17 +40,17 @@ export default function BaseDetails({ goToNext }: Props) {
 
     const handleNext = async () => {
 
-        const defaultPatient: Patient = {
-            resourceType: "Patient",
-            managingOrganization: { reference: `Organization/${organizationID}` },
-            name: [createFhirName(details.givenName, details.familyName)]
-        }
+        if (setInformation && goToNext) {
+            const defaultPatient: Patient = {
+                resourceType: "Patient",
+                managingOrganization: { reference: `Organization/${organizationID}` },
+                name: [createFhirName(details.givenName, details.familyName)]
+            }
 
-        setLoading(true);
-        let submittedPatientId = await addPatient(defaultPatient);
-        setLoading(false);
-
-        if(goToNext){
+            setLoading(true);
+            let newPatient = await addPatient(defaultPatient)
+            setInformation(newPatient)
+            setLoading(false);
             goToNext();
         }
 
@@ -64,14 +58,12 @@ export default function BaseDetails({ goToNext }: Props) {
 
     return (<form onSubmit={(e) => { e.preventDefault() }}>
         <Box padding="1em 0">
-            {loading ? 
-            <Grid justifyContent="center" alignItems="center" container>
-              <CircularProgress variant="indeterminate" />
-            </Grid>
-            :
-            <>
-                {elements.map(element => <Element key={element.id} onChange={handleChange} value={details[element.id]} {...element} />)}
-            </>}
+            {loading ?
+                <Loading />
+                :
+                <>
+                    {elements.map(element => <Element key={element.id} onChange={handleChange} value={details[element.id]} {...element} />)}
+                </>}
         </Box>
         <NextButton disabled={!enableButton} onClick={handleNext} />
     </form>)
