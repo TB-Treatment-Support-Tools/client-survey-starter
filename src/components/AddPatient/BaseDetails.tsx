@@ -10,6 +10,7 @@ import NextButton from "./NextButton"
 import { Patient } from "fhir/r4"
 import { createFhirName } from "../../utility/fhir-utilities"
 import { addPatient } from "../../api/practitioner"
+import { CircularProgress, Grid } from "@mui/material"
 
 type InputTypes = {
     [key: string]: string | number,
@@ -25,14 +26,14 @@ const elements: FormElement[] = [
 
 console.log('default patient')
 
-interface Props{
-    goToNext? : () => void
+interface Props {
+    goToNext?: () => void
 }
 
-export default function BaseDetails({goToNext} : Props) {
+export default function BaseDetails({ goToNext }: Props) {
 
-    const {organizationID} = useContext(UserContext)
-    const [loading,setLoading] = useState<boolean>(false);
+    const { organizationID } = useContext(UserContext)
+    const [loading, setLoading] = useState<boolean>(false);
     const [details, setDetails] = useState<InputTypes>({ givenName: "", familyName: "", username: "", organizationId: organizationID || "" })
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -45,21 +46,32 @@ export default function BaseDetails({goToNext} : Props) {
 
     const handleNext = async () => {
 
-        const defaultPatient : Patient = {
+        const defaultPatient: Patient = {
             resourceType: "Patient",
-            managingOrganization: { reference: `Organization/${organizationID}`},
-            name: [createFhirName(details.givenName,details.familyName)]
+            managingOrganization: { reference: `Organization/${organizationID}` },
+            name: [createFhirName(details.givenName, details.familyName)]
         }
 
         setLoading(true);
         let submittedPatientId = await addPatient(defaultPatient);
         setLoading(false);
 
+        if(goToNext){
+            goToNext();
+        }
+
     }
 
     return (<form onSubmit={(e) => { e.preventDefault() }}>
         <Box padding="1em 0">
-        {elements.map(element => <Element key={element.id} onChange={handleChange} value={details[element.id]} {...element} />)}
+            {loading ? 
+            <Grid justifyContent="center" alignItems="center" container>
+              <CircularProgress variant="indeterminate" />
+            </Grid>
+            :
+            <>
+                {elements.map(element => <Element key={element.id} onChange={handleChange} value={details[element.id]} {...element} />)}
+            </>}
         </Box>
         <NextButton disabled={!enableButton} onClick={handleNext} />
     </form>)

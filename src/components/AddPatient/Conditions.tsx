@@ -8,15 +8,18 @@ import { Box } from '@mui/system';
 import NextButton from './NextButton';
 import AddPatientFlowProps from './AddPatientFlowProps';
 import { positiveHIVCodeableConcept, riskForHIVCodeableConcept } from "../../resources/conditions";
+import { Condition } from 'fhir/r4';
 
 export default function Conditions({ goToNext, information, setInformation }: AddPatientFlowProps) {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-
-        if (setInformation) {
-            let tempInformation = { ...information }
-            tempInformation.condition = (value === "prep" ? riskForHIVCodeableConcept : positiveHIVCodeableConcept)
-            setInformation(tempInformation)
+        if (information?.id) {
+            const condition: Condition = {
+                resourceType: "Condition",
+                subject: { reference: `Patient/${information?.id}` },
+                code:  (value === "prep" ? riskForHIVCodeableConcept : positiveHIVCodeableConcept)
+            }
+            console.log(condition);
         }
     }
 

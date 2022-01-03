@@ -43,7 +43,7 @@ export default function ViewPatients() {
 
     return (<Box padding="1em">
         <p>Patients at Site {userContext.organizationID}</p>
-        {patients.length > 0 && <PatientTable conditions={conditions} patients={patients} />}
+        {patients.length > 0 && <PatientTable refresh={()=>{getPatients()}} conditions={conditions} patients={patients} />}
         <Box height="1em" />
         <AddPatient />
     </Box>)

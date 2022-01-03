@@ -156,3 +156,7 @@ export const addMedicaiton = () => {
 export function addPatient(details : Patient){
     return fhirFetch('/Patient',{method:"POST",body: JSON.stringify(details)})
 }
+
+export function deletePatient(id: string){
+    return fhirFetch(`/Patient/${id}`,{method: "DELETE"})
+}

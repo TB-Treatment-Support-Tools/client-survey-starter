@@ -37,7 +37,7 @@ export default function AddPatientFlow() {
 
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
-    const [information, setInformation] = useState<AddPatient>({})
+    const [information, setInformation] = useState<Patient | null>(null)
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);

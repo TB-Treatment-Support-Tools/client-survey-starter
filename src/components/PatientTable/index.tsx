@@ -2,20 +2,27 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { Condition, Patient } from 'fhir/r4'
 import { Link } from "react-router-dom";
 import { addCondition } from "../../api/patient";
+import { deletePatient } from "../../api/practitioner";
 import { extractTreatmentTypeFromSnomedCode, getFhirFullname } from "../../utility/fhir-utilities";
 
 interface Props {
     patients: Patient[]
-    conditions: Condition[]
+    conditions: Condition[],
+    refresh: () => void
 }
 
-export default function PatientTable({ patients, conditions }: Props) {
+export default function PatientTable({ patients, conditions, refresh }: Props) {
 
     type ConditionMap = {
         [key: string]: string | undefined
     };
 
     let conditionsMap: ConditionMap = {}
+
+    const handleDelete = (id : string) => {
+        deletePatient(id)
+        refresh();
+    }
 
     conditions.forEach(c => {
         if (c.subject.reference && c.code && c.code.coding) {
@@ -47,6 +54,9 @@ export default function PatientTable({ patients, conditions }: Props) {
                         <br />
                         <button onClick={() => { patient.id && addCondition(patient.id, true) }}>Add +HIV</button>
                     </>}
+                </TableCell>
+                <TableCell>
+                    <button onClick={()=>{patient.id && handleDelete(patient.id)}}>Delete</button>
                 </TableCell>
             </TableRow>)})}
         </TableBody>
