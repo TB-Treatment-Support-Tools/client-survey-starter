@@ -1,4 +1,4 @@
-import { MedicationStatement, Organization, Patient, Practitioner, PractitionerRole, PractitionerRoleNotAvailable } from "fhir/r4";
+import { Patient} from "fhir/r4";
 import { cloneElement, useState } from "react";
 import OptionButton from "../Buttons/OptionButton";
 import { Dialog, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid'
 import Conditions from "./Conditions";
 import { AddOutlined, ChevronLeft } from "@mui/icons-material";
 import AddPatient from "../../types/add-patient";
+import CarePlanInfo from "./CarePlanInfo";
 
 const generatePatient = (): Patient => {
     const patient: Patient = {
@@ -30,7 +31,7 @@ const generatePatient = (): Patient => {
 }
 
 const steps = ["Details", "Condition", "CarePlan", "Confirmation"];
-const stepContent = [<BaseDetails />, <Conditions />]
+const stepContent = [<BaseDetails />, <Conditions />, <CarePlanInfo />]
 
 export default function AddPatientFlow() {
 
@@ -71,8 +72,8 @@ export default function AddPatientFlow() {
                         <ChevronLeft />
                     </IconButton>
                     {steps.map((step, index) => {
-                        return (<Step key={step}>
-                            <StepLabel>{step}</StepLabel>
+                        return (<Step  key={`stepper-${index}`}>
+                            <StepLabel icon={`${index + 1}`}>{step}</StepLabel>
                         </Step>)
                     })}
                 </Stepper>

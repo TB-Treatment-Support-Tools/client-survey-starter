@@ -1,4 +1,4 @@
-import { CarePlan, CodeableConcept, Condition, Patient } from "fhir/r4"
+import { CodeableConcept } from "fhir/r4"
 
 type AddPatient = {
     firstName?: string,
