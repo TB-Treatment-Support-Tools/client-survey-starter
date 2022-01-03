@@ -1,10 +1,15 @@
-.label{
+.label {
     width: fit-content;
     display: flex;
     flex-direction: column;
-    font
 
-    span{
+    input {
+        border-radius: 2px;
+        border: 1px solid gray;
+        padding: 5px;
+    }
+
+    span {
         font-family: inherit;
         padding-top: 1em;
     }

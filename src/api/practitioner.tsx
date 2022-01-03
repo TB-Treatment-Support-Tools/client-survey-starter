@@ -153,11 +153,6 @@ export const addMedicaiton = () => {
     console.log(JSON.stringify(medication))
 }
 
-// export const addMedicationRequest = (medicationID) => {
-//     const medRequest : MedicationRequest = {
-//         resourceType: "MedicationRequest",
-//         status: "active",
-//         subject: {reference: "Patient/1"},
-//         medicationReference: {reference: `Medication/${medicationID}`}
-//     }
-// }
+export function addPatient(details : Patient){
+    return fhirFetch('/Patient',{method:"POST",body: JSON.stringify(details)})
+}

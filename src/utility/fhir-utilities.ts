@@ -16,6 +16,13 @@ export function getFhirFirstName(names: HumanName[] | undefined) {
     return "No name found"
 }
 
+export function createFhirName(givenName: string, familyName: string) : HumanName {
+    return {
+        family: familyName,
+        given: [givenName],
+    }
+}
+
 // export function getIdFromReference(reference: string | undefined) {
 //     if (!reference) {
 //         return null
