@@ -76,7 +76,6 @@ export const addTLD = () => {
             createIngredient(30,"713464000","Dolutegravir")
         ]
     }
-    console.log(JSON.stringify(medication))
 }
 
 export const addMedicaiton = () => {

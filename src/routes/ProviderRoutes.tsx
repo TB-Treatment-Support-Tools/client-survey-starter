@@ -1,7 +1,8 @@
 
 import ViewPatients from '../pages/ViewPatients'
 import PatientProfile from '../pages/PatientProfile'
-import { PrivateRoute, ProviderRoute } from './utils'
+import { ProviderRoute } from './utils'
+import Medications from '../pages/Medication'
 
 export default function ProviderRoutes() {
 
@@ -9,6 +10,7 @@ export default function ProviderRoutes() {
         <>
             <ProviderRoute path="/patients" component={ViewPatients} />
             <ProviderRoute path="/patient/*" component={PatientProfile} />
+            <ProviderRoute path="/medications" component={Medications} />
         </>
     )
 
