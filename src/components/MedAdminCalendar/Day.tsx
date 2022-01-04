@@ -9,7 +9,7 @@ interface Props {
 export default function Day({ date, medicationWasTaken }: Props) {
 
     return (
-        <div className={classes.day} style={{backgroundColor: medicationWasTaken !== undefined ? (medicationWasTaken ? "rgba(68, 175, 105,.5)" : "red") : "unset"}}>
+        <div className={classes.day} style={{backgroundColor: medicationWasTaken !== undefined ? (medicationWasTaken ? "rgba(68, 175, 105,.5)" : "#eb5756") : "unset"}}>
             <p>
                 {date.day}
             </p>

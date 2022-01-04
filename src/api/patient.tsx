@@ -46,7 +46,7 @@ export const addMedicationAdministration = async (patientID: string, medicationI
 }
 
 export async function getMedcationAdministration(patientID: string) {
-    const admins = await requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}`);
+    const admins = await requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&_sort=-effective-time`);
     return admins;
 }
 
