@@ -12,51 +12,7 @@ export const getConditions = (): Promise<any> => {
     return fhirFetch(`Condition?patient.organization=102`)
 }
 
-export const addCarePlan = (patient: Patient) => {
-
-    const carePlan: CarePlan = {
-        intent: "plan",
-        resourceType: "CarePlan",
-        status: "active",
-        subject: { reference: `Patient/${patient.id}` },
-        activity: [{
-            reference: {
-
-                reference: `MedicationRequest/${10}`
-            },
-            detail: {
-                status: "in-progress",
-                description: "Take medication",
-                kind: "MedicationRequest",
-                dailyAmount: {
-                    value: 1,
-                    unit: "pill"
-                },
-                scheduledTiming: {
-                    repeat: {
-                        timeOfDay: ["12:00"]
-                    }
-                }
-            }
-        },
-        {
-            detail: {
-                description: "Complete survey",
-                status: "scheduled",
-                instantiatesCanonical: ["Questionnaire/52"],
-                scheduledTiming: {
-                    repeat: {
-                        frequency: 1,
-                        period: 1,
-                        periodUnit: "d"
-                    }
-                }
-            }
-        }
-        ]
-
-    }
-
+export const addCarePlan = (carePlan: CarePlan) => {
     return fhirFetch(`CarePlan`, { method: "POST", body: JSON.stringify(carePlan) })
 }
 

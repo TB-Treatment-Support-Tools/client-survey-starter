@@ -44,7 +44,6 @@ export default function Conditions({ goToNext, information, setInformation }: Ad
                     <RadioGroup
                         onChange={handleChange}
                         aria-label="gender"
-                        defaultValue="female"
                         name="radio-buttons-group"
                     >
                         <FormControlLabel value="prep" control={<Radio />} label="PrEP Treatment" />
@@ -52,7 +51,7 @@ export default function Conditions({ goToNext, information, setInformation }: Ad
                     </RadioGroup>
                 </FormControl>}
             </Box>
-            <NextButton onClick={goToNext} />
+            <NextButton onClick={handleNext} />
         </>
     )
 }

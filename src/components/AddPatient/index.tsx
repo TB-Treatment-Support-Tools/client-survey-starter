@@ -1,14 +1,12 @@
 import { Patient } from "fhir/r4";
 import { cloneElement, useState } from "react";
 import OptionButton from "../Buttons/OptionButton";
-import { Dialog, IconButton, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import { Dialog, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import BaseDetails from "./BaseDetails";
 import { Box } from "@mui/system";
 import classes from './styles.module.scss'
-import Grid from '@mui/material/Grid'
 import Conditions from "./Conditions";
-import { AddOutlined, ChevronLeft } from "@mui/icons-material";
-import AddPatient from "../../types/add-patient";
+import { AddOutlined } from "@mui/icons-material";
 import CarePlanInfo from "./CarePlanInfo";
 
 const generatePatient = (): Patient => {

@@ -3,13 +3,17 @@ import { useEffect, useState } from "react"
 import { getMedications } from "../../api/practitioner"
 import MedicationResult from "./MedicationResult";
 
-export default function MedicationList() {
+interface Props{
+    value: string | null,
+    handleChange: () => void
+}
+
+export default function MedicationList({handleChange, value}: Props) {
 
     const [medications, setMedication] = useState<Medication[]>([]);
 
     const fetchMeds = async () => {
         let medications = await getMedications();
-        console.log(medications)
         setMedication(medications);
     }
 
@@ -18,7 +22,7 @@ export default function MedicationList() {
     }, [])
 
     return (<div>
-        <select>
+        <select value={value || ""} onChange={handleChange}>
             {medications.map(each => <MedicationResult medication={each} />)}
         </select>
     </div>)
