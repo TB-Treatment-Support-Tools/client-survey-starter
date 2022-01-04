@@ -32,12 +32,12 @@ export default function ReportMedAdmin() {
         if(user?.id && idForUpload){
             setLoading(true)
             await addMedicationAdministration(user.id,idForUpload,tookMedication)
-            setLoading(false)
             !!updateMedicationDates && updateMedicationDates()
+            setLoading(false)
         }
     }
 
-    const hasAlreadyReported = !!medicationDates?.get(DateTime.local().toISODate())
+    const hasAlreadyReported = medicationDates?.has(DateTime.local().toISODate())
 
     return (
         <Box padding="1em">
