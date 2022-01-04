@@ -1,4 +1,4 @@
-import { Patient, QuestionnaireResponse, QuestionnaireResponseItem } from "fhir/r4"
+import { MedicationAdministration, Patient, QuestionnaireResponse, QuestionnaireResponseItem } from "fhir/r4"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import Fhir from "../../api"
@@ -8,13 +8,16 @@ import OptionButton from "../../components/Buttons/OptionButton"
 import CarePlanInfo from "../../components/CarePlanInfo"
 import { getFhirFullname } from "../../utility/fhir-utilities"
 import styles from './styles.module.scss'
+import Calendar from '../../components/MedAdminCalendar'
+import { getMedAdminsMap, getMedcationAdministration } from "../../api/patient"
+import DateMap from "../../types/date-map"
 
 export default function PatientProfile() {
     const { location } = useHistory()
     const [patient, setPatient] = useState<Patient | null>(null)
 
-    const [responses, setResponses] = useState<QuestionnaireResponse[] | null>(null)
-
+    const [responses, setResponses] = useState<QuestionnaireResponse[]>([])
+    const [medAdmins,setMedAdmins] = useState<DateMap>(new Map<string, boolean>())
 
     const splitPath = location.pathname.split("/")
     const patientId = splitPath[splitPath.length - 1]
@@ -27,7 +30,9 @@ export default function PatientProfile() {
 
     const loadResponses = async () => {
         const res = await Fhir.getPatientQuestionnaireResponses(patientId)
+        const medAdmins = await getMedAdminsMap(patientId)
         setResponses(res.reverse().map((each: any) => { return each.resource }))
+        setMedAdmins(medAdmins)
     }
 
     const deleteEntry = async (id: string) => {
@@ -49,6 +54,8 @@ export default function PatientProfile() {
             <p>Resource ID: {patient.id}</p>
             <OptionButton onClick={addMedicaiton}>Add Medication</OptionButton>
         </div>}
+
+        <Calendar valueMap={medAdmins} />
 
         {patient && <CarePlanInfo patient={patient} />}
 

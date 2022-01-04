@@ -23,7 +23,7 @@ import Progress from '../pages/Progress'
 import { getPractitionerRoles } from '../api/practitioner'
 import { getIdFromReference } from '../utility/fhir-utilities'
 import SubmitTest from '../pages/Patient/SubmitTest'
-import { getCarePlans, getMedcationAdministration } from '../api/patient'
+import { getCarePlans, getMedAdminsMap, getMedcationAdministration } from '../api/patient'
 import { DateTime } from 'luxon'
 
 const AppRouter = () => {
@@ -49,10 +49,10 @@ const AppRouter = () => {
   const getCurrentUser = async () => {
     const user = await Fhir.getUserInformation();
     setUserResource(user);
-    if (user?.resourceType === "Patient" && user.managingOrganization) {
+    if (user?.resourceType === "Patient" && user.managingOrganization && user.id) {
       setOrgId(getIdFromReference(user.managingOrganization))
       getCarePlanDetails(user);
-      getMedAdmins(user);
+      getCalendarData(user.id);
     } else if (user?.resourceType === "Practitioner" && user.id) {
       const roles = await getPractitionerRoles(user.id);
       if (roles && roles.length > 0 && roles[0].organization?.reference) {
@@ -61,50 +61,41 @@ const AppRouter = () => {
     }
   }
 
-  async function getMedAdmins(patient : Patient) {
-    if (patient && patient.id) {
-      let medAdmins = await getMedcationAdministration(patient.id)
-      let tempMap = new Map<string, boolean>();
-      for (let medAdmin of medAdmins) {
-        if (medAdmin.effectiveDateTime) {
-          const date = DateTime.fromISO(medAdmin.effectiveDateTime).toISODate();
-          tempMap.set(date, medAdmin.status === "completed");
-        }
-      }
-      setMap(tempMap)
-    }
+  const getCalendarData = async (id: string) => {
+    let adminMap = await getMedAdminsMap(id)
+    setMap(adminMap)
   }
 
-    useEffect(() => {
-      getCurrentUser();
-    }, [initialized])
+  useEffect(() => {
+    getCurrentUser();
+  }, [initialized])
 
-    return (
-      <Router>
-        <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan, medicationDates: map }}>
-          <div className={styles.container}>
-            {isProvider && <TopBar />}
-            <div className={styles.main}>
-              <Switch>
-                {isProvider && <ProviderRoutes />}
-                <PrivateRoute path="/progress" component={Progress} />
-                <PrivateRoute path="/home" component={PatientHome} />
-                <Route path="/chat" component={Chat} />
-                <Route path="/survey" component={PatientHome} />
-                <Route path="/login" component={Login} />
-                <PrivateRoute path="/submit-photo" component={SubmitTest} />
-                <Route path="/">
-                  <DefaultComponent />
-                </Route>
-              </Switch>
-            </div>
-            {isPatient && <BottomNavigation />}
+  return (
+    <Router>
+      <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan, medicationDates: map }}>
+        <div className={styles.container}>
+          {isProvider && <TopBar />}
+          <div className={styles.main}>
+            <Switch>
+              {isProvider && <ProviderRoutes />}
+              <PrivateRoute path="/progress" component={Progress} />
+              <PrivateRoute path="/home" component={PatientHome} />
+              <Route path="/chat" component={Chat} />
+              <Route path="/survey" component={PatientHome} />
+              <Route path="/login" component={Login} />
+              <PrivateRoute path="/submit-photo" component={SubmitTest} />
+              <Route path="/">
+                <DefaultComponent />
+              </Route>
+            </Switch>
           </div>
-        </UserContext.Provider>
-      </Router>
-    )
-  }
+          {isPatient && <BottomNavigation />}
+        </div>
+      </UserContext.Provider>
+    </Router>
+  )
+}
 
-  const DefaultComponent = () => <div>Page Not Found <Login /></div>
+const DefaultComponent = () => <div>Page Not Found <Login /></div>
 
-  export default AppRouter;
+export default AppRouter;

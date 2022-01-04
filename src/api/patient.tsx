@@ -59,4 +59,16 @@ export async function seedPatientData(patientID : string, medicationID : string)
     }
 }
 
+export async function getMedAdminsMap(id : string) {
+      let medAdmins = await getMedcationAdministration(id)
+      let tempMap = new Map<string, boolean>();
+      for (let medAdmin of medAdmins) {
+        if (medAdmin.effectiveDateTime) {
+          const date = DateTime.fromISO(medAdmin.effectiveDateTime).toISODate();
+          tempMap.set(date, medAdmin.status === "completed");
+        }
+      }
+      return tempMap;
+  }
+
 export {addCondition, getQuestionnaire }
