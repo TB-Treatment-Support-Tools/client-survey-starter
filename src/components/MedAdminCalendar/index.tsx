@@ -40,7 +40,7 @@ const CustomCalendar = ({valueMap} : CalendarProps) => {
             }
             tileContent={({ date, view }) => {
                 let dt = DateTime.fromJSDate(date);
-                return (view === "month" ? <Day medicationWasTaken={!!valueMap.get(dt.toISODate())} date={dt}  /> : null)
+                return (view === "month" ? <Day medicationWasTaken={valueMap.get(dt.toISODate())} date={dt}  /> : null)
 }}
             next2Label={null}
             prev2Label={null}

@@ -66,13 +66,17 @@ const AppRouter = () => {
     setMap(adminMap)
   }
 
+  const updateCalendarData = () => {
+    userResource?.id && getCalendarData(userResource.id)
+  }
+
   useEffect(() => {
     getCurrentUser();
   }, [initialized])
 
   return (
     <Router>
-      <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan, medicationDates: map }}>
+      <UserContext.Provider value={{ user: userResource, organizationID: orgID, carePlan: carePlan, medicationDates: map, updateMedicationDates: updateCalendarData}}>
         <div className={styles.container}>
           {isProvider && <TopBar />}
           <div className={styles.main}>

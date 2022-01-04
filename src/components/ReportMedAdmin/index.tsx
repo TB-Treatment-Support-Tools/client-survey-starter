@@ -7,34 +7,43 @@ import { useContext, useState } from 'react'
 import { addMedicationAdministration } from '../../api/patient'
 import UserContext from '../../context/user-context'
 import { getMedicationIdFromCarePlan } from '../../utility/fhir-utilities'
+import Loading from '../Loading'
 import SectionTitle from '../Text/SectionTitle'
 import classes from './styles.module.scss'
 
 export default function ReportMedAdmin() {
 
-    const { user, carePlan, medicationDates } = useContext(UserContext);
-    const [value,setValue] = useState<boolean | null>(null);
+    const [loading,setLoading] = useState<boolean>(false);
+    const { user, carePlan, medicationDates, updateMedicationDates } = useContext(UserContext);
 
     const medicationID = () => {
         return getMedicationIdFromCarePlan(carePlan)
     }
     const handleYes = () => {
-        const idForUpload = medicationID();
-        if(user?.resourceType === "Patient" && user.id && idForUpload){
-            addMedicationAdministration(user.id,idForUpload);
-        }
+        handleSubmission(true)
     }
 
     const handleNo = () => {
-        console.log("Didnt take meds")
+        handleSubmission(false)
+    }
+
+    const handleSubmission = async (tookMedication : boolean) => {
+        const idForUpload = medicationID();
+        if(user?.id && idForUpload){
+            setLoading(true)
+            await addMedicationAdministration(user.id,idForUpload,tookMedication)
+            setLoading(false)
+            !!updateMedicationDates && updateMedicationDates()
+        }
     }
 
     const hasAlreadyReported = !!medicationDates?.get(DateTime.local().toISODate())
 
     return (
         <Box padding="1em">
+            {loading ? <Loading /> : <>
             <SectionTitle>Have you taken your medication today?</SectionTitle>
-            {hasAlreadyReported ? <p>You already reported today, check back tomorrow!</p> : <Grid className={classes.container} container>
+            {hasAlreadyReported ? <p>Great job! Please check back in tomorrow when you have taken your medication</p> : <Grid className={classes.container} container>
                 <IconButton onClick={handleYes} className={classes.yes}>
                     <Check />
                 </IconButton>
@@ -43,6 +52,7 @@ export default function ReportMedAdmin() {
                     <Clear />
                 </IconButton>
             </Grid>}
+            </>}
         </Box>
     )
 }

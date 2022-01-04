@@ -6,7 +6,8 @@ interface Context {
     user: Patient | Practitioner | null,
     organizationID: string | null,
     carePlan: CarePlan | null,
-    medicationDates: DateMap | null
+    medicationDates: DateMap | null,
+    updateMedicationDates?: () => void | Promise<void>
 }
 
 const UserContext = createContext<Context>({ user: null, organizationID: null, carePlan: null, medicationDates: null });
