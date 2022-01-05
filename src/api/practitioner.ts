@@ -1,4 +1,4 @@
-import { fhirFetch, fetchFhirResource } from "./base";
+import { fhirFetch, fetchFhirResource, requestFhirBundle } from "./base";
 import { Bundle, CarePlan, Condition, Medication, MedicationRequest, Patient, PractitionerRole } from "fhir/r4";
 import { createIngredient } from "../utility/fhir-utilities";
 
@@ -108,4 +108,8 @@ export function addCondition(condition: Condition){
 
 export function deletePatient(id: string){
     return fhirFetch(`/Patient/${id}`,{method: "DELETE"})
+}
+
+export function getPatients(organizationId :string){
+    return requestFhirBundle<Patient>(`Patient?organization=${organizationId}`)
 }
