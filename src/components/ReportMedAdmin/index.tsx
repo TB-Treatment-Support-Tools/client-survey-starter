@@ -2,9 +2,10 @@ import { Check, Clear } from '@mui/icons-material'
 import { IconButton, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/system'
+import { MedicationAdministration } from 'fhir/r4'
 import { DateTime } from 'luxon'
-import { useContext, useState } from 'react'
-import { addMedicationAdministration } from '../../api/patient'
+import { useContext, useEffect, useState } from 'react'
+import { addMedicationAdministration, getTodaysMedAdmin } from '../../api/patient'
 import UserContext from '../../context/user-context'
 import { getMedicationIdFromCarePlan } from '../../utility/fhir-utilities'
 import Loading from '../Loading'
@@ -13,8 +14,20 @@ import classes from './styles.module.scss'
 
 export default function ReportMedAdmin() {
 
-    const [loading,setLoading] = useState<boolean>(false);
-    const { user, carePlan, medicationDates, updateMedicationDates } = useContext(UserContext);
+    const [loading,setLoading] = useState<boolean>(false)
+    const [todaysEntries,setTodaysEntries] = useState<MedicationAdministration[]>([])
+    const { user, carePlan, medicationDates, updateMedicationDates } = useContext(UserContext)
+
+    const getLatestMedAdmin = async () => {
+        if(user?.id){
+            const entries = await getTodaysMedAdmin(user.id)
+            setTodaysEntries(entries)
+        }
+    }
+
+    useEffect(()=>{
+        getLatestMedAdmin()
+    },[])
 
     const medicationID = () => {
         return getMedicationIdFromCarePlan(carePlan)
@@ -28,7 +41,7 @@ export default function ReportMedAdmin() {
     }
 
     const handleSubmission = async (tookMedication : boolean) => {
-        const idForUpload = medicationID();
+        const idForUpload = medicationID()
         if(user?.id && idForUpload){
             setLoading(true)
             await addMedicationAdministration(user.id,idForUpload,tookMedication)
@@ -37,7 +50,7 @@ export default function ReportMedAdmin() {
         }
     }
 
-    const hasAlreadyReported = medicationDates?.has(DateTime.local().toISODate())
+    const hasAlreadyReported = todaysEntries.length > 0
 
     return (
         <Box padding="1em">

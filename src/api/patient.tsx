@@ -3,7 +3,7 @@ import { CarePlan, Condition, Questionnaire, QuestionnaireResponse, BundleEntry,
 import { DateTime } from "luxon";
 import { positiveHIVCodeableConcept, riskForHIVCodeableConcept } from "../resources/conditions";
 
-const addCondition = (patientID: string, hivPositive: boolean) => {
+export const addCondition = (patientID: string, hivPositive: boolean) => {
     const condition: Condition = {
         resourceType: "Condition",
         code: hivPositive ? positiveHIVCodeableConcept : riskForHIVCodeableConcept,
@@ -15,14 +15,13 @@ const addCondition = (patientID: string, hivPositive: boolean) => {
     fhirFetch(`Condition`, { method: "POST", body: JSON.stringify(condition) })
 }
 
-const getQuestionnaire = async () => {
+export const getQuestionnaire = async () => {
     return fhirFetch('Questionnaire/52').then(json => {
         if (json.resourceType === "Questionnaire") {
             return json as Questionnaire
         } else {
             return null;
         }
-
     })
 }
 
@@ -46,8 +45,7 @@ export const addMedicationAdministration = async (patientID: string, medicationI
 }
 
 export async function getMedcationAdministration(patientID: string) {
-    const admins = await requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&_sort=-effective-time`);
-    return admins;
+    return requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&_sort=-effective-time`);
 }
 
 export async function seedPatientData(patientID: string, medicationID: string) {
@@ -71,4 +69,6 @@ export async function getMedAdminsMap(id: string) {
     return tempMap;
 }
 
-export { addCondition, getQuestionnaire }
+export async function getTodaysMedAdmin(patientID : string){
+    return requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&effective-time=eq${DateTime.local().toISODate()}`)
+}
