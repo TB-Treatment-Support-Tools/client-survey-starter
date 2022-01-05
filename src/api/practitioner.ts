@@ -111,5 +111,5 @@ export function deletePatient(id: string){
 }
 
 export function getPatients(organizationId :string){
-    return requestFhirBundle<Patient>(`Patient?organization=${organizationId}`)
+    return requestFhirBundle<Patient>(`Patient?organization=${organizationId}`,{cache: "no-cache"})
 }

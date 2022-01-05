@@ -46,7 +46,7 @@ export default function ViewPatients() {
         <Grid justifyContent="space-between" style={{ width: "100%" }} container wrap="nowrap">
             <span>Patients at Site {organizationID}</span>
             <Box width="1em" />
-            <AddPatient />
+            <AddPatient refresh={loadPatients} />
         </Grid>
         <Box padding="1em 0">
             {patients.length > 0 && <PatientTable refresh={() => { loadPatients() }} conditions={conditions} patients={patients} />}

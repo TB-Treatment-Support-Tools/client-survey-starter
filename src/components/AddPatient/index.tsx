@@ -9,36 +9,46 @@ import Conditions from "./Conditions";
 import { AddOutlined } from "@mui/icons-material";
 import CarePlanInfo from "./CarePlanInfo";
 
-const generatePatient = (): Patient => {
-    const patient: Patient = {
-        resourceType: "Patient",
-        name: [{
-            use: "official",
-            given: ["Kyle", "Joseph"],
-            family: "Goodwin",
-
-        }],
-        telecom: [{ system: "phone", use: "mobile", value: "123456789" }],
-        gender: "male",
-        birthDate: "1997-10-20",
-        managingOrganization: {
-            reference: "Organization/1"
-        }
-    }
-    return patient;
+interface Props{
+    refresh: () => void
 }
+
+// const generatePatient = (): Patient => {
+//     const patient: Patient = {
+//         resourceType: "Patient",
+//         name: [{
+//             use: "official",
+//             given: ["Kyle", "Joseph"],
+//             family: "Goodwin",
+
+//         }],
+//         telecom: [{ system: "phone", use: "mobile", value: "123456789" }],
+//         gender: "male",
+//         birthDate: "1997-10-20",
+//         managingOrganization: {
+//             reference: "Organization/1"
+//         }
+//     }
+//     return patient;
+// }
 
 const steps = ["Details", "Condition", "CarePlan", "Confirmation"];
 const stepContent = [<BaseDetails />, <Conditions />, <CarePlanInfo />]
 
-export default function AddPatientFlow() {
+export default function AddPatientFlow({refresh} : Props) {
 
     const [open, setOpen] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const [information, setInformation] = useState<Patient | null>(null)
 
     const handleNext = () => {
-        setActiveStep(activeStep + 1);
+
+        if(activeStep + 1 < stepContent.length){
+            setActiveStep(activeStep + 1)
+        }else{
+            refresh()
+            handleClose()
+        }  
     }
 
     const handleBack = () => {
@@ -50,8 +60,8 @@ export default function AddPatientFlow() {
     }
 
     const handleClose = () => {
-        setOpen(false)
         setActiveStep(0)
+        setOpen(false)
 
     }
 
