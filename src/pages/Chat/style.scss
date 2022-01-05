@@ -1,0 +1,12 @@
+.container{
+    position: fixed;
+    left: 0;
+    top: 60;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
+}
+
+.str-chat{
+    height:  calc(100vh - 60px);
+}

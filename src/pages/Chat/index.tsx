@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useKeycloak } from "@react-keycloak/web"
-import API from "../api";
+import API from "../../api";
 import { ChannelFilters, StreamChat } from 'stream-chat'
 import {
     Chat,
@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { Grid } from "@mui/material"
 import { CancelOutlined } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import './style.scss'
 
 export default function ChatPage() {
 
@@ -47,7 +48,7 @@ export default function ChatPage() {
 
     return (
         <>
-            {token && <div style={{ position: "fixed", left: 0, top: 0, height: "100vh", width: "100vw", zIndex: 1 }}>
+            {token && <div className={'container'}>
                 <Chat client={chatClient}>
                     <ChannelList filters={filters} />
                     <Channel>

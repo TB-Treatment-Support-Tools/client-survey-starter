@@ -96,7 +96,6 @@ export const addMedicaiton = () => {
             }]
     }
 
-    console.log(JSON.stringify(medication))
 }
 
 export function addPatient(details : Patient){
