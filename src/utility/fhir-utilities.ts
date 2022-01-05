@@ -60,7 +60,7 @@ export const getMedicationIdFromCarePlan = (carePlan : CarePlan | null) : string
 
     if(carePlan && carePlan.activity){
         for(let activity of carePlan.activity){
-            if(activity.detail?.productReference){
+            if(activity.detail?.productReference?.reference){
                 const medicationID = getIdFromReference(activity.detail.productReference)
                 return medicationID
             }

@@ -24,7 +24,6 @@ export default function ChatPage() {
     const [token, setToken] = useState("");
 
     const apiKey = process.env.REACT_APP_STREAM_KEY as string;
-    const userId = keycloak.subject as string;
 
     const chatClient = StreamChat.getInstance(apiKey);
 
@@ -34,8 +33,6 @@ export default function ChatPage() {
     }
 
     useEffect(() => {
-        console.log(keycloak.subject)
-        console.log(token)
         if (keycloak.subject && token) {
             chatClient.connectUser({ id: keycloak.subject }, token);
         }

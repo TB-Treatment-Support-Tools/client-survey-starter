@@ -26,7 +26,7 @@ export const getQuestionnaire = async () => {
 }
 
 export const getCarePlans = async (patientID: string) => {
-    return fhirFetch(`CarePlan?subject:Patient=${patientID}`).then(json => { return json.entry.map((each: BundleEntry) => each.resource) as CarePlan[] })
+    return fhirFetch(`CarePlan?subject:Patient=${patientID}`).then(json => { return json.entry ? json.entry.map((each: BundleEntry) => each.resource) as CarePlan[] : [] })
 }
 
 export const uploadQuestionnaireResponse = async (questionnaireResponse: QuestionnaireResponse) => {

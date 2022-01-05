@@ -1,37 +1,44 @@
-import { CarePlan, Patient } from "fhir/r4";
-import { useEffect, useState } from "react";
-import { getCarePlans } from "../../api/patient";
+import { CarePlan, Medication, Patient } from "fhir/r4"
+import { useEffect, useState } from "react"
+import { getCarePlans } from "../../api/patient"
+import { getMedication } from "../../api/shared"
+import { getMedicationIdFromCarePlan } from "../../utility/fhir-utilities"
 
-interface Props{
-    patient : Patient
+interface Props {
+    patient: Patient
 }
 
-export default function CarePlanInfo({patient}: Props){
+export default function CarePlanInfo({ patient }: Props) {
 
-
-    const [carePlan,setCarePlan] = useState<CarePlan | null>(null);
-    const [loaded,setLoaded] = useState<boolean>(false);
+    const [carePlan, setCarePlan] = useState<CarePlan | null>(null)
+    const [medication, setMedication] = useState<Medication | undefined>()
 
     const fetchCarePlans = async () => {
-        if(patient && patient.id){
-           let carePlans = await getCarePlans(patient.id)
-           setCarePlan(carePlans[0])
+        if (patient?.id) {
+            let carePlans = await getCarePlans(patient.id)
+            if (carePlans.length > 0) {
+                setCarePlan(carePlans[0])
+                try {
+                    let med = await getMedication(getMedicationIdFromCarePlan(carePlans[0]))
+                    setMedication(med)
+                } catch(err) {
+                    console.log("Error getting meds")
+                    console.log(err)
+                }
+            }
         }
     }
 
-    useEffect(()=>{
-        fetchCarePlans();
-    },[])
+    useEffect(() => {
+        fetchCarePlans()
+    }, [])
 
-    return(
+    return (
         <div>
-            <p>CarePlan</p>
-            {carePlan && <>
-            <p>ID: {carePlan?.id}</p>
-            {console.log(carePlan.activity)}
-            </>}
+            <p>CarePlan ID: {carePlan?.id}</p>
+            <p>Medication: {medication?.code?.text || "Not Found"} </p>
         </div>
     )
 
-    
+
 }
