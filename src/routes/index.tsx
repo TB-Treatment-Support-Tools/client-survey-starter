@@ -81,10 +81,10 @@ const AppRouter = () => {
           {isProvider && <TopBar />}
           <div className={styles.main}>
             <Switch>
+            <Route path="/chat" component={Chat} />
               {isProvider && <ProviderRoutes />}
               <PrivateRoute path="/progress" component={Progress} />
               <PrivateRoute path="/home" component={PatientHome} />
-              <Route path="/chat" component={Chat} />
               <Route path="/survey" component={PatientHome} />
               <Route path="/login" component={Login} />
               <PrivateRoute path="/submit-photo" component={SubmitTest} />

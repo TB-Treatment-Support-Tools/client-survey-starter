@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-// import matrixcs from "matrix-js-sdk"
 import { useKeycloak } from "@react-keycloak/web"
 import API from "../api";
 import { ChannelFilters, StreamChat } from 'stream-chat'
@@ -17,6 +16,7 @@ import 'stream-chat-css/dist/css/index.css';
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material"
 import { CancelOutlined } from "@mui/icons-material";
+import { Box } from "@mui/system";
 
 export default function ChatPage() {
 
@@ -34,6 +34,8 @@ export default function ChatPage() {
     }
 
     useEffect(() => {
+        console.log(keycloak.subject)
+        console.log(token)
         if (keycloak.subject && token) {
             chatClient.connectUser({ id: keycloak.subject }, token);
         }
@@ -48,7 +50,7 @@ export default function ChatPage() {
 
     return (
         <>
-            {token && <div style={{ position: "fixed", top: 0, left: 0, height: "100vh", width: "100vw", zIndex: 1 }}>
+            {token && <div style={{ position: "fixed", left: 0, top: 0, height: "100vh", width: "100vw", zIndex: 1 }}>
                 <Chat client={chatClient}>
                     <ChannelList filters={filters} />
                     <Channel>
