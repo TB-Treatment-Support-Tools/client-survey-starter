@@ -4,7 +4,7 @@ import DateMap from '../types/date-map'
 
 import { useKeycloak } from '@react-keycloak/web'
 
-import Login from '../pages/Login'
+import Login from '../pages/Login/'
 
 import { PrivateRoute } from './utils'
 import BottomNavigation from '../components/BottomNavigation/'

@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
-import { Link, Redirect, useLocation,  } from 'react-router-dom'
+import { Redirect, useLocation,  } from 'react-router-dom'
 import { useKeycloak } from '@react-keycloak/web'
+import classes from './styles.module.scss'
 
 const LoginPage = () => {
   const location = useLocation<{ [key: string]: unknown }>()
@@ -18,9 +19,9 @@ const LoginPage = () => {
     return <Redirect to={currentLocationState?.from as string} />
 
   return (
-    <div>
+    <div className={classes.container}>
       <h1>Welcome to treatment tracker please login</h1>
-      <button type="button" onClick={login}>Login</button>
+      <button className={classes.button} type="button" onClick={login}>Login</button>
       <br />
     </div>
   )
