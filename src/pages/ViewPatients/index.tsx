@@ -4,7 +4,6 @@ import PatientTable from "../../components/PatientTable"
 import { getConditions, getPatients } from "../../api/practitioner"
 import UserContext from "../../context/user-context"
 import AddPatient from "../../components/AddPatient"
-import Fhir from "../../api"
 import { Grid, Box } from "@mui/material"
 
 export default function ViewPatients() {

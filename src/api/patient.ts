@@ -45,7 +45,7 @@ export const addMedicationAdministration = async (patientID: string, medicationI
 }
 
 export async function getMedcationAdministration(patientID: string) {
-    return requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&_sort=-effective-time`);
+    return requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&_sort=-effective-time`,{cache: "no-cache"});
 }
 
 export async function seedPatientData(patientID: string, medicationID: string) {
