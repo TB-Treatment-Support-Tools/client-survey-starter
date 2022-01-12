@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import MedAdminCalendar from "../../components/MedAdminCalendar";
 import UserContext from "../../context/user-context";
 import Grid from '@mui/material/Grid'
@@ -7,7 +7,11 @@ import { Refresh } from "@mui/icons-material";
 
 export default function Progress() {
 
-    const { medicationDates, updateMedicationDates } = useContext(UserContext);
+    const { medicationDates, updateMedicationDates, user } = useContext(UserContext);
+
+    useEffect(()=>{
+            updateMedicationDates && updateMedicationDates();
+    },[])
 
     return (<div>
         <Grid justifyContent="flex-end" container>

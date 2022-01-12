@@ -19,8 +19,10 @@ export default function ReportMedAdmin() {
 
     const getLatestMedAdmin = async () => {
         if(user?.id){
+            setLoading(true)
             const entries = await getTodaysMedAdmin(user.id)
             setTodaysEntries(entries)
+            setLoading(false)
         }
     }
 
@@ -33,6 +35,7 @@ export default function ReportMedAdmin() {
     }
     const handleYes = () => {
         handleSubmission(true)
+
     }
 
     const handleNo = () => {
@@ -40,11 +43,11 @@ export default function ReportMedAdmin() {
     }
 
     const handleSubmission = async (tookMedication : boolean) => {
-        const idForUpload = medicationID()
+        const idForUpload = medicationID();
         if(user?.id && idForUpload){
             setLoading(true)
             await addMedicationAdministration(user.id,idForUpload,tookMedication)
-            !!updateMedicationDates && updateMedicationDates()
+            getLatestMedAdmin()
             setLoading(false)
         }
     }
@@ -53,8 +56,8 @@ export default function ReportMedAdmin() {
 
     return (
         <Box padding="1em">
+              <SectionTitle>Have you taken your medication today?</SectionTitle>
             {loading ? <Loading /> : <>
-            <SectionTitle>Have you taken your medication today?</SectionTitle>
             {hasAlreadyReported ? <p>Great job! Please check back in tomorrow when you have taken your medication</p> : <Grid className={classes.container} container>
                 <IconButton onClick={handleYes} className={classes.yes}>
                     <Check />

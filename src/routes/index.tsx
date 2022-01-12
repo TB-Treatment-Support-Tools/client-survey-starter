@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import DateMap from '../types/date-map'
 
 import { useKeycloak } from '@react-keycloak/web'
@@ -88,9 +88,7 @@ const AppRouter = () => {
               <Route path="/survey" component={PatientHome} />
               <Route path="/login" component={Login} />
               <PrivateRoute path="/submit-photo" component={SubmitTest} />
-              <Route path="/">
-                <DefaultComponent />
-              </Route>
+              <Redirect from="/" to="/home" />
             </Switch>
           </div>
           {isPatient && <BottomNavigation />}

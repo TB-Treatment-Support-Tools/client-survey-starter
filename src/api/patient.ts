@@ -72,3 +72,7 @@ export async function getMedAdminsMap(id: string) {
 export async function getTodaysMedAdmin(patientID : string){
     return requestFhirBundle<MedicationAdministration>(`MedicationAdministration?subject:Patient=${patientID}&effective-time=eq${DateTime.local().toISODate()}`)
 }
+
+export async function deleteMedAdmin(id : string){
+    requestFhirBundle(`MedicationAdministration/${id}`,{method: "DELETE"})
+}
