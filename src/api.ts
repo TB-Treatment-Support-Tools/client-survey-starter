@@ -4,7 +4,7 @@ import { Patient, Practitioner, QuestionnaireResponse } from "fhir/r4";
 
 export default class Fhir {
 
-    static baseURL = "http://localhost:8100"
+    static baseURL = "http://localhost:8090"
 
     static async getChatToken() {
         return await fetch(`http://localhost:8100/chat-token`, { headers: { 'Authorization': `Bearer ${keycloak.token}` } }).then(res => { return res.json() })
@@ -20,11 +20,11 @@ export default class Fhir {
         const keycloakID = keycloak?.tokenParsed?.sub;
 
         if (isProvider) {
-            return await this.fhirFetch(`Practitioner?identifier=keycloak|${keycloakID}`).then(json => { return json.entry[0].resource as Practitioner })
+            return await this.fhirFetch(`Practitioner?identifier=keycloak%7C${keycloakID}`).then(json => { return json.entry[0].resource as Practitioner })
         }
 
         if (isPatient) {
-            return await this.fhirFetch(`Patient?identifier=keycloak|${keycloakID}`)
+            return await this.fhirFetch(`Patient?identifier=keycloak%7C${keycloakID}`)
                 .then(json => { return json.entry[0].resource as Patient })
         }
 

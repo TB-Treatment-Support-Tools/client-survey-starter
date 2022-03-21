@@ -1,8 +1,7 @@
 import keycloak from "../keycloak";
 import { BundleEntry } from "fhir/r4";
-import { Type } from "typescript";
 
-const baseURL = "http://localhost:8100";
+const baseURL = "http://localhost:8090";
 
 const fhirFetch = (resource: string, options?: RequestInit): Promise<any> => {
     return fetch(`${baseURL}/fhir/${resource}`, { headers: { 'Content-Type': "application/fhir+json", 'Authorization': `Bearer ${keycloak.token}`, 'Cache-Control': "no-cache" }, ...options })
